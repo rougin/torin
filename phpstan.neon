@@ -1,0 +1,9 @@
+parameters:
+  level: 9
+  paths:
+    - app
+    - src
+    - tests
+  excludePaths:
+    analyse:
+      - app/cache/compiled
