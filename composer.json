@@ -12,7 +12,8 @@
   ],
   "require":
   {
-    "php": ">=5.3.0",
+    "php": ">=5.4.0",
+    "illuminate/database": "*",
     "rougin/dexterity": "dev-master",
     "rougin/slytherin": "~0.9",
     "rougin/weasley": "~0.7",
