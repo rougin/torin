@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Torin;
+namespace Rougin\Temply;
 
 use Rougin\Slytherin\Template\RendererInterface;
 use Staticka\Filter\LayoutFilter;
@@ -12,7 +12,7 @@ use Staticka\Helper\PlateHelper;
 /**
  * TODO: This should be from Staticka package.
  *
- * @package Torin
+ * @package Temply
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
@@ -53,9 +53,10 @@ class Plate
 
         $this->helpers[] = new PlateHelper($render);
 
-        $helper = new LinkHelper(getenv('APP_URL'));
+        /** @var string */
+        $link = getenv('APP_URL');
 
-        $this->helpers[] = $helper;
+        $this->helpers[] = new LinkHelper($link);
         // ------------------------------------------
     }
 

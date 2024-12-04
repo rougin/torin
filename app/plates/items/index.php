@@ -1,11 +1,15 @@
 <?= $layout->load('main'); ?>
 
 <?= $block->body() ?>
-  <div class="mb-3">
+  <div class="mb-5">
     <?php echo $plate->add('navbar', compact('block', 'url')) ?>
   </div>
 
   <div class="container mb-3">
-    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga distinctio aut odit incidunt adipisci animi ipsum voluptatum repellat tempore quo culpa molestias totam ex commodi perspiciatis magni obcaecati id, omnis.</div>
+    <div class="card shadow-lg">
+      <div class="card-body">
+        <div><?= $table ?></div>
+      </div>
+    </div>
   </div>
 <?= $block->end() ?>

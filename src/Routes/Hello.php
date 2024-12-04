@@ -2,7 +2,7 @@
 
 namespace Rougin\Torin\Routes;
 
-use Rougin\Torin\Plate;
+use Rougin\Temply\Plate;
 
 /**
  * @package Torin
@@ -12,12 +12,13 @@ use Rougin\Torin\Plate;
 class Hello
 {
     /**
-     * @param \Rougin\Torin\Plate $plate
+     * @param \Rougin\Temply\Plate $plate
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function index(Plate $plate)
     {
+        /** @var \Psr\Http\Message\ResponseInterface */
         return $plate->render('index');
     }
 }

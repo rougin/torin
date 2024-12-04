@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Torin;
+namespace Rougin\Temply;
 
 use Rougin\Slytherin\Template\RendererInterface;
 use Staticka\Render\RenderInterface;
@@ -8,7 +8,7 @@ use Staticka\Render\RenderInterface;
 /**
  * TODO: Use RendererInterface instead from Staticka.
  *
- * @package Torin
+ * @package Temply
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */

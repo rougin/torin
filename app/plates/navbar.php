@@ -1,4 +1,4 @@
-<div class="navbar py-0 navbar-expand-lg bg-black" data-bs-theme="dark">
+<div class="navbar py-0 navbar-expand-lg bg-black shadow-lg" data-bs-theme="dark">
   <div class="container py-3">
     <span class="navbar-brand mb-1 h1"><?= getenv('APP_NAME') ?></span>
     <div class="collapse navbar-collapse d-flex" id="navbarNav">
