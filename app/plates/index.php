@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Torin - Simple inventory management.</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-</head>
-<body>
-  <div class="container">
-    <div class="p-5">
-      <h1 class="text-center">Hello, Rougin Gutib!</h1>
-    </div>
+<?= $layout->load('main'); ?>
+
+<?= $block->body() ?>
+  <div class="mb-3">
+    <?php echo $plate->add('navbar', compact('block', 'url')) ?>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-</body>
-</html>
+  <div class="container mb-3">
+    <p class="mb-0">Hello, Rougin Gutib!</p>
+  </div>
+<?= $block->end() ?>

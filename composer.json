@@ -17,6 +17,7 @@
     "rougin/dexterity": "dev-master",
     "rougin/slytherin": "~0.9",
     "rougin/weasley": "~0.7",
+    "staticka/staticka": "~0.4",
     "vlucas/phpdotenv": "~2.0"
   },
   "require-dev":

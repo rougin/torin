@@ -9,7 +9,7 @@ use Rougin\Torin\Plate;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Hello
+class Items
 {
     /**
      * @param \Rougin\Torin\Plate $plate
@@ -18,6 +18,6 @@ class Hello
      */
     public function index(Plate $plate)
     {
-        return $plate->render('index');
+        return $plate->render('items.index');
     }
 }
