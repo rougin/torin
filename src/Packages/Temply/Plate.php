@@ -3,6 +3,7 @@
 namespace Rougin\Temply;
 
 use Rougin\Slytherin\Template\RendererInterface;
+use Rougin\Temply\Helpers\FormHelper;
 use Staticka\Filter\LayoutFilter;
 use Staticka\Helper\BlockHelper;
 use Staticka\Helper\LayoutHelper;
@@ -52,6 +53,8 @@ class Plate
         $this->helpers[] = new LayoutHelper($render);
 
         $this->helpers[] = new PlateHelper($render);
+
+        $this->helpers[] = new FormHelper;
 
         /** @var string */
         $link = getenv('APP_URL');

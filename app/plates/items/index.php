@@ -2,7 +2,11 @@
 
 <?= $block->body() ?>
   <div class="mb-5">
-    <?php echo $plate->add('navbar', compact('block', 'url')) ?>
+    <?= $plate->add('navbar', compact('block', 'url')) ?>
+  </div>
+
+  <div class="container mb-3">
+    <?= $form->buttonLink('Create New', $url->set('items/create'), 'btn btn-primary') ?>
   </div>
 
   <div class="container mb-3">

@@ -30,6 +30,8 @@ class Router extends Slytherin
     {
         $this->get('/', 'Hello@index');
 
+        $this->get('items/create', 'Items@create');
+
         $this->get('items', 'Items@index');
 
         return $this->routes;
