@@ -30,14 +30,18 @@
   {
     "psr-4":
     {
-      "Rougin\\Torin\\": "src"
+      "Rougin\\Dexterity\\": "src/Dexterity",
+      "Rougin\\Torin\\": "src",
+      "Rougin\\Weasley\\": "src/Weasley"
     }
   },
   "autoload-dev":
   {
     "psr-4":
     {
-      "Rougin\\Torin\\": "tests"
+      "Rougin\\Dexterity\\": "tests/Dexterity",
+      "Rougin\\Torin\\": "tests",
+      "Rougin\\Weasley\\": "tests/Weasley"
     }
   },
   "scripts":
