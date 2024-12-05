@@ -6,7 +6,8 @@
   </div>
 
   <div class="container mb-3">
-    <?= $form->buttonLink('Create New', $url->set('items/create'), 'btn btn-primary') ?>
+    <?= $form->button('Create New')->withClass('btn btn-primary shadow-lg')
+      ->with('data-bs-toggle', 'modal')->with('data-bs-target', '#item-modal') ?>
   </div>
 
   <div class="container mb-3">
@@ -16,4 +17,26 @@
       </div>
     </div>
   </div>
+
+  <?= $plate->add('items.modal', compact('form')) ?>
+<?= $block->end() ?>
+
+<?= $block->set('scripts') ?>
+  <script>
+    <?= $form->script('items')
+      ->with('name')
+      ->with('detail')
+      ->withError()
+      ->withLoading() ?>
+
+    items.store = function ()
+    {
+      this.loading = true
+
+      setTimeout(() =>
+      {
+        this.loading = false
+      }, 1000)
+    }
+  </script>
 <?= $block->end() ?>

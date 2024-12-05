@@ -17,17 +17,6 @@ class Items
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function create(Plate $plate)
-    {
-        /** @var \Psr\Http\Message\ResponseInterface */
-        return $plate->render('items.create');
-    }
-
-    /**
-     * @param \Rougin\Temply\Plate $plate
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
     public function index(Plate $plate)
     {
         $items = array();

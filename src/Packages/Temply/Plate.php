@@ -47,20 +47,20 @@ class Plate
         $this->filters[] = new LayoutFilter;
         // ---------------------------------
 
-        // Staticka Helpers -------------------------
+        // Staticka Helpers ------------------------------
         $this->helpers[] = new BlockHelper;
 
         $this->helpers[] = new LayoutHelper($render);
 
         $this->helpers[] = new PlateHelper($render);
 
-        $this->helpers[] = new FormHelper;
+        $this->helpers[] = (new FormHelper)->withAlpine();
 
         /** @var string */
         $link = getenv('APP_URL');
 
         $this->helpers[] = new LinkHelper($link);
-        // ------------------------------------------
+        // -----------------------------------------------
     }
 
     /**
