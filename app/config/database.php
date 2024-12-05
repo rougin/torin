@@ -16,13 +16,11 @@ return array(
     'default' => getenv('APP_DEFAULT_DB'),
 
     /**
-     * Configuration for a MySQL connection.
-     *
-     * @link https://www.mysql.com
+     * Configuration for the Torin package.
      *
      * @var array<string, string>
      */
-    'mysql' => array(
+    'torin' => array(
 
         /**
          * @var string
@@ -32,32 +30,32 @@ return array(
         /**
          * @var string
          */
-        'host' => getenv('MYSQL_HOSTNAME'),
+        'host' => getenv('TORIN_HOSTNAME'),
 
         /**
          * @var string
          */
-        'username' => getenv('MYSQL_USERNAME'),
+        'username' => getenv('TORIN_USERNAME'),
 
         /**
          * @var string
          */
-        'password' => getenv('MYSQL_PASSWORD'),
+        'password' => getenv('TORIN_PASSWORD'),
 
         /**
          * @var string
          */
-        'database' => getenv('MYSQL_DATABASE'),
+        'database' => getenv('TORIN_DATABASE'),
 
         /**
          * @var integer
          */
-        'port' => getenv('MYSQL_PORT'),
+        'port' => getenv('TORIN_PORT'),
 
         /**
          * @var string
          */
-        'charset' => getenv('MYSQL_CHARSET'),
+        'charset' => getenv('TORIN_CHARSET'),
 
     ),
 
