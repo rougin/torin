@@ -34,6 +34,8 @@ class Router extends Slytherin
 
         $this->get('items', 'Items@index');
 
+        $this->post('/v1/items', 'Items@store');
+
         return $this->routes;
     }
 }

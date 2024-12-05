@@ -23,6 +23,8 @@
 
 <?= $block->set('scripts') ?>
   <script>
+    const link = '<?= $url->set('/v1/items') ?>';
+
     <?= $form->script('items')
       ->with('name')
       ->with('detail')
@@ -31,12 +33,31 @@
 
     items.store = function ()
     {
-      this.loading = true
+      const input = new FormData
 
-      setTimeout(() =>
-      {
-        this.loading = false
-      }, 1000)
+      const self = this
+
+      input.append('name', self.name)
+
+      input.append('detail', self.detail)
+
+      self.loading = true
+
+      self.error = {}
+
+      axios.post(link, input)
+        .then(function (response)
+        {
+          console.log(response.data)
+        })
+        .catch(function (error)
+        {
+          self.error = error.response.data
+        })
+        .finally(function ()
+        {
+          self.loading = false
+        })
     }
   </script>
 <?= $block->end() ?>

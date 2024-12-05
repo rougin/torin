@@ -22,7 +22,7 @@ class FormHelper implements HelperInterface
     protected $alpine = false;
 
     /**
-     * @param string $text
+     * @param string      $text
      * @param string|null $class
      *
      * @return \Rougin\Temply\Button
@@ -42,7 +42,8 @@ class FormHelper implements HelperInterface
     /**
      * TODO: This is a specific code for "alpinejs".
      *
-     * @param  string $field
+     * @param string $field
+     *
      * @return \Rougin\Temply\Error
      */
     public function error($field)
@@ -51,7 +52,7 @@ class FormHelper implements HelperInterface
     }
 
     /**
-     * @param string $name
+     * @param string      $name
      * @param string|null $class
      *
      * @return \Rougin\Temply\Input
@@ -69,7 +70,7 @@ class FormHelper implements HelperInterface
     }
 
     /**
-     * @param string $text
+     * @param string      $text
      * @param string|null $class
      *
      * @return \Rougin\Temply\Label

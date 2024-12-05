@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string       $name
  * @property string       $detail
  *
+ * @method \Rougin\Torin\Models\Item create(array<string, mixed> $data)
+ *
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>

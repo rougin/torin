@@ -38,7 +38,8 @@ class Input extends Element
     /**
      * TODO: This is a specific code for "alpinejs".
      *
-     * @param  string|null $name
+     * @param string|null $name
+     *
      * @return self
      */
     public function asModel($name = null)
@@ -47,7 +48,8 @@ class Input extends Element
     }
 
     /**
-     * @param  string $name
+     * @param string $name
+     *
      * @return self
      */
     public function withName($name)
@@ -56,7 +58,8 @@ class Input extends Element
     }
 
     /**
-     * @param  string $type
+     * @param string $type
+     *
      * @return self
      */
     public function withType($type)

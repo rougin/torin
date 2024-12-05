@@ -17,8 +17,9 @@ class Element
     /**
      * TODO: This is a specific code for "alpinejs".
      *
-     * @param  string $name
-     * @return self
+     * @param string $name
+     *
+     * @return static
      */
     public function disablesOn($name)
     {
@@ -27,8 +28,9 @@ class Element
 
     /**
      * @param string $key
-     * @param mixed $value
-     * @return self
+     * @param mixed  $value
+     *
+     * @return static
      */
     public function with($key, $value)
     {
@@ -38,8 +40,9 @@ class Element
     }
 
     /**
-     * @param  string $class
-     * @return self
+     * @param string $class
+     *
+     * @return static
      */
     public function withClass($class)
     {

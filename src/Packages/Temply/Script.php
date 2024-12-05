@@ -12,7 +12,7 @@ namespace Rougin\Temply;
 class Script
 {
     /**
-     * @var string[]
+     * @var array<string, mixed>
      */
     protected $fields = array();
 
@@ -41,8 +41,9 @@ class Script
     }
 
     /**
-     * @param  string $field
+     * @param string     $field
      * @param mixed|null $default
+     *
      * @return self
      */
     public function with($field, $default = null)

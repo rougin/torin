@@ -165,7 +165,7 @@ return array(
          *
          * @link https://roug.in/weasley/
          */
-        // 'Rougin\Weasley\Packages\Laravel\Eloquent',
+        'Rougin\Weasley\Packages\Laravel\Eloquent',
         // 'Rougin\Weasley\Packages\Laravel\Blade',
     ),
 

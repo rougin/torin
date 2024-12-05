@@ -56,6 +56,7 @@ class Label extends Element
 
     /**
      * @param string $name
+     *
      * @return self
      */
     public function for($name)
@@ -64,7 +65,8 @@ class Label extends Element
     }
 
     /**
-     * @param  string $type
+     * @param string $type
+     *
      * @return self
      */
     public function withType($type)

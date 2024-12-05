@@ -18,7 +18,8 @@
     "rougin/slytherin": "~0.9",
     "rougin/weasley": "~0.7",
     "staticka/staticka": "~0.4",
-    "vlucas/phpdotenv": "~2.0"
+    "vlucas/phpdotenv": "~2.0",
+    "vlucas/valitron": "~1.4"
   },
   "require-dev":
   {
@@ -32,7 +33,8 @@
     {
       "Rougin\\Gable\\": "src/Packages/Gable",
       "Rougin\\Temply\\": "src/Packages/Temply",
-      "Rougin\\Torin\\": "src"
+      "Rougin\\Torin\\": "src",
+      "Rougin\\Valdi\\": "src/Packages/Valdi"
     }
   },
   "autoload-dev":
@@ -41,7 +43,8 @@
     {
       "Rougin\\Gable\\": "tests/Packages/Gable",
       "Rougin\\Temply\\": "tests/Packages/Temply",
-      "Rougin\\Torin\\": "tests"
+      "Rougin\\Torin\\": "tests",
+      "Rougin\\Valdi\\": "tests/Packages/Valdi"
     }
   },
   "scripts":
