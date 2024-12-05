@@ -32,6 +32,7 @@
     "psr-4":
     {
       "Rougin\\Gable\\": "src/Packages/Gable",
+      "Rougin\\Onion\\": "src/Packages/Onion",
       "Rougin\\Temply\\": "src/Packages/Temply",
       "Rougin\\Torin\\": "src",
       "Rougin\\Valdi\\": "src/Packages/Valdi"
@@ -42,6 +43,7 @@
     "psr-4":
     {
       "Rougin\\Gable\\": "tests/Packages/Gable",
+      "Rougin\\Onion\\": "tests/Packages/Onion",
       "Rougin\\Temply\\": "tests/Packages/Temply",
       "Rougin\\Torin\\": "tests",
       "Rougin\\Valdi\\": "tests/Packages/Valdi"

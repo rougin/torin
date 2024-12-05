@@ -29,4 +29,9 @@ class Item extends Model
         'name',
         'detail',
     ];
+
+    /**
+     * @var string
+     */
+    protected $connection = 'torin';
 }

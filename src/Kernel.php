@@ -2,6 +2,11 @@
 
 namespace Rougin\Torin;
 
+use Rougin\Onion\BodyParams;
+use Rougin\Onion\CorsHeader;
+use Rougin\Onion\FormParser;
+use Rougin\Onion\NullString;
+
 /**
  * @package Torin
  *
@@ -16,6 +21,13 @@ class Kernel
      */
     public static function items()
     {
-        return array();
+        $items = array();
+
+        $items[] = new BodyParams;
+        $items[] = new FormParser;
+        $items[] = new NullString;
+        $items[] = new CorsHeader;
+
+        return $items;
     }
 }
