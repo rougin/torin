@@ -1,4 +1,4 @@
-<?= $layout->load('main'); ?>
+<?= $layout->load('main', compact('plate')); ?>
 
 <?= $block->body() ?>
   <div class="mb-5">
@@ -48,7 +48,9 @@
       axios.post(link, input)
         .then(function (response)
         {
-          console.log(response.data)
+          Modal.hide('item-modal')
+
+          Alert.success('Item created!', 'Item successfully created.')
         })
         .catch(function (error)
         {

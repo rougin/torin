@@ -11,7 +11,7 @@
             <?= $form->input('name', 'form-control')->asModel()->disablesOn('loading') ?>
             <?= $form->error('error.name') ?>
           </div>
-          <div class="mb-3">
+          <div>
             <?= $form->label('Details', 'form-label mb-0')->asRequired() ?>
             <?= $form->input('detail', 'form-control')->asModel()->disablesOn('loading') ?>
             <?= $form->error('error.detail') ?>
