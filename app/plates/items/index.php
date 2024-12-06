@@ -31,6 +31,11 @@
       ->withError()
       ->withLoading() ?>
 
+    items.init = function ()
+    {
+      console.log('asdsdasd')
+    }
+
     items.store = function ()
     {
       const input = new FormData

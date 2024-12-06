@@ -62,8 +62,6 @@ class Items
     }
 
     /**
-     * Returns a response if the validation failed.
-     *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function invalidStore()
@@ -92,7 +90,7 @@ class Items
      */
     protected function setStoreData($parsed)
     {
-        // $this->item->create($parsed);
+        $this->item->create($parsed);
 
         return new JsonResponse('Created!', 201);
     }

@@ -1,4 +1,4 @@
-<?= $layout->load('main'); ?>
+<?= $layout->load('main', compact('plate')); ?>
 
 <?= $block->body() ?>
   <div class="mb-3">
