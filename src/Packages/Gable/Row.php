@@ -16,10 +16,19 @@ class Row extends Data
      */
     public function __construct($class = null, $style = null, $width = null)
     {
-        $this->class = $class;
+        if ($class)
+        {
+            $this->setClass($class);
+        }
 
-        $this->style = $style;
+        if ($style)
+        {
+            $this->setStyle($style);
+        }
 
-        $this->width = $width;
+        if ($width)
+        {
+            $this->setWidth($width);
+        }
     }
 }

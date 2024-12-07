@@ -37,21 +37,10 @@ class Data extends Element
 
         foreach ($this->cells as $cell)
         {
-            $width = $cell->getWidth() ? $cell->getWidth() . '%' : null;
-
-            $html .= '<' . $type . ' align="' . $cell->getAlign() . '" class="' . $cell->getClass() . '" colspan="' . $cell->getColspan() . '" rowspan="' . $cell->getRowspan() . '" style="' . $cell->getStyle() . '" width="' . $width . '">' . $cell->getValue() . '</' . $type . '>';
+            $html .= '<' . $type . ' ' . $cell->getParsedAttrs() . '>' . $cell->getValue() . '</' . $type . '>';
         }
 
-        // Remove empty attributes -------------------
-        $html = str_replace(' align=""', '', $html);
-        $html = str_replace(' class=""', '', $html);
-        $html = str_replace(' colspan=""', '', $html);
-        $html = str_replace(' rowspan=""', '', $html);
-        $html = str_replace(' style=""', '', $html);
-        $html = str_replace(' width=""', '', $html);
-        // -------------------------------------------
-
-        return $html;
+        return str_replace('<' . $type . ' >', '<' . $type . '>', $html);
     }
 
     /**
@@ -91,14 +80,12 @@ class Data extends Element
      */
     public function toHtml($type = 'td')
     {
-        $width = $this->getWidth() ? $this->getWidth() . '%' : null;
-
-        $html = '<tr class="' . $this->getClass() . '" style="' . $this->getStyle() . '" width="' . $width . '">';
+        $html = '<tr ' . $this->getParsedAttrs() . '>';
 
         $html .= $this->cellsToHtml($type);
 
         $html .= '</tr>';
 
-        return $html;
+        return str_replace('<tr >', '<tr>', $html);
     }
 }

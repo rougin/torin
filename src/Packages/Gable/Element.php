@@ -10,42 +10,39 @@ namespace Rougin\Gable;
 class Element
 {
     /**
-     * @var string|null
+     * @var array<string, mixed>
      */
-    protected $class = null;
+    protected $attrs = array();
 
     /**
-     * @var string|null
+     * @return array<string, mixed>
      */
-    protected $style = null;
-
-    /**
-     * @var integer|null
-     */
-    protected $width = null;
-
-    /**
-     * @return string|null
-     */
-    public function getClass()
+    public function getAttrs()
     {
-        return $this->class;
+        return $this->attrs;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getStyle()
+    public function getParsedAttrs()
     {
-        return $this->style;
-    }
+        $attrs = array();
 
-    /**
-     * @return integer|null
-     */
-    public function getWidth()
-    {
-        return $this->width;
+        foreach ($this->getAttrs() as $key => $value)
+        {
+            if ($key === 'width' && $value !== null)
+            {
+                $value = $value . '%';
+            }
+
+            if ($value !== null)
+            {
+                $attrs[] = $key . '="' . $value . '"';
+            }
+        }
+
+        return implode(' ', $attrs);
     }
 
     /**
@@ -55,9 +52,7 @@ class Element
      */
     public function setClass($class)
     {
-        $this->class = $class;
-
-        return $this;
+        return $this->withAttr('class', $class);
     }
 
     /**
@@ -67,9 +62,7 @@ class Element
      */
     public function setStyle($style)
     {
-        $this->style = $style;
-
-        return $this;
+        return $this->withAttr('style', $style);
     }
 
     /**
@@ -81,7 +74,18 @@ class Element
      */
     public function setWidth($width)
     {
-        $this->width = $width;
+        return $this->withAttr('width', $width);
+    }
+
+    /**
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return self
+     */
+    public function withAttr($key, $value)
+    {
+        $this->attrs[$key] = $value;
 
         return $this;
     }

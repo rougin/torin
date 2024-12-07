@@ -42,7 +42,30 @@ class Table extends Element
     }
 
     /**
-     * @param string $name
+     * @param \Rougin\Gable\Cell $cell
+     *
+     * @return self
+     */
+    public function addCell(Cell $cell)
+    {
+        if ($this->type === self::TYPE_COL)
+        {
+            $index = count($this->cols) - 1;
+
+            $this->cols[$index]->addCell($cell);
+        }
+        else
+        {
+            $index = count($this->rows) - 1;
+
+            $this->rows[$index]->addCell($cell);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string       $name
      * @param string|null  $class
      * @param string|null  $style
      * @param integer|null $width
@@ -59,7 +82,9 @@ class Table extends Element
 
         foreach ($col->getCells() as $cell)
         {
-            $this->setCell($cell->getName());
+            $cell->withAttr('x-text', 'item.' . $cell->getName());
+
+            $this->addCell($cell);
         }
 
         return $this;
@@ -70,9 +95,7 @@ class Table extends Element
      */
     public function make()
     {
-        $width = $this->getWidth() ? $this->getWidth() . '%' : null;
-
-        $html = '<table class="' . $this->getClass() . '" style="' . $this->getStyle() . '" width="' . $width . '">';
+        $html = '<table ' . $this->getParsedAttrs() . '>';
 
         if (count($this->cols) > 0)
         {
@@ -110,13 +133,7 @@ class Table extends Element
 
         $html .= '</table>';
 
-        // Remove empty attributes -----------------
-        $html = str_replace(' class=""', '', $html);
-        $html = str_replace(' style=""', '', $html);
-        $html = str_replace(' width=""', '', $html);
-        // -----------------------------------------
-
-        return (string) $html;
+        return str_replace('<table >', '<table>', $html);
     }
 
     /**
@@ -178,22 +195,7 @@ class Table extends Element
      */
     public function setCell($value, $align = null, $class = null, $cspan = null, $rspan = null, $style = null, $width = null)
     {
-        $cell = new Cell($value, $align, $class, $cspan, $rspan, $style, $width);
-
-        if ($this->type === self::TYPE_COL)
-        {
-            $index = count($this->cols) - 1;
-
-            $this->cols[$index]->addCell($cell);
-        }
-        else
-        {
-            $index = count($this->rows) - 1;
-
-            $this->rows[$index]->addCell($cell);
-        }
-
-        return $this;
+        return $this->addCell(new Cell($value, $align, $class, $cspan, $rspan, $style, $width));
     }
 
     /**

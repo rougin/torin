@@ -41,7 +41,7 @@ class ItemDepot extends Depot
      * @param integer $page
      * @param integer $limit
      *
-     * @return \Acme\Sample\User[]
+     * @return \Rougin\Torin\Models\Item[]
      */
     protected function getItems($page, $limit)
     {
@@ -66,6 +66,7 @@ class ItemDepot extends Depot
      */
     protected function getCode()
     {
+        /** @var string */
         $data = PHP_MAJOR_VERSION < 7 ? openssl_random_pseudo_bytes(16) : random_bytes(16);
 
         $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // Set version to 0100

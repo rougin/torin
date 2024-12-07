@@ -10,24 +10,9 @@ namespace Rougin\Gable;
 class Cell extends Element
 {
     /**
-     * @var string|null
-     */
-    protected $align = null;
-
-    /**
-     * @var integer|null
-     */
-    protected $cspan = null;
-
-    /**
      * @var string
      */
     protected $name = '';
-
-    /**
-     * @var integer|null
-     */
-    protected $rspan = null;
 
     /**
      * @var mixed|null
@@ -45,17 +30,26 @@ class Cell extends Element
      */
     public function __construct($value = null, $align = null, $class = null, $cspan = null, $rspan = null, $style = null, $width = null)
     {
-        $this->align = $align;
+        $this->withAttr('align', $align);
 
-        $this->class = $class;
+        if ($class)
+        {
+            $this->setClass($class);
+        }
 
-        $this->cspan = $cspan;
+        $this->withAttr('cspan', $cspan);
 
-        $this->rspan = $rspan;
+        $this->withAttr('rspan', $rspan);
 
-        $this->style = $style;
+        if ($style)
+        {
+            $this->setStyle($style);
+        }
 
-        $this->width = $width;
+        if ($width)
+        {
+            $this->setWidth($width);
+        }
 
         $this->value = $value;
 
@@ -71,7 +65,8 @@ class Cell extends Element
      */
     public function getAlign()
     {
-        return $this->align;
+        /** @var string|null */
+        return $this->attrs['align'];
     }
 
     /**
@@ -79,7 +74,8 @@ class Cell extends Element
      */
     public function getColspan()
     {
-        return $this->cspan;
+        /** @var integer|null */
+        return $this->attrs['cspan'];
     }
 
     /**
@@ -95,7 +91,8 @@ class Cell extends Element
      */
     public function getRowspan()
     {
-        return $this->rspan;
+        /** @var integer|null */
+        return $this->attrs['rspan'];
     }
 
     /**

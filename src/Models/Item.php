@@ -11,8 +11,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string       $name
  * @property string       $detail
  *
- * @method \Rougin\Torin\Models\Item create(array<string, mixed> $data)
- * @method integer count()
+ * @method integer                     count()
+ * @method \Rougin\Torin\Models\Item   create(array<string, mixed> $data)
+ * @method \Rougin\Torin\Models\Item[] get()
+ * @method \Rougin\Torin\Models\Item   limit(integer $value)
+ * @method \Rougin\Torin\Models\Item   offset(integer $value)
  *
  * @package Torin
  *

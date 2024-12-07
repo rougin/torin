@@ -6,8 +6,6 @@ use Rougin\Dexterity\Message\HttpResponse;
 use Rougin\Dexterity\Message\JsonResponse;
 use Rougin\Dexterity\Route\WithIndexMethod;
 use Rougin\Dexterity\Route\WithStoreMethod;
-use Rougin\Gable\Table;
-use Rougin\Temply\Plate;
 use Rougin\Torin\Checks\ItemCheck;
 use Rougin\Torin\Depots\ItemDepot;
 
@@ -73,11 +71,17 @@ class Items
      */
     protected function setIndexData($params)
     {
+        /** @var integer */
+        $limit = $params['l'] ?? 10;
+
+        /** @var integer */
         $page = $params['p'] ?? 1;
 
-        $result = $this->item->get($page, $params['l'] ?? 10);
+        $result = $this->item->get($page, $limit);
 
-        return new JsonResponse($result->toArray());
+        $items = $result->toArray();
+
+        return new JsonResponse($items);
     }
 
     /**
