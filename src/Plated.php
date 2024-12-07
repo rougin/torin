@@ -2,37 +2,37 @@
 
 namespace Rougin\Torin;
 
-use Rougin\Slytherin\Routing\Router as Slytherin;
+use Rougin\Slytherin\Routing\Router;
 
 /**
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Router extends Package
+class Plated extends Package
 {
     /**
      * @var string
      */
-    protected $namespace = 'Rougin\Torin\Routes';
+    protected $namespace = 'Rougin\Torin\Pages';
 
     /**
      * @var string
      */
-    protected $prefix = '/v1/';
+    protected $prefix = '/';
 
     /**
      * @return \Rougin\Slytherin\Routing\RouterInterface
      */
     protected function setRouter()
     {
-        $self = new Slytherin;
+        $self = new Router;
 
         $self->prefix($this->prefix, $this->namespace);
 
-        $self->get('items', 'Items@index');
+        $self->get('/', 'Hello@index');
 
-        $self->post('items', 'Items@store');
+        $self->get('items', 'Items@index');
 
         return $self;
     }

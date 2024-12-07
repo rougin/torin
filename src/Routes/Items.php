@@ -4,6 +4,7 @@ namespace Rougin\Torin\Routes;
 
 use Rougin\Dexterity\Message\HttpResponse;
 use Rougin\Dexterity\Message\JsonResponse;
+use Rougin\Dexterity\Route\WithIndexMethod;
 use Rougin\Dexterity\Route\WithStoreMethod;
 use Rougin\Gable\Table;
 use Rougin\Temply\Plate;
@@ -17,6 +18,7 @@ use Rougin\Torin\Depots\ItemDepot;
  */
 class Items
 {
+    use WithIndexMethod;
     use WithStoreMethod;
 
     /**
@@ -81,6 +83,20 @@ class Items
     protected function isStoreValid($parsed)
     {
         return $this->check->valid($parsed);
+    }
+
+    /**
+     * Executes the logic for returning an array of items.
+     *
+     * @param array<string, mixed> $params
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function setIndexData($params)
+    {
+        $text = 'The "[METHOD]" method must be overwriten in the concrete class.';
+
+        throw new \LogicException(str_replace('[METHOD]', __FUNCTION__, $text));
     }
 
     /**

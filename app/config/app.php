@@ -123,6 +123,7 @@ return array(
      */
     'views' => array(
 
+        __DIR__ . '/../assets',
         __DIR__ . '/../plates',
 
     ),
@@ -156,7 +157,8 @@ return array(
          * @link below on how to create a package for Slytherin.
          * @link https://github.com/rougin/slytherin/wiki/IntegrationInterface-Implementation
          */
-        'Rougin\Torin\Package',
+        'Rougin\Torin\Plated',
+        'Rougin\Torin\Router',
 
         /**
          * This section specifies the packages came from Weasley.

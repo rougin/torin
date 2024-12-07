@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string       $detail
  *
  * @method \Rougin\Torin\Models\Item create(array<string, mixed> $data)
+ * @method integer count()
  *
  * @package Torin
  *

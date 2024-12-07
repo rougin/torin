@@ -11,7 +11,7 @@ use Rougin\Slytherin\Integration\IntegrationInterface;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Package implements IntegrationInterface
+abstract class Package implements IntegrationInterface
 {
     /**
      * @param \Rougin\Slytherin\Container\ContainerInterface $container
@@ -21,7 +21,7 @@ class Package implements IntegrationInterface
      */
     public function define(ContainerInterface $container, Configuration $config)
     {
-        $current = new Router;
+        $current = $this->setRouter();
 
         $interface = 'Rougin\Slytherin\Routing\RouterInterface';
 
@@ -35,4 +35,9 @@ class Package implements IntegrationInterface
 
         return $container->set($interface, $current);
     }
+
+    /**
+     * @return \Rougin\Slytherin\Routing\RouterInterface
+     */
+    abstract protected function setRouter();
 }
