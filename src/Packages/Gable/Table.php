@@ -14,6 +14,11 @@ class Table extends Element
     const TYPE_ROW = 1;
 
     /**
+     * @var string|null
+     */
+    protected $alpineName = null;
+
+    /**
      * @var \Rougin\Gable\Row[]
      */
     protected $cols = array();
@@ -34,6 +39,30 @@ class Table extends Element
     public function __toString()
     {
         return $this->make();
+    }
+
+    /**
+     * @param string $name
+     * @param string|null  $class
+     * @param string|null  $style
+     * @param integer|null $width
+     *
+     * @return self
+     */
+    public function withAlpine($name = 'items', $class = null, $style = null, $width = null)
+    {
+        $this->alpineName = $name;
+
+        $col = $this->cols[count($this->cols) - 1];
+
+        $this->newRow($class, $style, $width);
+
+        foreach ($col->getCells() as $cell)
+        {
+            $this->setCell($cell->getName());
+        }
+
+        return $this;
     }
 
     /**
@@ -61,9 +90,19 @@ class Table extends Element
         {
             $html .= '<tbody>';
 
+            if ($this->alpineName)
+            {
+                $html .= '<template x-for="item in ' . $this->alpineName . '">';
+            }
+
             foreach ($this->rows as $row)
             {
                 $html .= $row->toHtml();
+            }
+
+            if ($this->alpineName)
+            {
+                $html .= '</template>';
             }
 
             $html .= '</tbody>';

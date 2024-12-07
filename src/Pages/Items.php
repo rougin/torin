@@ -27,6 +27,7 @@ class Items
         $table->setCell('Name', 'left')->withWidth(5);
         $table->setCell('Description', 'left')->withWidth(10)->withName('detail');
         $table->setCell('Action', 'left')->withWidth(1);
+        $table->withAlpine();
 
         $data = array('table' => $table);
 

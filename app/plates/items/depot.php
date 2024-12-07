@@ -4,6 +4,7 @@ const link = '<?= $url->set('/v1/items') ?>';
 <?= $form->script('items')
   ->with('name')
   ->with('detail')
+  ->with('items', array())
   ->withError()
   ->withLoading() ?>
 
@@ -21,7 +22,11 @@ items.load = function ()
   axios.get(link)
     .then(function (response)
     {
-      console.log(response.data)
+      const result = response.data
+
+      console.log(result.items)
+
+      self.items = result.items
     })
     .catch(function (error)
     {
