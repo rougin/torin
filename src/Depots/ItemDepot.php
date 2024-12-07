@@ -3,7 +3,6 @@
 namespace Rougin\Torin\Depots;
 
 use Rougin\Dexterity\Depot;
-use Rougin\Dexterity\Result;
 use Rougin\Torin\Models\Item;
 
 /**
@@ -46,18 +45,12 @@ class ItemDepot extends Depot
      */
     protected function getItems($page, $limit)
     {
-        $total = $this->getTotal();
+        $model = $this->item->limit($limit);
 
         $offset = $this->getOffset($page, $limit);
 
-        $result = $this->item->offset($offset);
-
-        $result = $result->limit((int) $limit);
-
         /** @var \Rougin\Torin\Models\Item[] */
-        $items = $result->get();
-
-        return new Result($items, $total, $limit);
+        return $model->offset($offset)->get();
     }
 
     /**
