@@ -58,6 +58,8 @@ items.store = function ()
       Modal.hide('item-modal')
 
       Alert.success('Item created!', 'Item successfully created.')
+
+      self.load()
     })
     .catch(function (error)
     {

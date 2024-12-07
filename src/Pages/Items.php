@@ -23,10 +23,11 @@ class Items
         $table->setClass('table mb-0');
 
         $table->newColumn();
-        $table->setCell('Code', 'left')->withWidth(1);
-        $table->setCell('Name', 'left')->withWidth(5);
-        $table->setCell('Description', 'left')->withWidth(10)->withName('detail');
-        $table->setCell('Action', 'left')->withWidth(1);
+        $table->setCell('Code', 'left')->withWidth(25);
+        $table->setCell('Name', 'left')->withWidth(20);
+        $table->setCell('Description', 'left')->withWidth(35)->withName('detail');
+        $table->setCell('Action', 'left')->withWidth(10);
+        $table->withLoading();
         $table->withAlpine();
 
         $data = array('table' => $table);

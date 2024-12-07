@@ -24,6 +24,16 @@ class Table extends Element
     protected $cols = array();
 
     /**
+     * @var integer
+     */
+    protected $loadingCount = 0;
+
+    /**
+     * @var string|null
+     */
+    protected $loadingName = null;
+
+    /**
      * @var \Rougin\Gable\Row[]
      */
     protected $rows = array();
@@ -65,32 +75,6 @@ class Table extends Element
     }
 
     /**
-     * @param string       $name
-     * @param string|null  $class
-     * @param string|null  $style
-     * @param integer|null $width
-     *
-     * @return self
-     */
-    public function withAlpine($name = 'items', $class = null, $style = null, $width = null)
-    {
-        $this->alpineName = $name;
-
-        $col = $this->cols[count($this->cols) - 1];
-
-        $this->newRow($class, $style, $width);
-
-        foreach ($col->getCells() as $cell)
-        {
-            $cell->withAttr('x-text', 'item.' . $cell->getName());
-
-            $this->addCell($cell);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function make()
@@ -113,8 +97,29 @@ class Table extends Element
         {
             $html .= '<tbody>';
 
+            if ($this->loadingName)
+            {
+                $cells = count($this->cols[0]->getCells());
+
+                $html .= '<template x-if="items.length === 0 && ' . $this->loadingName . '">';
+                $html .= '<template x-data="{ length: items && items.length ? items.length : ' . $this->loadingCount . ' }" x-for="i in length">';
+                $html .= '<tr>';
+
+                foreach (range(1, $cells) as $item)
+                {
+                    $html .= '<td class="align-middle placeholder-glow">';
+                    $html .= '<span class="placeholder col-12"></span>';
+                    $html .= '</td>';
+                }
+
+                $html .= '</tr>';
+                $html .= '</template>';
+                $html .= '</template>';
+            }
+
             if ($this->alpineName)
             {
+                $html .= '<template x-if="items && items.length > 0">';
                 $html .= '<template x-for="item in ' . $this->alpineName . '">';
             }
 
@@ -125,6 +130,7 @@ class Table extends Element
 
             if ($this->alpineName)
             {
+                $html .= '</template>';
                 $html .= '</template>';
             }
 
@@ -238,6 +244,52 @@ class Table extends Element
                 }
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * TODO: This is a specific code for "alpinejs".
+     *
+     * @param string       $name
+     * @param string|null  $class
+     * @param string|null  $style
+     * @param integer|null $width
+     *
+     * @return self
+     */
+    public function withAlpine($name = 'items', $class = null, $style = null, $width = null)
+    {
+        $this->alpineName = $name;
+
+        $col = $this->cols[count($this->cols) - 1];
+
+        $this->newRow($class, $style, $width);
+
+        foreach ($col->getCells() as $cell)
+        {
+            $new = new Cell(null, null, $class, $style, $width);
+
+            $new->withAttr('x-text', 'item.' . $cell->getName());
+
+            $this->addCell($new);
+        }
+
+        return $this;
+    }
+
+    /**
+     * TODO: This is a specific code for "alpinejs".
+     *
+     * @param  integer $count
+     * @param  string  $name
+     * @return self
+     */
+    public function withLoading($count = 5, $name = 'loading')
+    {
+        $this->loadingCount = $count;
+
+        $this->loadingName = $name;
 
         return $this;
     }
