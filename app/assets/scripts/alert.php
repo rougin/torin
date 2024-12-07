@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
 const Alert =
 {
   danger(title, text)

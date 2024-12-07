@@ -13,7 +13,7 @@
   </div>
 </div>
 
-<script>
+<script type="text/javascript">
 const Modal =
 {
   get(id)

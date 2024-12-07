@@ -2,6 +2,7 @@
 
 namespace Rougin\Torin\Pages;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Gable\Table;
 use Rougin\Temply\Plate;
 
@@ -14,10 +15,11 @@ class Items
 {
     /**
      * @param \Rougin\Temply\Plate $plate
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return string
      */
-    public function index(Plate $plate)
+    public function index(Plate $plate, ServerRequestInterface $request)
     {
         $table = new Table;
         $table->setClass('table mb-0');
@@ -30,7 +32,14 @@ class Items
         $table->withLoading();
         $table->withAlpine();
 
+        /** @var array<string, mixed> */
+        $params = $request->getQueryParams();
+
         $data = array('table' => $table);
+
+        $data['limit'] = $params['l'] ?? 10;
+
+        $data['page'] = $params['q'] ?? 1;
 
         return $plate->render('items.index', $data);
     }

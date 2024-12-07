@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
 const link = '<?= $url->set('/v1/items') ?>';
 
 <?= $form->script('items')
@@ -19,12 +19,16 @@ items.load = function ()
 
   self.loading = true
 
-  axios.get(link)
+  let data = { p: <?= $page ?>, l: <?= $limit ?> }
+
+  const search = new URLSearchParams(data)
+
+  const query = search.toString()
+
+  axios.get(link + '?' + query)
     .then(function (response)
     {
       const result = response.data
-
-      console.log(result.items)
 
       self.items = result.items
     })

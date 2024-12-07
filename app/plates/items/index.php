@@ -25,5 +25,5 @@
 <?= $block->end() ?>
 
 <?= $block->set('scripts') ?>
-  <?= $plate->add('items.depot', compact('form', 'url')) ?>
+  <?= $plate->add('items.depot', compact('form', 'url', 'page', 'limit')) ?>
 <?= $block->end() ?>
