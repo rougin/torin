@@ -34,6 +34,11 @@ class Table extends Element
     protected $loadingName = null;
 
     /**
+     * @var string
+     */
+    protected $noItemsText = 'No items found.';
+
+    /**
      * @var \Rougin\Gable\Row[]
      */
     protected $rows = array();
@@ -97,7 +102,7 @@ class Table extends Element
         {
             $html .= '<tbody>';
 
-            if ($this->loadingName)
+            if ($this->alpineName && $this->loadingName)
             {
                 $cells = count($this->cols[0]->getCells());
 
@@ -115,6 +120,16 @@ class Table extends Element
                 $html .= '</tr>';
                 $html .= '</template>';
                 $html .= '</template>';
+
+                // Show "no items found" text if loading is enabled ----------------------
+                $html .= '<template x-if="items.length === 0 && empty">';
+                $html .= '<tr>';
+                $html .= '<td colspan="' . $cells . '" class="align-middle text-center">';
+                $html .= '<span>' . $this->noItemsText . '</span>';
+                $html .= '</td>';
+                $html .= '</tr>';
+                $html .= '</template>';
+                // -----------------------------------------------------------------------
             }
 
             if ($this->alpineName)
@@ -321,6 +336,17 @@ class Table extends Element
         $cell->setName($name);
 
         $this->rows[$index]->setLast($cell);
+
+        return $this;
+    }
+
+    /**
+     * @param  string $text
+     * @return self
+     */
+    public function withNoItemsText($text)
+    {
+        $this->noItemsText = $text;
 
         return $this;
     }

@@ -5,6 +5,7 @@ const link = '<?= $url->set('/v1/items') ?>';
   ->with('name')
   ->with('detail')
   ->with('items', array())
+  ->with('empty', false)
   ->withError()
   ->withLoading() ?>
 
@@ -29,6 +30,11 @@ items.load = function ()
     .then(function (response)
     {
       const result = response.data
+
+      if (result.items.length === 0)
+      {
+        self.empty = true
+      }
 
       self.items = result.items
     })
