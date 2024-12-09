@@ -18,6 +18,10 @@ items.load = function ()
 {
   const self = this
 
+  self.name = null
+
+  self.detail = null
+
   self.loading = true
 
   let data = { p: <?= $page ?>, l: <?= $limit ?> }

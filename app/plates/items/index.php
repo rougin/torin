@@ -2,8 +2,12 @@
 
 <?= $block->body() ?>
   <div x-data="items">
-    <div class="mb-5">
+    <div class="mb-3">
       <?= $plate->add('navbar', compact('block', 'url')) ?>
+    </div>
+
+    <div class="container mb-3">
+      <span class="fs-1">Items</span>
     </div>
 
     <div class="container mb-3">
