@@ -14,6 +14,11 @@ class Table extends Element
     const TYPE_ROW = 1;
 
     /**
+     * @var string
+     */
+    protected $actionName = '';
+
+    /**
      * @var string|null
      */
     protected $alpineName = null;
@@ -22,6 +27,11 @@ class Table extends Element
      * @var \Rougin\Gable\Row[]
      */
     protected $cols = array();
+
+    /**
+     * @var boolean
+     */
+    protected $hasAction = false;
 
     /**
      * @var integer
@@ -262,6 +272,29 @@ class Table extends Element
 
         return $this;
     }
+
+    /**
+     * @param mixed|null   $value
+     * @param string|null  $align
+     * @param string|null  $class
+     * @param integer|null $cspan
+     * @param integer|null $rspan
+     * @param string|null  $style
+     * @param integer|null $width
+     *
+     * @return self
+     */
+    public function withActions($value = 'Action', $align = null, $class = null, $cspan = null, $rspan = null, $style = null, $width = null)
+    {
+        $this->actionName = $value;
+
+        $this->setCell($value, $align, $class, $cspan, $rspan, $style, $width);
+
+        $this->hasAction = true;
+
+        return $this;
+    }
+
 
     /**
      * TODO: This is a specific code for "alpinejs".

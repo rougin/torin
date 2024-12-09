@@ -28,7 +28,7 @@ class Items
         $table->setCell('Code', 'left')->withWidth(27);
         $table->setCell('Name', 'left')->withWidth(20);
         $table->setCell('Description', 'left')->withWidth(35)->withName('detail');
-        $table->setCell('Action', 'left')->withWidth(10);
+        $table->withActions(null, 'left')->withWidth(10);
         $table->withLoading();
         $table->withAlpine();
 
