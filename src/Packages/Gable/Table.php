@@ -364,7 +364,9 @@ class Table extends Element
 
                 foreach ($this->actions as $action)
                 {
-                    $html .= '<div><a class="dropdown-item" href="javascript:void(0)" @click="' . $action->onClick() . '">' . $action->getName() . '</a></div>';
+                    $danger = $action->isDanger() ? ' text-danger' : '';
+
+                    $html .= '<div><a class="dropdown-item' . $danger . '" href="javascript:void(0)" @click="' . $action->onClick() . '">' . $action->getName() . '</a></div>';
                 }
 
                 $html .= '</div>';
@@ -379,6 +381,26 @@ class Table extends Element
 
             $this->addCell($new);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param  string $clicked
+     * @param  string $name
+     * @return self
+     */
+    public function withDeleteAction($clicked, $name = 'Delete')
+    {
+        $action = new Action;
+
+        $action->setName($name);
+
+        $action->ifClicked($clicked);
+
+        $action->setDanger(true);
+
+        $this->actions[] = $action;
 
         return $this;
     }

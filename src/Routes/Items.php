@@ -4,6 +4,7 @@ namespace Rougin\Torin\Routes;
 
 use Rougin\Dexterity\Message\HttpResponse;
 use Rougin\Dexterity\Message\JsonResponse;
+use Rougin\Dexterity\Route\WithDeleteMethod;
 use Rougin\Dexterity\Route\WithIndexMethod;
 use Rougin\Dexterity\Route\WithStoreMethod;
 use Rougin\Dexterity\Route\WithUpdateMethod;
@@ -17,6 +18,7 @@ use Rougin\Torin\Depots\ItemDepot;
  */
 class Items
 {
+    use WithDeleteMethod;
     use WithIndexMethod;
     use WithStoreMethod;
     use WithUpdateMethod;
@@ -45,6 +47,18 @@ class Items
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
+    protected function invalidDelete()
+    {
+        $code = HttpResponse::UNPROCESSABLE;
+
+        $errors = $this->check->errors();
+
+        return new JsonResponse($errors, $code);
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     protected function invalidStore()
     {
         $code = HttpResponse::UNPROCESSABLE;
@@ -64,6 +78,16 @@ class Items
         $errors = $this->check->errors();
 
         return new JsonResponse($errors, $code);
+    }
+
+    /**
+     * @param integer $id
+     *
+     * @return boolean
+     */
+    protected function isDeleteValid($id)
+    {
+        return $this->item->rowExists($id);
     }
 
     /**
@@ -87,6 +111,18 @@ class Items
     protected function isUpdateValid($id, $parsed)
     {
         return $this->check->valid($parsed);
+    }
+
+    /**
+     * @param integer $id
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function setDeleteData($id)
+    {
+        $this->item->delete($id);
+
+        return new JsonResponse('Deleted!', 204);
     }
 
     /**

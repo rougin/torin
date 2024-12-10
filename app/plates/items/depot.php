@@ -8,12 +8,33 @@ const link = '<?= $url->set('/v1/items') ?>';
   ->with('empty', false)
   ->with('loadError', false)
   ->with('id', null)
+  ->with('delete', false)
   ->withError()
   ->withLoading() ?>
 
 items.init = function ()
 {
   this.load()
+}
+
+items.close = function ()
+{
+  const self = this
+
+  Modal.hide('delete-item-modal')
+
+  Modal.hide('item-detail-modal')
+
+  setTimeout(() =>
+  {
+    self.detail = null
+
+    self.id = null
+
+    self.loadError = false
+
+    self.name = null
+  }, 1000)
 }
 
 items.edit = function (item)
@@ -26,18 +47,12 @@ items.edit = function (item)
 
   self.id = item.id
 
-  Modal.show('item-modal')
+  Modal.show('item-detail-modal')
 }
 
 items.load = function ()
 {
   const self = this
-
-  self.loadError = false
-
-  self.name = null
-
-  self.detail = null
 
   self.loading = true
 
@@ -69,6 +84,35 @@ items.load = function ()
     })
 }
 
+items.remove = function (id)
+{
+  const input = new FormData
+
+  const self = this
+
+  self.loading = true
+
+  self.error = {}
+
+  axios.delete(link + '/' + id, input)
+    .then(function (response)
+    {
+      self.close()
+
+      Alert.success('Item deleted!', 'Item successfully deleted.')
+
+      self.load()
+    })
+    .catch(function (error)
+    {
+      self.error = error.response.data
+    })
+    .finally(function ()
+    {
+      self.loading = false
+    })
+}
+
 items.store = function ()
 {
   const input = new FormData
@@ -86,7 +130,7 @@ items.store = function ()
   axios.post(link, input)
     .then(function (response)
     {
-      Modal.hide('item-modal')
+      self.close()
 
       Alert.success('Item created!', 'Item successfully created.')
 
@@ -100,6 +144,17 @@ items.store = function ()
     {
       self.loading = false
     })
+}
+
+items.trash = function (item)
+{
+  const self = this
+
+  self.name = item.name
+
+  self.id = item.id
+
+  Modal.show('delete-item-modal')
 }
 
 items.update = function (id)
@@ -119,7 +174,7 @@ items.update = function (id)
   axios.put(link + '/' + id, input)
     .then(function (response)
     {
-      Modal.hide('item-modal')
+      self.close()
 
       Alert.success('Item updated!', 'Item successfully updated.')
 

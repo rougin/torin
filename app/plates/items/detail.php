@@ -1,12 +1,12 @@
-<div class="modal fade" id="item-modal" data-bs-backdrop="static" tabindex="-1">
+<div class="modal fade" id="item-detail-modal" data-bs-backdrop="static" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
     <div class="modal-header text-white bg-primary border-bottom-0">
       <template x-if="id">
-        <div class="modal-title fs-5 fw-bold" id="item-modal-label">Update Item Details</div>
+        <div class="modal-title fs-5 fw-bold" id="item-detail-modal-label">Update Item Details</div>
       </template>
       <template x-if="! id">
-        <div class="modal-title fs-5 fw-bold" id="item-modal-label">Create New Item</div>
+        <div class="modal-title fs-5 fw-bold" id="item-detail-modal-label">Create New Item</div>
       </template>
     </div>
     <div class="modal-body">
@@ -27,7 +27,7 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-      <?= $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('data-bs-dismiss', 'modal')->disablesOn('loading') ?>
+      <?= $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
       <template x-if="id">
         <?= $form->button('Update Details', 'btn btn-primary')->onClick('update(id)')->disablesOn('loading') ?>
       </template>

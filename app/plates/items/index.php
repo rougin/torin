@@ -12,7 +12,7 @@
 
     <div class="container mb-3">
       <?= $form->button('Create New')->withClass('btn btn-primary shadow-lg')
-        ->with('data-bs-toggle', 'modal')->with('data-bs-target', '#item-modal')
+        ->with('data-bs-toggle', 'modal')->with('data-bs-target', '#item-detail-modal')
         ->disablesOn('loading') ?>
     </div>
 
@@ -24,7 +24,8 @@
       </div>
     </div>
 
-    <?= $plate->add('items.modal', compact('form')) ?>
+    <?= $plate->add('items.delete', compact('form')) ?>
+    <?= $plate->add('items.detail', compact('form')) ?>
   </div>
 <?= $block->end() ?>
 

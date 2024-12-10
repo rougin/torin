@@ -38,6 +38,16 @@ class ItemDepot extends Depot
     }
 
     /**
+     * @param integer $id
+     *
+     * @return boolean
+     */
+    public function rowExists($id)
+    {
+        return $this->item->find($id) !== null;
+    }
+
+    /**
      * @param integer              $id
      * @param array<string, mixed> $data
      *
@@ -45,7 +55,7 @@ class ItemDepot extends Depot
      */
     public function update($id, $data)
     {
-        $item = $this->item->findOrFail($id);
+        $item = $this->findRow($id);
 
         /** @var string */
         $name = $data['name'];
@@ -56,6 +66,41 @@ class ItemDepot extends Depot
         $item->detail = $detail;
 
         return $item->save();
+    }
+
+    /**
+     * @param integer $id
+     *
+     * @return boolean
+     */
+    protected function deleteRow($id)
+    {
+        return $this->findRow($id)->delete();
+    }
+
+    /**
+     * @param integer $id
+     *
+     * @return mixed
+     * @throws \UnexpectedValueException
+     */
+    protected function findRow($id)
+    {
+        return $this->item->findOrFail($id);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCode()
+    {
+        /** @var string */
+        $data = PHP_MAJOR_VERSION < 7 ? openssl_random_pseudo_bytes(16) : random_bytes(16);
+
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // Set version to 0100
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // Set bits 6-7 to 10
+
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 
     /**
@@ -80,19 +125,5 @@ class ItemDepot extends Depot
     protected function getTotal()
     {
         return $this->item->count();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCode()
-    {
-        /** @var string */
-        $data = PHP_MAJOR_VERSION < 7 ? openssl_random_pseudo_bytes(16) : random_bytes(16);
-
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // Set version to 0100
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // Set bits 6-7 to 10
-
-        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 }

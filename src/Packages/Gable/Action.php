@@ -15,6 +15,11 @@ class Action
     protected $action = null;
 
     /**
+     * @var boolean
+     */
+    protected $danger = false;
+
+    /**
      * @var string|null
      */
     protected $name = null;
@@ -31,6 +36,14 @@ class Action
     }
 
     /**
+     * @return boolean
+     */
+    public function isDanger()
+    {
+        return $this->danger;
+    }
+
+    /**
      * @return string|null
      */
     public function onClick()
@@ -44,6 +57,17 @@ class Action
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param boolean $danger
+     * @return self
+     */
+    public function setDanger($danger)
+    {
+        $this->danger = $danger;
+
+        return $this;
     }
 
     /**
