@@ -29,6 +29,8 @@ items.close = function ()
   {
     self.detail = null
 
+    self.error = {}
+
     self.id = null
 
     self.loadError = false
