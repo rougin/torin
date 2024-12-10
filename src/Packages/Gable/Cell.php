@@ -114,4 +114,16 @@ class Cell extends Element
 
         return $this;
     }
+
+    /**
+     * @param mixed $value
+     *
+     * @return self
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
 }

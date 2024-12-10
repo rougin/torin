@@ -6,6 +6,7 @@ use Rougin\Dexterity\Message\HttpResponse;
 use Rougin\Dexterity\Message\JsonResponse;
 use Rougin\Dexterity\Route\WithIndexMethod;
 use Rougin\Dexterity\Route\WithStoreMethod;
+use Rougin\Dexterity\Route\WithUpdateMethod;
 use Rougin\Torin\Checks\ItemCheck;
 use Rougin\Torin\Depots\ItemDepot;
 
@@ -18,6 +19,7 @@ class Items
 {
     use WithIndexMethod;
     use WithStoreMethod;
+    use WithUpdateMethod;
 
     /**
      * @var \Rougin\Torin\Checks\ItemCheck
@@ -53,6 +55,18 @@ class Items
     }
 
     /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function invalidUpdate()
+    {
+        $code = HttpResponse::UNPROCESSABLE;
+
+        $errors = $this->check->errors();
+
+        return new JsonResponse($errors, $code);
+    }
+
+    /**
      * @param array<string, mixed> $parsed
      *
      * @return boolean
@@ -63,8 +77,19 @@ class Items
     }
 
     /**
-     * Executes the logic for returning an array of items.
+     * Checks if the specified item can be updated.
      *
+     * @param integer              $id
+     * @param array<string, mixed> $parsed
+     *
+     * @return boolean
+     */
+    protected function isUpdateValid($id, $parsed)
+    {
+        return $this->check->valid($parsed);
+    }
+
+    /**
      * @param array<string, mixed> $params
      *
      * @return \Psr\Http\Message\ResponseInterface
@@ -94,5 +119,18 @@ class Items
         $this->item->create($parsed);
 
         return new JsonResponse('Created!', 201);
+    }
+
+    /**
+     * @param integer              $id
+     * @param array<string, mixed> $parsed
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function setUpdateData($id, $parsed)
+    {
+        $this->item->update($id, $parsed);
+
+        return new JsonResponse('Updated!', 204);
     }
 }

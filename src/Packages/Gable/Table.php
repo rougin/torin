@@ -9,14 +9,20 @@ namespace Rougin\Gable;
  */
 class Table extends Element
 {
+
     const TYPE_COL = 0;
 
     const TYPE_ROW = 1;
 
     /**
-     * @var string
+     * @var integer
      */
-    protected $actionName = '';
+    protected $actionIndex = 0;
+
+    /**
+     * @var \Rougin\Gable\Action[]
+     */
+    protected $actions = array();
 
     /**
      * @var string|null
@@ -255,21 +261,6 @@ class Table extends Element
     }
 
     /**
-     * @param string|null  $align
-     * @param string|null  $class
-     * @param integer|null $cspan
-     * @param integer|null $rspan
-     * @param string|null  $style
-     * @param integer|null $width
-     *
-     * @return self
-     */
-    public function setEmptyCell($align = null, $class = null, $cspan = null, $rspan = null, $style = null, $width = null)
-    {
-        return $this->setCell(null, $align, $class, $cspan, $rspan, $style, $width);
-    }
-
-    /**
      * @param array<string, mixed>[] $data
      *
      * @return self
@@ -299,6 +290,21 @@ class Table extends Element
     }
 
     /**
+     * @param string|null  $align
+     * @param string|null  $class
+     * @param integer|null $cspan
+     * @param integer|null $rspan
+     * @param string|null  $style
+     * @param integer|null $width
+     *
+     * @return self
+     */
+    public function setEmptyCell($align = null, $class = null, $cspan = null, $rspan = null, $style = null, $width = null)
+    {
+        return $this->setCell(null, $align, $class, $cspan, $rspan, $style, $width);
+    }
+
+    /**
      * @param mixed|null   $value
      * @param string|null  $align
      * @param string|null  $class
@@ -311,15 +317,20 @@ class Table extends Element
      */
     public function withActions($value = 'Action', $align = null, $class = null, $cspan = null, $rspan = null, $style = null, $width = null)
     {
-        $this->actionName = $value;
-
         $this->setCell($value, $align, $class, $cspan, $rspan, $style, $width);
 
         $this->hasAction = true;
 
+        // Get the last cell as the action's index ---
+        $index = count($this->cols) - 1;
+
+        $cells = $this->cols[$index]->getCells();
+
+        $this->actionIndex = count($cells) - 1;
+        // -------------------------------------------
+
         return $this;
     }
-
 
     /**
      * TODO: This is a specific code for "alpinejs".
@@ -339,9 +350,30 @@ class Table extends Element
 
         $this->newRow($class, $style, $width);
 
-        foreach ($col->getCells() as $cell)
+        foreach ($col->getCells() as $index => $cell)
         {
             $new = new Cell(null, null, $class, $style, $width);
+
+            if ($index === $this->actionIndex)
+            {
+                $html = '<div class="dropdown">';
+                $html .= '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">';
+                $html .= $cell->getName() ? $cell->getName() : 'Action' . (count($this->actions) > 1 ? 's' : '');
+                $html .= '</button>';
+                $html .= '<div class="dropdown-menu dropdown-menu-end">';
+
+                foreach ($this->actions as $action)
+                {
+                    $html .= '<div><a class="dropdown-item" href="javascript:void(0)" @click="' . $action->onClick() . '">' . $action->getName() . '</a></div>';
+                }
+
+                $html .= '</div>';
+                $html .= '</div>';
+
+                $this->addCell($new->setValue($html));
+
+                continue;
+            }
 
             $new->withAttr('x-text', 'item.' . $cell->getName());
 
@@ -422,6 +454,24 @@ class Table extends Element
         $this->noItemsKey = $key;
 
         $this->noItemsText = $text;
+
+        return $this;
+    }
+
+    /**
+     * @param  string $clicked
+     * @param  string $name
+     * @return self
+     */
+    public function withUpdateAction($clicked, $name = 'Update')
+    {
+        $action = new Action;
+
+        $action->setName($name);
+
+        $action->ifClicked($clicked);
+
+        $this->actions[] = $action;
 
         return $this;
     }

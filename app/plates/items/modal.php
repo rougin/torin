@@ -2,7 +2,12 @@
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
     <div class="modal-header text-white bg-primary border-bottom-0">
-      <div class="modal-title fs-5 fw-bold" id="item-modal-label">Create New Page</div>
+      <template x-if="id">
+        <div class="modal-title fs-5 fw-bold" id="item-modal-label">Update Item Details</div>
+      </template>
+      <template x-if="! id">
+        <div class="modal-title fs-5 fw-bold" id="item-modal-label">Create New Item</div>
+      </template>
     </div>
     <div class="modal-body">
       <div class="mb-3">
@@ -23,7 +28,12 @@
         </div>
       </div>
       <?= $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('data-bs-dismiss', 'modal')->disablesOn('loading') ?>
-      <?= $form->button('Create New', 'btn btn-primary')->onClick('store')->disablesOn('loading') ?>
+      <template x-if="id">
+        <?= $form->button('Update Details', 'btn btn-primary')->onClick('update(id)')->disablesOn('loading') ?>
+      </template>
+      <template x-if="! id">
+        <?= $form->button('Create New', 'btn btn-primary')->onClick('store')->disablesOn('loading') ?>
+      </template>
     </div>
   </div>
 </div>

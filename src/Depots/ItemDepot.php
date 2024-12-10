@@ -38,6 +38,27 @@ class ItemDepot extends Depot
     }
 
     /**
+     * @param integer              $id
+     * @param array<string, mixed> $data
+     *
+     * @return boolean
+     */
+    public function update($id, $data)
+    {
+        $item = $this->item->findOrFail($id);
+
+        /** @var string */
+        $name = $data['name'];
+        $item->name = $name;
+
+        /** @var string */
+        $detail = $data['detail'];
+        $item->detail = $detail;
+
+        return $item->save();
+    }
+
+    /**
      * @param integer $page
      * @param integer $limit
      *

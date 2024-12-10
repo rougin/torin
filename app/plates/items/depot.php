@@ -7,12 +7,26 @@ const link = '<?= $url->set('/v1/items') ?>';
   ->with('items', array())
   ->with('empty', false)
   ->with('loadError', false)
+  ->with('id', null)
   ->withError()
   ->withLoading() ?>
 
 items.init = function ()
 {
   this.load()
+}
+
+items.edit = function (item)
+{
+  const self = this
+
+  self.name = item.name
+
+  self.detail = item.detail
+
+  self.id = item.id
+
+  Modal.show('item-modal')
 }
 
 items.load = function ()
@@ -75,6 +89,39 @@ items.store = function ()
       Modal.hide('item-modal')
 
       Alert.success('Item created!', 'Item successfully created.')
+
+      self.load()
+    })
+    .catch(function (error)
+    {
+      self.error = error.response.data
+    })
+    .finally(function ()
+    {
+      self.loading = false
+    })
+}
+
+items.update = function (id)
+{
+  const input = new FormData
+
+  const self = this
+
+  input.append('name', self.name)
+
+  input.append('detail', self.detail)
+
+  self.loading = true
+
+  self.error = {}
+
+  axios.put(link + '/' + id, input)
+    .then(function (response)
+    {
+      Modal.hide('item-modal')
+
+      Alert.success('Item updated!', 'Item successfully updated.')
 
       self.load()
     })

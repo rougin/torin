@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method integer                     count()
  * @method \Rougin\Torin\Models\Item   create(array<string, mixed> $data)
+ * @method \Rougin\Torin\Models\Item findOrFail(mixed $id)
  * @method \Rougin\Torin\Models\Item[] get()
  * @method \Rougin\Torin\Models\Item   limit(integer $value)
  * @method \Rougin\Torin\Models\Item   offset(integer $value)

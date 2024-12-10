@@ -30,6 +30,8 @@ class Router extends Package
 
         $self->prefix($this->prefix, $this->namespace);
 
+        $self->put('items/:id', 'Items@update');
+
         $self->get('items', 'Items@index');
 
         $self->post('items', 'Items@store');
