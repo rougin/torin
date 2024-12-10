@@ -22,6 +22,9 @@
           <div><?= $table ?></div>
         </div>
       </div>
+      <div class="mt-3">
+        <?= $pagee ?>
+      </div>
     </div>
 
     <?= $plate->add('items.delete', compact('form')) ?>
@@ -30,5 +33,5 @@
 <?= $block->end() ?>
 
 <?= $block->set('scripts') ?>
-  <?= $plate->add('items.depot', compact('form', 'url', 'page', 'limit')) ?>
+  <?= $plate->add('items.depot', compact('form', 'pagee', 'url')) ?>
 <?= $block->end() ?>

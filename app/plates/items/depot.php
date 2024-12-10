@@ -58,7 +58,9 @@ items.load = function ()
 
   self.loading = true
 
-  let data = { p: <?= $page ?>, l: <?= $limit ?> }
+  let data = { p: <?= $pagee->getPage() ?> }
+
+  data.l = <?= $pagee->getLimit() ?>
 
   const search = new URLSearchParams(data)
 

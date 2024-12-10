@@ -3,6 +3,7 @@
 namespace Rougin\Torin\Pages;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
 use Rougin\Temply\Plate;
 
@@ -39,9 +40,11 @@ class Items
 
         $data = array('table' => $table);
 
-        $data['limit'] = $params['l'] ?? 10;
+        $limit = $params['l'] ?? 10;
 
-        $data['page'] = $params['q'] ?? 1;
+        $page = $params['q'] ?? 1;
+
+        $data['pagee'] = new Pagee($page, $limit);
 
         return $plate->render('items.index', $data);
     }
