@@ -6,6 +6,7 @@ const link = '<?= $url->set('/v1/items') ?>';
   ->with('detail')
   ->with('items', array())
   ->with('empty', false)
+  ->with('loadError', false)
   ->withError()
   ->withLoading() ?>
 
@@ -17,6 +18,8 @@ items.init = function ()
 items.load = function ()
 {
   const self = this
+
+  self.loadError = false
 
   self.name = null
 
@@ -44,7 +47,7 @@ items.load = function ()
     })
     .catch(function (error)
     {
-      console.log(error)
+      self.loadError = true
     })
     .finally(function ()
     {

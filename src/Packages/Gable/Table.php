@@ -46,7 +46,22 @@ class Table extends Element
     /**
      * @var string
      */
+    protected $noItemsKey = 'empty';
+
+    /**
+     * @var string
+     */
     protected $noItemsText = 'No items found.';
+
+    /**
+     * @var string
+     */
+    protected $loadErrorKey = 'loadError';
+
+    /**
+     * @var string
+     */
+    protected $loadErrorText = 'An error occured in getting the items.';
 
     /**
      * @var \Rougin\Gable\Row[]
@@ -131,15 +146,25 @@ class Table extends Element
                 $html .= '</template>';
                 $html .= '</template>';
 
-                // Show "no items found" text if loading is enabled ----------------------
-                $html .= '<template x-if="items.length === 0 && empty">';
+                // Show "no items found" text if loading is enabled -------------------------
+                $html .= '<template x-if="items.length === 0 && ' . $this->noItemsKey . '">';
                 $html .= '<tr>';
                 $html .= '<td colspan="' . $cells . '" class="align-middle text-center">';
                 $html .= '<span>' . $this->noItemsText . '</span>';
                 $html .= '</td>';
                 $html .= '</tr>';
                 $html .= '</template>';
-                // -----------------------------------------------------------------------
+                // --------------------------------------------------------------------------
+
+                // Show "loading error" text if there is an error when loading --------------------------
+                $html .= '<template x-if="! ' . $this->loadingName . ' && ' . $this->loadErrorKey . '">';
+                $html .= '<tr>';
+                $html .= '<td colspan="' . $cells . '" class="align-middle text-center">';
+                $html .= '<span>' . $this->loadErrorText . '</span>';
+                $html .= '</td>';
+                $html .= '</tr>';
+                $html .= '</template>';
+                // --------------------------------------------------------------------------------------
             }
 
             if ($this->alpineName)
@@ -327,6 +352,20 @@ class Table extends Element
     }
 
     /**
+     * @param  string $text
+     * @param string $key
+     * @return self
+     */
+    public function withLoadErrorText($text, $key = 'loadError')
+    {
+        $this->loadErrorKey = $key;
+
+        $this->loadErrorText = $text;
+
+        return $this;
+    }
+
+    /**
      * TODO: This is a specific code for "alpinejs".
      *
      * @param  integer $count
@@ -375,10 +414,13 @@ class Table extends Element
 
     /**
      * @param  string $text
+     * @param string $key
      * @return self
      */
-    public function withNoItemsText($text)
+    public function withNoItemsText($text, $key = 'empty')
     {
+        $this->noItemsKey = $key;
+
         $this->noItemsText = $text;
 
         return $this;
