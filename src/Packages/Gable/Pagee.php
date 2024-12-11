@@ -31,11 +31,6 @@ class Pagee
     /**
      * @var integer
      */
-    protected $maxTotal = 2;
-
-    /**
-     * @var integer
-     */
     protected $page = 1;
 
     /**
@@ -82,7 +77,9 @@ class Pagee
         $html .= $this->setButton('Previous', $link, $disabled);
         // -----------------------------------------------------
 
-        foreach (range(1, $this->total) as $page)
+        $total = (int) ceil($this->total / $this->limit);
+
+        foreach (range(1, $total) as $page)
         {
             $active = $page === $this->page;
 
@@ -92,15 +89,15 @@ class Pagee
         }
 
         // "Next" button -----------------------------------
-        $disabled = $this->page >= $this->total;
+        $disabled = $this->page >= $total;
         $link = $this->setUrl($this->page + 1, $disabled);
 
         $html .= $this->setButton('Next', $link, $disabled);
         // -------------------------------------------------
 
         // "Last page" button ------------------------------
-        $disabled = $this->page === $this->total;
-        $link = $this->setUrl($this->total);
+        $disabled = $this->page === $total;
+        $link = $this->setUrl($total);
         $html .= $this->setButton('Last', $link, $disabled);
         // -------------------------------------------------
 
@@ -133,17 +130,6 @@ class Pagee
     public function setLink($link)
     {
         $this->link = $link;
-
-        return $this;
-    }
-
-    /**
-     * @param integer $total
-     * @return self
-     */
-    public function setMaxPages($total)
-    {
-        $this->maxTotal = $total;
 
         return $this;
     }
