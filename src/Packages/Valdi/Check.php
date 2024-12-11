@@ -56,7 +56,7 @@ class Check
         /** @var string[][] */
         $values = array_values($this->errors);
 
-        return (string) $values[0][0];
+        return $values[0][0];
     }
 
     /**

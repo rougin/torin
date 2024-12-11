@@ -85,7 +85,9 @@ class Pagee
 
             $link = $this->setUrl($page, $active);
 
-            $html .= $this->setButton((string) $page, $link, $active, self::BTN_ACTIVE);
+            $text = (string) $page;
+
+            $html .= $this->setButton($text, $link, $active, self::BTN_ACTIVE);
         }
 
         // "Next" button -----------------------------------

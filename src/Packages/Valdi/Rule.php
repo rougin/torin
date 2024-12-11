@@ -67,7 +67,7 @@ class Rule
         // Extract all dependency fields/values -----
         if (count($details) > 1)
         {
-            $details[1] = (string) trim($details[1]);
+            $details[1] = trim($details[1]);
 
             /** @var string[] */
             $values = explode(',', $details[1]);

@@ -105,6 +105,6 @@ class Plate
             $html = $filter->filter($html);
         }
 
-        return (string) $html;
+        return $html;
     }
 }

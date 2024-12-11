@@ -55,8 +55,15 @@ class Cell extends Element
 
         if ($value)
         {
-            /** @var string $value */
-            $this->name = ltrim(strtolower((string) preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $value)), '_');
+            $regex = '/[A-Z]([A-Z](?![a-z]))*/';
+
+            /** @var string */
+            $parsed = $value;
+
+            /** @var string */
+            $text = preg_replace($regex, '_$0', $parsed);
+
+            $this->name = ltrim(strtolower($text), '_');
         }
     }
 

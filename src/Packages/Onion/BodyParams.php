@@ -29,7 +29,7 @@ class BodyParams implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, HandlerInterface $handler)
     {
-        $method = (string) $request->getMethod();
+        $method = $request->getMethod();
 
         if (! in_array($method, $this->complex))
         {
@@ -44,7 +44,7 @@ class BodyParams implements MiddlewareInterface
         /** @var array<string, string> */
         $parsed = array();
 
-        parse_str((string) $contents, $parsed);
+        parse_str($contents, $parsed);
 
         if (strpos($contents, 'form-data') !== false)
         {
@@ -100,7 +100,7 @@ class BodyParams implements MiddlewareInterface
             /** @var array<string> */
             $headerParts = preg_split('#; |\r\n#', $head);
 
-            $key = null;
+            $key = '';
 
             $thisHeader = array();
 
@@ -129,16 +129,16 @@ class BodyParams implements MiddlewareInterface
                 $thisHeader[$keyVal[1]] = $keyVal[3];
             }
 
-            if ($key === null)
+            if ($key === '')
             {
-            continue;
+                continue;
             }
 
-            // If the key is multidimensional, generate -----------
-            // multidimentional array based off of the parts ------
-            /** @var array<string> */
-            $nameParts = preg_split('#(?=\[.*\])#', (string) $key);
-            // ----------------------------------------------------
+            // If the key is multidimensional, generate --------
+            // multidimentional array based off of the parts ---
+            /** @var string[] */
+            $nameParts = preg_split('#(?=\[.*\])#', $key);
+            // -------------------------------------------------
 
             if (count($nameParts) < 1)
             {
@@ -152,7 +152,7 @@ class BodyParams implements MiddlewareInterface
 
                 $filename = tempnam(sys_get_temp_dir(), 'php');
 
-                file_put_contents((string) $filename, $body);
+                file_put_contents($filename, $body);
 
                 $item = array('error' => 0);
 
@@ -226,9 +226,9 @@ class BodyParams implements MiddlewareInterface
 
                 if (isset($thisHeader['filename']))
                 {
-                    $temp = (string) sys_get_temp_dir();
+                    $temp = sys_get_temp_dir();
 
-                    $filename = (string) tempnam($temp, 'php');
+                    $filename = tempnam($temp, 'php');
 
                     file_put_contents($filename, $body);
 
@@ -238,7 +238,7 @@ class BodyParams implements MiddlewareInterface
 
                     $file['type'] = $thisHeader['Content-Type'];
 
-                    $file['tmp_name'] = (string) $filename;
+                    $file['tmp_name'] = $filename;
 
                     $file['size'] = filesize($body);
 
