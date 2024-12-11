@@ -4,10 +4,18 @@
     <div class="collapse navbar-collapse d-flex" id="navbarNav">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="<?= $url->set('/') ?>">Home</a>
+          <?php if ($url->isCurrent('/')): ?>
+            <div class="nav-link active fw-bold">Home</div>
+          <?php else: ?>
+            <a class="nav-link" href="<?= $url->set('/') ?>">Home</a>
+          <?php endif ?>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?= $url->set('/items') ?>">Items</a>
+          <?php if ($url->isCurrent('/items')): ?>
+            <div class="nav-link active fw-bold">Items</div>
+          <?php else: ?>
+            <a class="nav-link" href="<?= $url->set('/items') ?>">Items</a>
+          <?php endif ?>
         </li>
       </ul>
     </div>

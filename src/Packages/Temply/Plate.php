@@ -2,12 +2,13 @@
 
 namespace Rougin\Temply;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Slytherin\Template\RendererInterface;
 use Rougin\Temply\Helpers\FormHelper;
+use Rougin\Temply\Helpers\LinkHelper;
 use Staticka\Filter\LayoutFilter;
 use Staticka\Helper\BlockHelper;
 use Staticka\Helper\LayoutHelper;
-use Staticka\Helper\LinkHelper;
 use Staticka\Helper\PlateHelper;
 
 /**
@@ -41,8 +42,9 @@ class Plate
 
     /**
      * @param \Rougin\Slytherin\Template\RendererInterface $parent
+     * @param \Psr\Http\Message\ServerRequestInterface     $request
      */
-    public function __construct(RendererInterface $parent)
+    public function __construct(RendererInterface $parent, ServerRequestInterface $request)
     {
         $render = new Render($parent);
 
@@ -53,25 +55,25 @@ class Plate
         // ---------------------------------
 
         // Staticka Helpers ------------------------------
-        $this->helpers[] = new BlockHelper;
-
-        $this->helpers[] = new LayoutHelper($render);
+        $this->helpers[] = (new FormHelper)->withAlpine();
 
         $this->helpers[] = new PlateHelper($render);
 
-        $this->helpers[] = (new FormHelper)->withAlpine();
+        $this->helpers[] = new BlockHelper;
+
+        $this->helpers[] = new LayoutHelper($render);
         // -----------------------------------------------
 
-        // TODO: Remove usage of "APP_URL" ---
+        // TODO: Remove usage of "APP_URL" ----------
+        $server = $request->getServerParams();
+
         /** @var string */
         $link = getenv('APP_URL');
 
-        $link = new LinkHelper($link);
+        $this->link = new LinkHelper($link, $server);
 
-        $this->link = $link;
-
-        $this->helpers[] = $link;
-        // -----------------------------------
+        $this->helpers[] = $this->link;
+        // ------------------------------------------
     }
 
     /**
