@@ -44,8 +44,8 @@ class Pagee
     protected $total = 0;
 
     /**
-     * @param integer $page
-     * @param integer $limit
+     * @param integer     $page
+     * @param integer     $limit
      * @param string|null $link
      */
     public function __construct($page, $limit, $link = null)
@@ -85,7 +85,7 @@ class Pagee
 
             $link = $this->setUrl($page, $active);
 
-            $html .= $this->setButton($page, $link, $active, self::BTN_ACTIVE);
+            $html .= $this->setButton((string) $page, $link, $active, self::BTN_ACTIVE);
         }
 
         // "Next" button -----------------------------------
@@ -125,6 +125,7 @@ class Pagee
 
     /**
      * @param string $link
+     *
      * @return self
      */
     public function setLink($link)
@@ -136,6 +137,7 @@ class Pagee
 
     /**
      * @param integer $total
+     *
      * @return self
      */
     public function setTotal($total)
@@ -146,9 +148,11 @@ class Pagee
     }
 
     /**
-     * @param string $name
+     * @param string  $name
+     * @param string  $link
      * @param boolean $status
      * @param integer $type
+     *
      * @return string
      */
     protected function setButton($name, $link, $status = false, $type = self::BTN_DISABLED)
@@ -170,6 +174,7 @@ class Pagee
     /**
      * @param integer $page
      * @param boolean $active
+     *
      * @return string
      */
     protected function setUrl($page, $active = false)

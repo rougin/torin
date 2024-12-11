@@ -16,22 +16,26 @@ use Rougin\Torin\Depots\ItemDepot;
 class Items
 {
     /**
-     * @param \Rougin\Torin\Depots\ItemDepot $item
-     * @param \Rougin\Temply\Plate $plate
+     * @param \Rougin\Torin\Depots\ItemDepot           $item
+     * @param \Rougin\Temply\Plate                     $plate
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return string
      */
     public function index(ItemDepot $item, Plate $plate, ServerRequestInterface $request)
     {
-        // Get "page number" and "items per page" from request ---
+        // Get "limit" and "page" from request ---
         /** @var array<string, mixed> */
         $params = $request->getQueryParams();
 
-        $limit = $params['l'] ?? 10;
+        /** @var string */
+        $limit = $params['l'];
+        $limit = $limit ? (int) $limit : 10;
 
-        $page = $params['p'] ?? 1;
-        // -------------------------------------------------------
+        /** @var string */
+        $page = $params['p'];
+        $page = $page ? (int) $page : 1;
+        // ---------------------------------------
 
         $table = new Table;
         $table->setClass('table mb-0');
@@ -46,7 +50,7 @@ class Items
         $table->withLoading($limit);
         $table->withAlpine();
 
-        // Prepare the "Pagee" class --------
+        // Prepare the pagination -----------
         $pagee = new Pagee($page, $limit);
 
         $link = $plate->getLinkHelper();

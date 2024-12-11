@@ -89,7 +89,7 @@ class ItemDepot extends Depot
     /**
      * @param integer $id
      *
-     * @return mixed
+     * @return \Rougin\Torin\Models\Item
      * @throws \UnexpectedValueException
      */
     protected function findRow($id)

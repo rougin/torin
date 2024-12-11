@@ -12,14 +12,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string       $name
  * @property string       $detail
  *
- * @method integer                     count()
- * @method boolean delete()
- * @method \Rougin\Torin\Models\Item   create(array<string, mixed> $data)
- * @method \Rougin\Torin\Models\Item findOrFail(mixed $id)
+ * @method integer                        count()
+ * @method boolean                        delete()
+ * @method \Rougin\Torin\Models\Item      create(array<string, mixed> $data)
+ * @method \Rougin\Torin\Models\Item      findOrFail(mixed $id)
  * @method \Rougin\Torin\Models\Item|null find(mixed $id)
- * @method \Rougin\Torin\Models\Item[] get()
- * @method \Rougin\Torin\Models\Item   limit(integer $value)
- * @method \Rougin\Torin\Models\Item   offset(integer $value)
+ * @method \Rougin\Torin\Models\Item[]    get()
+ * @method \Rougin\Torin\Models\Item      limit(integer $value)
+ * @method \Rougin\Torin\Models\Item      offset(integer $value)
  *
  * @package Torin
  *

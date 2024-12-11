@@ -9,7 +9,6 @@ namespace Rougin\Gable;
  */
 class Table extends Element
 {
-
     const TYPE_COL = 0;
 
     const TYPE_ROW = 1;
@@ -352,7 +351,7 @@ class Table extends Element
 
         foreach ($col->getCells() as $index => $cell)
         {
-            $new = new Cell(null, null, $class, $style, $width);
+            $new = new Cell(null, null, $class, null, null, $style, $width);
 
             if ($index === $this->actionIndex)
             {
@@ -386,8 +385,9 @@ class Table extends Element
     }
 
     /**
-     * @param  string $clicked
-     * @param  string $name
+     * @param string $clicked
+     * @param string $name
+     *
      * @return self
      */
     public function withDeleteAction($clicked, $name = 'Delete')
@@ -406,8 +406,9 @@ class Table extends Element
     }
 
     /**
-     * @param  string $text
+     * @param string $text
      * @param string $key
+     *
      * @return self
      */
     public function withLoadErrorText($text, $key = 'loadError')
@@ -422,8 +423,9 @@ class Table extends Element
     /**
      * TODO: This is a specific code for "alpinejs".
      *
-     * @param  integer $count
-     * @param  string  $name
+     * @param integer $count
+     * @param string  $name
+     *
      * @return self
      */
     public function withLoading($count = 5, $name = 'loading')
@@ -467,8 +469,9 @@ class Table extends Element
     }
 
     /**
-     * @param  string $text
+     * @param string $text
      * @param string $key
+     *
      * @return self
      */
     public function withNoItemsText($text, $key = 'empty')
@@ -481,8 +484,9 @@ class Table extends Element
     }
 
     /**
-     * @param  string $clicked
-     * @param  string $name
+     * @param string $clicked
+     * @param string $name
+     *
      * @return self
      */
     public function withUpdateAction($clicked, $name = 'Update')

@@ -25,7 +25,8 @@ class Action
     protected $name = null;
 
     /**
-     * @param  string $action
+     * @param string $action
+     *
      * @return self
      */
     public function ifClicked($action)
@@ -61,6 +62,7 @@ class Action
 
     /**
      * @param boolean $danger
+     *
      * @return self
      */
     public function setDanger($danger)
@@ -72,6 +74,7 @@ class Action
 
     /**
      * @param string $name
+     *
      * @return self
      */
     public function setName($name)
