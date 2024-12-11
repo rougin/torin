@@ -28,13 +28,22 @@ class Items
         /** @var array<string, mixed> */
         $params = $request->getQueryParams();
 
-        /** @var string */
-        $limit = $params['l'];
-        $limit = $limit ? (int) $limit : 10;
+        $limit = 10;
+        $page = 1;
 
-        /** @var string */
-        $page = $params['p'];
-        $page = $page ? (int) $page : 1;
+        if (array_key_exists('l', $params))
+        {
+            /** @var string */
+            $limit = $params['l'];
+            $limit = (int) $limit;
+        }
+
+        if (array_key_exists('p', $params))
+        {
+            /** @var string */
+            $page = $params['p'];
+            $page = (int) $page;
+        }
         // ---------------------------------------
 
         $table = new Table;
