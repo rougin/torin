@@ -30,6 +30,11 @@ class Plate
     protected $helpers = array();
 
     /**
+     * @var \Staticka\Helper\LinkHelper
+     */
+    protected $link;
+
+    /**
      * @var \Rougin\Slytherin\Template\RendererInterface
      */
     protected $parent;
@@ -55,12 +60,26 @@ class Plate
         $this->helpers[] = new PlateHelper($render);
 
         $this->helpers[] = (new FormHelper)->withAlpine();
+        // -----------------------------------------------
 
+        // TODO: Remove usage of "APP_URL" ---
         /** @var string */
         $link = getenv('APP_URL');
 
-        $this->helpers[] = new LinkHelper($link);
-        // -----------------------------------------------
+        $link = new LinkHelper($link);
+
+        $this->link = $link;
+
+        $this->helpers[] = $link;
+        // -----------------------------------
+    }
+
+    /**
+     * @return \Staticka\Helper\LinkHelper
+     */
+    public function getLinkHelper()
+    {
+        return $this->link;
     }
 
     /**

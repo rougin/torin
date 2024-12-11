@@ -6,6 +6,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
 use Rougin\Temply\Plate;
+use Rougin\Torin\Depots\ItemDepot;
 
 /**
  * @package Torin
@@ -15,13 +16,23 @@ use Rougin\Temply\Plate;
 class Items
 {
     /**
+     * @param \Rougin\Torin\Depots\ItemDepot $item
      * @param \Rougin\Temply\Plate $plate
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return string
      */
-    public function index(Plate $plate, ServerRequestInterface $request)
+    public function index(ItemDepot $item, Plate $plate, ServerRequestInterface $request)
     {
+        // Get "page number" and "items per page" from request ---
+        /** @var array<string, mixed> */
+        $params = $request->getQueryParams();
+
+        $limit = $params['l'] ?? 10;
+
+        $page = $params['p'] ?? 1;
+        // -------------------------------------------------------
+
         $table = new Table;
         $table->setClass('table mb-0');
 
@@ -32,19 +43,20 @@ class Items
         $table->withActions(null, 'left')->withWidth(10);
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
-        $table->withLoading();
+        $table->withLoading($limit);
         $table->withAlpine();
 
-        /** @var array<string, mixed> */
-        $params = $request->getQueryParams();
+        // Prepare the "Pagee" class --------
+        $pagee = new Pagee($page, $limit);
 
-        $data = array('table' => $table);
+        $link = $plate->getLinkHelper();
 
-        $limit = $params['l'] ?? 10;
+        $pagee->setLink($link->set('items'));
 
-        $page = $params['q'] ?? 1;
+        $pagee->setTotal($item->getTotal());
+        // ----------------------------------
 
-        $data['pagee'] = new Pagee($page, $limit);
+        $data = compact('pagee', 'table');
 
         return $plate->render('items.index', $data);
     }

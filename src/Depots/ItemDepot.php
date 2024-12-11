@@ -38,6 +38,14 @@ class ItemDepot extends Depot
     }
 
     /**
+     * @return integer
+     */
+    public function getTotal()
+    {
+        return $this->item->count();
+    }
+
+    /**
      * @param integer $id
      *
      * @return boolean
@@ -117,13 +125,5 @@ class ItemDepot extends Depot
 
         /** @var \Rougin\Torin\Models\Item[] */
         return $model->offset($offset)->get();
-    }
-
-    /**
-     * @return integer
-     */
-    protected function getTotal()
-    {
-        return $this->item->count();
     }
 }

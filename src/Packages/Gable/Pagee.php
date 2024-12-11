@@ -9,10 +9,29 @@ namespace Rougin\Gable;
  */
 class Pagee
 {
+    const BTN_DISABLED = 0;
+
+    const BTN_ACTIVE = 1;
+
     /**
      * @var integer
      */
     protected $limit = 10;
+
+    /**
+     * @var string
+     */
+    protected $limitKey = 'l';
+
+    /**
+     * @var string|null
+     */
+    protected $link = null;
+
+    /**
+     * @var integer
+     */
+    protected $maxTotal = 2;
 
     /**
      * @var integer
@@ -20,14 +39,27 @@ class Pagee
     protected $page = 1;
 
     /**
+     * @var string
+     */
+    protected $pageKey = 'p';
+
+    /**
+     * @var integer
+     */
+    protected $total = 0;
+
+    /**
      * @param integer $page
      * @param integer $limit
+     * @param string|null $link
      */
-    public function __construct($page, $limit)
+    public function __construct($page, $limit, $link = null)
     {
-        $this->limit = $limit;
+        $this->limit = (int) $limit;
 
-        $this->page = $page;
+        $this->link = $link;
+
+        $this->page = (int) $page;
     }
 
     /**
@@ -35,23 +67,45 @@ class Pagee
      */
     public function __toString()
     {
-        $html = '<nav aria-label="Page navigation example">';
+        $html = '<div class="d-inline-block">';
         $html .= '<ul class="pagination">';
-        $html .= '<li class="page-item">';
-        $html .= '<a class="page-link" href="#" aria-label="Previous">';
-        $html .= '<span aria-hidden="true">&laquo;</span>';
-        $html .= '</a>';
-        $html .= '</li>';
-        $html .= '<li class="page-item"><a class="page-link" href="#">1</a></li>';
-        $html .= '<li class="page-item"><a class="page-link" href="#">2</a></li>';
-        $html .= '<li class="page-item"><a class="page-link" href="#">3</a></li>';
-        $html .= '<li class="page-item">';
-        $html .= '<a class="page-link" href="#" aria-label="Next">';
-        $html .= '<span aria-hidden="true">&raquo;</span>';
-        $html .= '</a>';
-        $html .= '</li>';
+
+        // "First page" button ------------------------------
+        $disabled = $this->page === 1;
+        $link = $this->setUrl(1);
+        $html .= $this->setButton('First', $link, $disabled);
+        // --------------------------------------------------
+
+        // "Previous" button -----------------------------------
+        $disabled = $this->page <= 1;
+        $link = $this->setUrl($this->page - 1, $disabled);
+        $html .= $this->setButton('Previous', $link, $disabled);
+        // -----------------------------------------------------
+
+        foreach (range(1, $this->total) as $page)
+        {
+            $active = $page === $this->page;
+
+            $link = $this->setUrl($page, $active);
+
+            $html .= $this->setButton($page, $link, $active, self::BTN_ACTIVE);
+        }
+
+        // "Next" button -----------------------------------
+        $disabled = $this->page >= $this->total;
+        $link = $this->setUrl($this->page + 1, $disabled);
+
+        $html .= $this->setButton('Next', $link, $disabled);
+        // -------------------------------------------------
+
+        // "Last page" button ------------------------------
+        $disabled = $this->page === $this->total;
+        $link = $this->setUrl($this->total);
+        $html .= $this->setButton('Last', $link, $disabled);
+        // -------------------------------------------------
+
         $html .= '</ul>';
-        $html .= '</nav>';
+        $html .= '</div>';
 
         return $html;
     }
@@ -70,5 +124,74 @@ class Pagee
     public function getPage()
     {
         return $this->page;
+    }
+
+    /**
+     * @param string $link
+     * @return self
+     */
+    public function setLink($link)
+    {
+        $this->link = $link;
+
+        return $this;
+    }
+
+    /**
+     * @param integer $total
+     * @return self
+     */
+    public function setMaxPages($total)
+    {
+        $this->maxTotal = $total;
+
+        return $this;
+    }
+
+    /**
+     * @param integer $total
+     * @return self
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param boolean $status
+     * @param integer $type
+     * @return string
+     */
+    protected function setButton($name, $link, $status = false, $type = self::BTN_DISABLED)
+    {
+        $active = $status ? ' active' : '';
+        $disabled = $status ? ' disabled' : '';
+
+        $class = $type === self::BTN_DISABLED ? $disabled : $active;
+
+        $html = '<li class="page-item' . $class . '">';
+        $html .= '<a class="page-link" href="' . $link . '">';
+        $html .= '<span>' . $name . '</span>';
+        $html .= '</a>';
+        $html .= '</li>';
+
+        return $html;
+    }
+
+    /**
+     * @param integer $page
+     * @param boolean $active
+     * @return string
+     */
+    protected function setUrl($page, $active = false)
+    {
+        $link = $this->link . '?' . $this->pageKey . '=' . $page;
+
+        $link .= '&' . $this->limitKey . '=' . $this->limit;
+
+        return $active ? 'javascript:void(0)' : $link;
     }
 }
