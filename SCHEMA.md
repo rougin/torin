@@ -4,6 +4,7 @@ https://vertabelo.com/blog/data-model-for-inventory-management-system/
 https://katanamrp.com/blog/ai-for-inventory-management/
 
 clients (stakeholders)
+- code
 - name
 - type (0 - customer, 1 - supplier)
 

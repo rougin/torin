@@ -63,17 +63,17 @@ class ItemDepot extends Depot
      */
     public function update($id, $data)
     {
-        $item = $this->findRow($id);
+        $row = $this->findRow($id);
 
         /** @var string */
         $name = $data['name'];
-        $item->name = $name;
+        $row->name = $name;
 
         /** @var string */
         $detail = $data['detail'];
-        $item->detail = $detail;
+        $row->detail = $detail;
 
-        return $item->save();
+        return $row->save();
     }
 
     /**
