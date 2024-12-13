@@ -21,6 +21,7 @@ orders
 - date_created
 - type (0 - sale, 1 - purchase, 2 - transfer)
 - status (0 - pending, 1 - fulfilled, 2 - cancelled)
+- remarks - null
 
 item_order
 - order_id

@@ -36,6 +36,8 @@ class Plated extends Package
 
         $self->get('items', 'Items@index');
 
+        $self->get('orders', 'Orders@index');
+
         return $self;
     }
 }
