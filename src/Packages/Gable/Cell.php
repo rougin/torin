@@ -10,6 +10,11 @@ namespace Rougin\Gable;
 class Cell extends Element
 {
     /**
+     * @var \Rougin\Gable\Badge[]
+     */
+    protected $badges = array();
+
+    /**
      * @var string
      */
     protected $name = '';
@@ -68,12 +73,31 @@ class Cell extends Element
     }
 
     /**
+     * @param \Rougin\Gable\Badge $badge
+     * @return self
+     */
+    public function addBadge(Badge $badge)
+    {
+        $this->badges[] = $badge;
+
+        return $this;
+    }
+
+    /**
      * @return string|null
      */
     public function getAlign()
     {
         /** @var string|null */
         return $this->attrs['align'];
+    }
+
+    /**
+     * @return \Rougin\Gable\Badge[]
+     */
+    public function getBadges()
+    {
+        return $this->badges;
     }
 
     /**
@@ -108,6 +132,20 @@ class Cell extends Element
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @param \Rougin\Gable\Badge[] $badges
+     * @return self
+     */
+    public function setBadges($badges)
+    {
+        foreach ($badges as $badge)
+        {
+            $this->addBadge($badge);
+        }
+
+        return $this;
     }
 
     /**

@@ -37,7 +37,16 @@ class Data extends Element
 
         foreach ($this->cells as $cell)
         {
-            $html .= '<' . $type . ' ' . $cell->getParsedAttrs() . '>' . $cell->getValue() . '</' . $type . '>';
+            $badges = $cell->getBadges();
+
+            $value = $cell->getValue();
+
+            if (count($badges) > 0)
+            {
+                $value = implode('', $badges);
+            }
+
+            $html .= '<' . $type . ' ' . $cell->getParsedAttrs() . '>' . $value . '</' . $type . '>';
         }
 
         return str_replace('<' . $type . ' >', '<' . $type . '>', $html);

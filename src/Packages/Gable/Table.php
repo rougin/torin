@@ -29,6 +29,11 @@ class Table extends Element
     protected $alpineName = null;
 
     /**
+     * @var \Rougin\Gable\Badge[][]
+     */
+    protected $badges = array();
+
+    /**
      * @var \Rougin\Gable\Row[]
      */
     protected $cols = array();
@@ -84,6 +89,26 @@ class Table extends Element
     public function __toString()
     {
         return $this->make();
+    }
+
+    /**
+     * @param string $text
+     * @param string $condition
+     * @param string $class
+     * @return self
+     */
+    public function addBadge($text, $condition, $class = 'text-bg-secondary')
+    {
+        $index = count($this->cols) - 1;
+
+        if (! array_key_exists($index, $this->badges))
+        {
+            $this->badges[$index] = array();
+        }
+
+        $this->badges[$index][] = new Badge($text, $condition, $class);
+
+        return $this;
     }
 
     /**
@@ -351,7 +376,16 @@ class Table extends Element
 
         foreach ($col->getCells() as $index => $cell)
         {
+            $hasBadges = array_key_exists($index, $this->badges);
+
             $new = new Cell(null, null, $class, null, null, $style, $width);
+
+            // Add badges to the specified column cell ---
+            if ($hasBadges)
+            {
+                $new->setBadges($this->badges[$index]);
+            }
+            // -------------------------------------------
 
             if ($index === $this->actionIndex)
             {
@@ -376,7 +410,10 @@ class Table extends Element
                 continue;
             }
 
-            $new->withAttr('x-text', 'item.' . $cell->getName());
+            if (! $hasBadges)
+            {
+                $new->withAttr('x-text', 'item.' . $cell->getName());
+            }
 
             $this->addCell($new);
         }
