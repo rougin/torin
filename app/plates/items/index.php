@@ -7,13 +7,19 @@
     </div>
 
     <div class="container mb-3">
-      <span class="fs-1">Items</span>
-    </div>
-
-    <div class="container mb-3">
-      <?= $form->button('Create New')->withClass('btn btn-primary shadow-lg')
-        ->with('data-bs-toggle', 'modal')->with('data-bs-target', '#item-detail-modal')
-        ->disablesOn('loading') ?>
+      <div class="d-flex justify-content-between align-items-end">
+        <div>
+          <span class="fs-2 lh-1 fw-bold">Items</span>
+        </div>
+        <div>
+          <?= $form->button('Create New')->withClass('btn btn-secondary shadow-lg')
+            ->with('data-bs-toggle', 'modal')->with('data-bs-target', '#item-detail-modal')
+            ->disablesOn('loading') ?>
+        </div>
+      </div>
+      <div class="text-secondary">
+        <hr>
+      </div>
     </div>
 
     <div class="container mb-3">

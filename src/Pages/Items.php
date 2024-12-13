@@ -40,10 +40,12 @@ class Items
         $table->setClass('table mb-0');
 
         $table->newColumn();
-        $table->setCell('Code', 'left')->withWidth(27);
-        $table->setCell('Name', 'left')->withWidth(20);
-        $table->setCell('Description', 'left')->withWidth(35)->withName('detail');
-        $table->withActions(null, 'left')->withWidth(10);
+        $table->setCell('Item Code', 'left')->withWidth(10)->withName('code');
+        $table->setCell('Name', 'left')->withWidth(15);
+        $table->setCell('Description', 'left')->withWidth(15)->withName('detail');
+        $table->setCell('Created At', 'left')->withWidth(12)->withName('created_at');
+        $table->setCell('Last Updated', 'left')->withWidth(12)->withName('updated_at');
+        $table->withActions(null, 'left')->withWidth(5);
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
         $table->withLoading($pagee->getLimit());

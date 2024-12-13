@@ -44,4 +44,24 @@ class Item extends Model
      * @var string
      */
     protected $connection = 'torin';
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    public function getCreatedAtAttribute($value)
+    {
+        return $value ? date('d M Y h:i:s A', (int) strtotime($value)) : $value;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    public function getUpdatedAtAttribute($value)
+    {
+        return $value ? date('d M Y h:i:s A', (int) strtotime($value)) : $value;
+    }
 }

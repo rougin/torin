@@ -23,6 +23,7 @@ const link = '<?= $url->set('/v1/items') ?>';
   ->resetField('detail')
   ->resetField('error')
   ->resetField('id')
+  ->resetField('name')
   ->resetField('loadError') ?>
 
 <?= $depot->withEdit()
