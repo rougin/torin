@@ -484,6 +484,21 @@ class Table extends Element
     }
 
     /**
+     * @param integer $value
+     * @return self
+     */
+    public function withOpacity($value)
+    {
+        $loading = $this->loadingName;
+
+        $name = $this->alpineName;
+
+        $this->withAttr(':class', '{ \'opacity-' . $value . '\': ' . $name . '.length > 0 && ' . $loading . '}');
+
+        return $this;
+    }
+
+    /**
      * @param string $clicked
      * @param string $name
      *

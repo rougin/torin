@@ -58,6 +58,7 @@ class Items
         $table->withDeleteAction('trash(item)');
         $table->withLoading($limit);
         $table->withAlpine();
+        $table->withOpacity(50);
 
         // Prepare the pagination -----------
         $pagee = new Pagee($page, $limit);
