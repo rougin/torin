@@ -2,6 +2,8 @@
 
 namespace Rougin\Dexter\Alpine;
 
+use Rougin\Temply\Script;
+
 /**
  * @package Dexterity
  *
@@ -13,6 +15,11 @@ class Close extends Method
      * @var string
      */
     protected $name = 'close';
+
+    /**
+     * @var \Rougin\Temply\Script|null
+     */
+    protected $script = null;
 
     /**
      * @return string
@@ -49,5 +56,17 @@ class Close extends Method
         $fn .= '}';
 
         return $fn;
+    }
+
+    /**
+     * @param \Rougin\Temply\Script $script
+     *
+     * @return self
+     */
+    public function withScript(Script $script)
+    {
+        $this->script = $script;
+
+        return $this;
     }
 }

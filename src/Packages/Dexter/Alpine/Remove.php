@@ -64,6 +64,7 @@ class Remove extends Method
     /**
      * @param string $title
      * @param string $text
+     *
      * @return self
      */
     public function setAlert($title, $text)

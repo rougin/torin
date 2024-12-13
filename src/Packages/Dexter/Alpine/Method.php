@@ -3,7 +3,6 @@
 namespace Rougin\Dexter\Alpine;
 
 use JShrink\Minifier;
-use Rougin\Temply\Script;
 
 /**
  * @package Dexterity
@@ -36,11 +35,6 @@ class Method
      * @var string[]
      */
     protected $resets = array();
-
-    /**
-     * @var \Rougin\Temply\Script|null
-     */
-    protected $script = null;
 
     /**
      * @param string $parent
@@ -122,18 +116,6 @@ class Method
     public function showModal($name)
     {
         $this->modals[$name] = 'show';
-
-        return $this;
-    }
-
-    /**
-     * @param \Rougin\Temply\Script $script
-     *
-     * @return self
-     */
-    public function withScript(Script $script)
-    {
-        $this->script = $script;
 
         return $this;
     }
