@@ -40,8 +40,11 @@ class Clients
         $table->setClass('table mb-0');
 
         $table->newColumn();
+        $table->setCell('Type', 'left')->withWidth(5)
+            ->addBadge('Customer', 'item.type === 0', 'text-bg-success')
+            ->addBadge('Supplier', 'item.type === 1', 'text-bg-primary');
         $table->setCell('Client Code', 'left')->withWidth(10)->withName('code');
-        $table->setCell('Name', 'left')->withWidth(15);
+        $table->setCell('Client Name', 'left')->withWidth(15)->withName('name');
         $table->setCell('Description', 'left')->withWidth(15)->withName('detail');
         $table->setCell('Created At', 'left')->withWidth(12)->withName('created_at');
         $table->setCell('Last Updated', 'left')->withWidth(12)->withName('updated_at');

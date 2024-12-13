@@ -13,7 +13,7 @@
         </div>
         <div>
           <?= $form->button('Create New')->withClass('btn btn-secondary shadow-lg')
-            ->with('data-bs-toggle', 'modal')->with('data-bs-target', '#item-detail-modal')
+            ->with('data-bs-toggle', 'modal')->with('data-bs-target', '#client-detail-modal')
             ->disablesOn('loading') ?>
         </div>
       </div>

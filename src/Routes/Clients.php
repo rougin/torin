@@ -152,7 +152,7 @@ class Clients
      */
     protected function setStoreData($parsed)
     {
-        // $this->client->create($parsed);
+        $this->client->create($parsed);
 
         return new JsonResponse('Created!', 201);
     }
