@@ -30,13 +30,25 @@ class Router extends Package
 
         $self->prefix($this->prefix, $this->namespace);
 
-        $self->delete('items/:id', 'Items@delete');
+        // Client -------------------------------------
+        $self->delete('clients/:id', 'Clients@delete');
 
-        $self->put('items/:id', 'Items@update');
+        $self->get('clients', 'Clients@index');
+
+        $self->put('clients/:id', 'Clients@update');
+
+        $self->post('clients', 'Clients@store');
+        // --------------------------------------------
+
+        // Item -----------------------------------
+        $self->delete('items/:id', 'Items@delete');
 
         $self->get('items', 'Items@index');
 
+        $self->put('items/:id', 'Items@update');
+
         $self->post('items', 'Items@store');
+        // ----------------------------------------
 
         return $self;
     }

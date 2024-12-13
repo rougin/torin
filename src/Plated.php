@@ -32,6 +32,8 @@ class Plated extends Package
 
         $self->get('/', 'Hello@index');
 
+        $self->get('clients', 'Clients@index');
+
         $self->get('items', 'Items@index');
 
         return $self;

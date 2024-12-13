@@ -11,6 +11,13 @@
           <?php endif ?>
         </li>
         <li class="nav-item">
+          <?php if ($url->isCurrent('/clients')): ?>
+            <div class="nav-link active fw-bold">Clients</div>
+          <?php else: ?>
+            <a class="nav-link" href="<?= $url->set('/clients') ?>">Clients</a>
+          <?php endif ?>
+        </li>
+        <li class="nav-item">
           <?php if ($url->isCurrent('/items')): ?>
             <div class="nav-link active fw-bold">Items</div>
           <?php else: ?>

@@ -7,7 +7,7 @@ use Phinx\Migration\AbstractMigration;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-final class CreateItemsTable extends AbstractMigration
+final class CreateClientsTable extends AbstractMigration
 {
     /**
      * @return void
@@ -16,11 +16,12 @@ final class CreateItemsTable extends AbstractMigration
     {
         $properties = array('id' => false, 'primary_key' => array('id'));
 
-        $table = $this->table('items', $properties);
+        $table = $this->table('clients', $properties);
 
         $table
             ->addColumn('id', 'integer', array('limit' => 10, 'identity' => true))
             ->addColumn('parent_id', 'integer', array('limit' => 10, 'null' => true))
+            ->addColumn('type', 'integer', array('limit' => 1))
             ->addColumn('code', 'string', array('limit' => 100, 'null' => true))
             ->addColumn('name', 'string', array('limit' => 200, 'null' => true))
             ->addColumn('detail', 'string', array('limit' => 300, 'null' => true))
