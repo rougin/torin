@@ -106,7 +106,7 @@ class ItemDepot extends Depot
 
         $time = date('Ymd');
 
-        $code = str_pad($total, 5, '0', STR_PAD_LEFT);
+        $code = sprintf('%05d', $total);
 
         return '00-' . $time . '-' . $code;
     }
