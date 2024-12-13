@@ -12,9 +12,11 @@ const link = '<?= $url->set('/v1/items') ?>';
   ->withError()
   ->withLoading() ?>
 
+items.pagee = <?= $pagee->getObject('items') ?>
+
 items.init = function ()
 {
-  this.load()
+  this.load(<?= $pagee->getPage() ?>)
 }
 
 items.close = function ()
@@ -52,21 +54,20 @@ items.edit = function (item)
   Modal.show('item-detail-modal')
 }
 
-items.load = function ()
+items.load = function (page)
 {
   const self = this
 
   self.loading = true
 
-  let data = { p: <?= $pagee->getPage() ?> }
+  let data = { <?= $pagee->getPageKey() ?>: page }
+  self.pagee.page = page
 
-  data.l = <?= $pagee->getLimit() ?>
+  data.<?= $pagee->getLimitKey() ?> = <?= $pagee->getLimit() ?>
 
   const search = new URLSearchParams(data)
 
-  const query = search.toString()
-
-  axios.get(link + '?' + query)
+  axios.get(link + '?' + search.toString())
     .then(function (response)
     {
       const result = response.data
@@ -75,6 +76,10 @@ items.load = function ()
       {
         self.empty = true
       }
+
+      self.pagee.limit = result.limit
+      self.pagee.pages = result.pages
+      self.pagee.total = result.total
 
       self.items = result.items
     })

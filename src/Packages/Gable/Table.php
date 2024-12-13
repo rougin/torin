@@ -485,6 +485,7 @@ class Table extends Element
 
     /**
      * @param integer $value
+     *
      * @return self
      */
     public function withOpacity($value)

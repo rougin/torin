@@ -24,28 +24,17 @@ class Items
      */
     public function index(ItemDepot $item, Plate $plate, ServerRequestInterface $request)
     {
-        // Get "limit" and "page" from request ---
-        /** @var array<string, mixed> */
-        $params = $request->getQueryParams();
+        // Prepare the pagination -----------------------------
+        $pagee = (new Pagee)->asAlpine();
 
-        $limit = 10;
-        $page = 1;
+        $pagee->fromRequest($request);
 
-        if (array_key_exists('l', $params))
-        {
-            /** @var string */
-            $limit = $params['l'];
-            $limit = (int) $limit;
-        }
+        $pagee->setLink($plate->getLinkHelper()->set('items'));
 
-        if (array_key_exists('p', $params))
-        {
-            /** @var string */
-            $page = $params['p'];
-            $page = (int) $page;
-        }
-        // ---------------------------------------
+        $pagee->setTotal($item->getTotal());
+        // ----------------------------------------------------
 
+        // Generate the HTML table -----------------------------------------------
         $table = new Table;
         $table->setClass('table mb-0');
 
@@ -56,19 +45,10 @@ class Items
         $table->withActions(null, 'left')->withWidth(10);
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
-        $table->withLoading($limit);
+        $table->withLoading($pagee->getLimit());
         $table->withAlpine();
         $table->withOpacity(50);
-
-        // Prepare the pagination -----------
-        $pagee = new Pagee($page, $limit);
-
-        $link = $plate->getLinkHelper();
-
-        $pagee->setLink($link->set('items'));
-
-        $pagee->setTotal($item->getTotal());
-        // ----------------------------------
+        // -----------------------------------------------------------------------
 
         $data = compact('pagee', 'table');
 
