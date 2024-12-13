@@ -40,9 +40,9 @@ class Clients
         $table->setClass('table mb-0');
 
         $table->newColumn();
-        $table->setCell('Type', 'left')->withWidth(5)
-            ->addBadge('Customer', 'item.type === 0', 'text-bg-success')
-            ->addBadge('Supplier', 'item.type === 1', 'text-bg-primary');
+        $table->setCell('Type', 'left')->withWidth(5);
+        $table->addBadge('Customer', 'item.type === 0', 'text-bg-success');
+        $table->addBadge('Supplier', 'item.type === 1', 'text-bg-primary');
         $table->setCell('Client Code', 'left')->withWidth(10)->withName('code');
         $table->setCell('Client Name', 'left')->withWidth(12)->withName('name');
         $table->setCell('Remarks', 'left')->withWidth(15);
@@ -52,6 +52,7 @@ class Clients
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
         $table->withLoading($pagee->getLimit());
+        $table->withNoItemsText('No clients found.');
         $table->withAlpine();
         $table->withOpacity(50);
         // --------------------------------------------------------------------------
