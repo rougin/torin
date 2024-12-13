@@ -7,6 +7,7 @@ clients (stakeholders)
 - code
 - name
 - type (0 - customer, 1 - supplier)
+- remarks - null
 
 items (products)
 - parent_id

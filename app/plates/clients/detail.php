@@ -25,9 +25,9 @@
         </div>
       </div>
       <div>
-        <?= $form->label('Description', 'form-label mb-0') ?>
-        <?= $form->input('detail', 'form-control')->asModel()->disablesOn('loading') ?>
-        <?= $form->error('error.detail') ?>
+        <?= $form->label('Remarks', 'form-label mb-0') ?>
+        <?= $form->input('remarks', 'form-control')->asModel()->disablesOn('loading') ?>
+        <?= $form->error('error.remarks') ?>
       </div>
     </div>
     <div class="modal-footer border-top-0 bg-light">

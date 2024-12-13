@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property integer|null $parent_id
  * @property string       $code
  * @property string       $name
- * @property string       $detail
+ * @property string       $remarks
  *
  * @method integer                          count()
  * @method boolean                          delete()
@@ -42,7 +42,7 @@ class Client extends Model
         'parent_id',
         'code',
         'name',
-        'detail',
+        'remarks',
         'type',
     ];
 

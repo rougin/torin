@@ -3,7 +3,7 @@ const link = '<?= $url->set('/v1/clients') ?>';
 
 <?= $script = $form->script('clients')
   ->with('name')
-  ->with('detail')
+  ->with('remarks')
   ->with('type')
   ->with('items', array())
   ->with('empty', false)
@@ -21,7 +21,7 @@ const link = '<?= $url->set('/v1/clients') ?>';
   ->withScript($script)
   ->hideModal('delete-client-modal')
   ->hideModal('client-detail-modal')
-  ->resetField('detail')
+  ->resetField('remarks')
   ->resetField('error')
   ->resetField('id')
   ->resetField('name')
@@ -29,7 +29,7 @@ const link = '<?= $url->set('/v1/clients') ?>';
 
 <?= $depot->withEdit()
   ->addField('name')
-  ->addField('detail')
+  ->addField('remarks')
   ->addField('type')
   ->addField('id')
   ->showModal('client-detail-modal') ?>
@@ -40,7 +40,7 @@ const link = '<?= $url->set('/v1/clients') ?>';
 
 <?= $depot->withStore()
   ->addField('name')
-  ->addField('detail')
+  ->addField('remarks')
   ->addField('type')
   ->setAlert('Client created!', 'Client successfully created.') ?>
 
@@ -51,6 +51,6 @@ const link = '<?= $url->set('/v1/clients') ?>';
 
 <?= $depot->withUpdate()
   ->addField('name')
-  ->addField('detail')
+  ->addField('remarks')
   ->setAlert('Client updated!', 'Client successfully updated.') ?>
 </script>

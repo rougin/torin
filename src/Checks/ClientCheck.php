@@ -17,7 +17,7 @@ class ClientCheck extends Request
     protected $labels =
     [
         'name' => 'Client Name',
-        'detail' => 'Description',
+        'remarks' => 'Remarks',
         'type' => 'Client Type',
     ];
 

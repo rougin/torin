@@ -70,8 +70,8 @@ class ClientDepot extends Depot
         $row->name = $name;
 
         /** @var string */
-        $detail = $data['detail'];
-        $row->detail = $detail;
+        $remarks = $data['remarks'];
+        $row->remarks = $remarks;
 
         /** @var integer */
         $type = $data['type'];

@@ -35,7 +35,7 @@ class Items
         $pagee->setTotal($item->getTotal());
         // ----------------------------------------------------
 
-        // Generate the HTML table -----------------------------------------------
+        // Generate the HTML table --------------------------------------------------
         $table = new Table;
         $table->setClass('table mb-0');
 
@@ -44,14 +44,14 @@ class Items
         $table->setCell('Name', 'left')->withWidth(15);
         $table->setCell('Description', 'left')->withWidth(15)->withName('detail');
         $table->setCell('Created At', 'left')->withWidth(12)->withName('created_at');
-        $table->setCell('Last Updated', 'left')->withWidth(12)->withName('updated_at');
+        $table->setCell('Updated At', 'left')->withWidth(12)->withName('updated_at');
         $table->withActions(null, 'left')->withWidth(5);
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
         $table->withLoading($pagee->getLimit());
         $table->withAlpine();
         $table->withOpacity(50);
-        // -----------------------------------------------------------------------
+        // --------------------------------------------------------------------------
 
         $depot = new Depot('items');
 
