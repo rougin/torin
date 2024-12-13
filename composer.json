@@ -18,6 +18,7 @@
     "rougin/slytherin": "~0.9",
     "rougin/weasley": "~0.7",
     "staticka/staticka": "~0.4",
+    "tedivm/jshrink": "~1.0",
     "vlucas/phpdotenv": "~2.0",
     "vlucas/valitron": "~1.4"
   },
@@ -31,6 +32,7 @@
   {
     "psr-4":
     {
+      "Rougin\\Dexter\\": "src/Packages/Dexter",
       "Rougin\\Gable\\": "src/Packages/Gable",
       "Rougin\\Onion\\": "src/Packages/Onion",
       "Rougin\\Temply\\": "src/Packages/Temply",
@@ -42,6 +44,7 @@
   {
     "psr-4":
     {
+      "Rougin\\Dexter\\": "tests/Packages/Dexter",
       "Rougin\\Gable\\": "tests/Packages/Gable",
       "Rougin\\Onion\\": "tests/Packages/Onion",
       "Rougin\\Temply\\": "tests/Packages/Temply",

@@ -3,6 +3,7 @@
 namespace Rougin\Torin\Pages;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Rougin\Dexter\Alpine\Depot;
 use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
 use Rougin\Temply\Plate;
@@ -50,7 +51,9 @@ class Items
         $table->withOpacity(50);
         // -----------------------------------------------------------------------
 
-        $data = compact('pagee', 'table');
+        $depot = new Depot('items');
+
+        $data = compact('depot', 'pagee', 'table');
 
         return $plate->render('items.index', $data);
     }

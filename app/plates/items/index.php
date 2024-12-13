@@ -33,5 +33,5 @@
 <?= $block->end() ?>
 
 <?= $block->set('scripts') ?>
-  <?= $plate->add('items.depot', compact('form', 'pagee', 'url')) ?>
+  <?= $plate->add('items.depot', compact('depot', 'form', 'pagee', 'url')) ?>
 <?= $block->end() ?>

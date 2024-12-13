@@ -41,6 +41,14 @@ class Script
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
      * @param string     $field
      * @param mixed|null $default
      *
@@ -58,14 +66,16 @@ class Script
      */
     public function withError()
     {
-        return $this->with('error', array());
+        return $this->with('error', (object) array());
     }
 
     /**
+     * @param boolean $value
+     *
      * @return self
      */
-    public function withLoading()
+    public function withLoading($value = false)
     {
-        return $this->with('loading', false);
+        return $this->with('loading', $value);
     }
 }

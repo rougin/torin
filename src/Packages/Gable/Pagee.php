@@ -208,30 +208,6 @@ class Pagee
     }
 
     /**
-     * @param string $dispatchKey
-     *
-     * @return string
-     */
-    public function getObject($dispatchKey)
-    {
-        $object = '{limit:[LIMIT],limitKey:"[LIMIT_KEY]",link:"[LINK]",dispatchKey:"[DISPATCH_KEY]",page:"[PAGE]",pageKey:"[PAGE_KEY]",pages:0,total:[TOTAL],items:function(){if(0===this.pages){const t=this.total/this.limit;this.pages=Math.ceil(t)}return Array.from({length:this.pages})},url:function(t){return this.link+"?"+this.pageKey+"="+t+"&"+this.limitKey+"="+this.limit},view:function(t,i){const e=parseInt(i.getAttribute("page"));e!==this.page&&(history.pushState({},"",i.href),t(this.dispatchKey,e))}}';
-
-        $object = str_replace('[DISPATCH_KEY]', $dispatchKey, $object);
-
-        $object = str_replace('[LIMIT]', (string) $this->getLimit(), $object);
-
-        $object = str_replace('[LIMIT_KEY]', $this->getLimitKey(), $object);
-
-        $object = str_replace('[LINK]', (string) $this->getLink(), $object);
-
-        $object = str_replace('[PAGE]', (string) $this->getPage(), $object);
-
-        $object = str_replace('[PAGE_KEY]', $this->getPageKey(), $object);
-
-        return str_replace('[TOTAL]', (string) $this->getTotal(), $object);
-    }
-
-    /**
      * @return integer
      */
     public function getPage()
@@ -301,6 +277,32 @@ class Pagee
         $this->total = $total;
 
         return $this;
+    }
+
+    /**
+     * @param string $dispatchKey
+     *
+     * @return string
+     */
+    public function toObject($dispatchKey)
+    {
+        $object = '{limit:[LIMIT],limitKey:"[LIMIT_KEY]",link:"[LINK]",dispatchKey:"[DISPATCH_KEY]",page:"[PAGE]",pageKey:"[PAGE_KEY]",pages:0,total:[TOTAL],items:function(){if(0===this.pages){const t=this.total/this.limit;this.pages=Math.ceil(t)}return Array.from({length:this.pages})},url:function(t){return this.link+"?"+this.pageKey+"="+t+"&"+this.limitKey+"="+this.limit},view:function(t,i){const e=parseInt(i.getAttribute("page"));e!==this.page&&(history.pushState({},"",i.href),t(this.dispatchKey,e))}}';
+
+        $object = str_replace('[DISPATCH_KEY]', $dispatchKey, $object);
+
+        $object = str_replace('[LIMIT]', (string) $this->getLimit(), $object);
+
+        $object = str_replace('[LIMIT_KEY]', $this->getLimitKey(), $object);
+
+        $object = str_replace('[LINK]', (string) $this->getLink(), $object);
+
+        $object = str_replace('[PAGE]', (string) $this->getPage(), $object);
+
+        $object = str_replace('[PAGE_KEY]', $this->getPageKey(), $object);
+
+        $object = str_replace('[TOTAL]', (string) $this->getTotal(), $object);
+
+        return $dispatchKey . '.pagee=' . $object;
     }
 
     /**
