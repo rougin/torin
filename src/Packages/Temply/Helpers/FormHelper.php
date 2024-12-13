@@ -7,6 +7,7 @@ use Rougin\Temply\Error;
 use Rougin\Temply\Input;
 use Rougin\Temply\Label;
 use Rougin\Temply\Script;
+use Rougin\Temply\Select;
 use Staticka\Helper\HelperInterface;
 
 /**
@@ -108,6 +109,38 @@ class FormHelper implements HelperInterface
     }
 
     /**
+     * @param string      $name
+     * @param mixed[]     $items
+     * @param string|null $class
+     *
+     * @return \Rougin\Temply\Select
+     */
+    public function select($name, $items = array(), $class = null)
+    {
+        $elem = new Select($name);
+
+        if ($class)
+        {
+            $elem->withClass($class);
+        }
+
+        $parsed = $items;
+
+        if ($this->isArrayList($items))
+        {
+            $parsed = array();
+
+            foreach ($items as $id => $name)
+            {
+                $parsed[] = compact('id', 'name');
+            }
+        }
+
+        /** @var array<string, string>[] $parsed */
+        return $elem->withItems($parsed);
+    }
+
+    /**
      * @return self
      */
     public function withAlpine()
@@ -125,5 +158,20 @@ class FormHelper implements HelperInterface
         $this->alpine = false;
 
         return $this;
+    }
+
+    /**
+     * @param mixed[] $items
+     *
+     * @return boolean
+     */
+    protected function isArrayList($items)
+    {
+        if ($items === array())
+        {
+            return true;
+        }
+
+        return array_keys($items) === range(0, count($items) - 1);
     }
 }
