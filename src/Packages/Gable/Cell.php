@@ -74,6 +74,7 @@ class Cell extends Element
 
     /**
      * @param \Rougin\Gable\Badge $badge
+     *
      * @return self
      */
     public function addBadge(Badge $badge)
@@ -136,6 +137,7 @@ class Cell extends Element
 
     /**
      * @param \Rougin\Gable\Badge[] $badges
+     *
      * @return self
      */
     public function setBadges($badges)

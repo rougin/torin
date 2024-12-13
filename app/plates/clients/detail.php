@@ -19,7 +19,7 @@
           </div>
           <div class="col-sm-6">
             <?= $form->label('Client Type', 'form-label mb-0')->asRequired() ?>
-            <?= $form->select('type', [ 'Customer', 'Supplier' ], 'form-select')->asModel()->disablesOn('loading') ?>
+            <?= $form->select('type', ['Customer', 'Supplier'], 'form-select')->asModel()->disablesOn('loading') ?>
             <?= $form->error('error.type') ?>
           </div>
         </div>

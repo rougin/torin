@@ -95,6 +95,7 @@ class Table extends Element
      * @param string $text
      * @param string $condition
      * @param string $class
+     *
      * @return self
      */
     public function addBadge($text, $condition, $class = 'text-bg-secondary')
