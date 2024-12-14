@@ -58,12 +58,11 @@ class Cell extends Element
 
         $this->value = $value;
 
-        if ($value)
+        if (is_string($value))
         {
-            $regex = '/[A-Z]([A-Z](?![a-z]))*/';
+            $parsed = str_replace(' ', '_', $value);
 
-            /** @var string */
-            $parsed = $value;
+            $regex = '/[A-Z]([A-Z](?![a-z]))*/';
 
             /** @var string */
             $text = preg_replace($regex, '_$0', $parsed);

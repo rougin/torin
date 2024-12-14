@@ -17,12 +17,21 @@ class Orders
 {
     /**
      * @param \Rougin\Temply\Plate $plate
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return string
      */
-    public function index(Plate $plate)
+    public function index(Plate $plate, ServerRequestInterface $request)
     {
-        // Generate the HTML table --------------------------------------------------
+        // Prepare the pagination ------------------------------
+        $pagee = (new Pagee)->asAlpine();
+
+        $pagee->fromRequest($request);
+
+        $pagee->setLink($plate->getLinkHelper()->set('orders'));
+        // -----------------------------------------------------
+
+        // Generate the HTML table ------------------------------------------
         $table = new Table;
         $table->setClass('table mb-0');
 
@@ -43,11 +52,16 @@ class Orders
         $table->withActions(null, 'left');
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
+        $table->withLoading();
+        $table->withNoItemsText('No orders found.');
+        $table->withLoadErrorText('An error occured in getting the orders.');
         $table->withAlpine();
         $table->withOpacity(50);
-        // --------------------------------------------------------------------------
+        // ------------------------------------------------------------------
 
-        $data = compact('table');
+        $depot = new Depot('orders');
+
+        $data = compact('depot', 'pagee', 'table');
 
         return $plate->render('orders.index', $data);
     }

@@ -1,7 +1,7 @@
 <?= $layout->load('main', compact('plate')); ?>
 
 <?= $block->body() ?>
-  <div x-data="items" @items.window="load($event.detail)">
+  <div x-data="orders" @orders.window="load($event.detail)">
     <div class="mb-3">
       <?= $plate->add('navbar', compact('block', 'url')) ?>
     </div>
@@ -29,5 +29,11 @@
         </div>
       </div>
     </div>
+
+    <?= $plate->add('orders.detail', compact('form')) ?>
   </div>
+<?= $block->end() ?>
+
+<?= $block->set('scripts') ?>
+  <?= $plate->add('orders.depot', compact('depot', 'form', 'pagee', 'url')) ?>
 <?= $block->end() ?>

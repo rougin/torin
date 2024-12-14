@@ -35,7 +35,7 @@ class Clients
         $pagee->setTotal($client->getTotal());
         // ------------------------------------------------------
 
-        // Generate the HTML table --------------------------------------------------
+        // Generate the HTML table ---------------------------------------------
         $table = new Table;
         $table->setClass('table mb-0');
 
@@ -46,16 +46,17 @@ class Clients
         $table->setCell('Client Code', 'left')->withWidth(10)->withName('code');
         $table->setCell('Client Name', 'left')->withWidth(12)->withName('name');
         $table->setCell('Remarks', 'left')->withWidth(15);
-        $table->setCell('Created At', 'left')->withWidth(13)->withName('created_at');
-        $table->setCell('Updated At', 'left')->withWidth(13)->withName('updated_at');
+        $table->setCell('Created At', 'left')->withWidth(13);
+        $table->setCell('Updated At', 'left')->withWidth(13);
         $table->withActions(null, 'left')->withWidth(5);
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
         $table->withLoading($pagee->getLimit());
-        $table->withNoItemsText('No clients found.');
+        $table->withNoItemsText('No orders found.');
+        $table->withLoadErrorText('An error occured in getting the clients.');
         $table->withAlpine();
         $table->withOpacity(50);
-        // --------------------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
         $depot = new Depot('clients');
 
