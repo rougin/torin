@@ -50,6 +50,10 @@ class Router extends Package
         $self->post('items', 'Items@store');
         // ----------------------------------------
 
+        // Order ----------------------------
+        $self->get('orders', 'Orders@index');
+        // ----------------------------------
+
         return $self;
     }
 }

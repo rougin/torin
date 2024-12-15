@@ -28,6 +28,9 @@
           <div><?= $table ?></div>
         </div>
       </div>
+      <div class="mt-3">
+        <?= $pagee ?>
+      </div>
     </div>
 
     <?= $plate->add('orders.detail', compact('form')) ?>

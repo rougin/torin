@@ -7,6 +7,7 @@ use Rougin\Dexter\Alpine\Depot;
 use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
 use Rougin\Temply\Plate;
+use Rougin\Torin\Depots\OrderDepot;
 
 /**
  * @package Torin
@@ -16,12 +17,13 @@ use Rougin\Temply\Plate;
 class Orders
 {
     /**
+     * @param \Rougin\Torin\Depots\OrderDepot $order
      * @param \Rougin\Temply\Plate $plate
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return string
      */
-    public function index(Plate $plate, ServerRequestInterface $request)
+    public function index(OrderDepot $order, Plate $plate, ServerRequestInterface $request)
     {
         // Prepare the pagination ------------------------------
         $pagee = (new Pagee)->asAlpine();
@@ -29,6 +31,8 @@ class Orders
         $pagee->fromRequest($request);
 
         $pagee->setLink($plate->getLinkHelper()->set('orders'));
+
+        $pagee->setTotal($order->getTotal());
         // -----------------------------------------------------
 
         // Generate the HTML table ------------------------------------------

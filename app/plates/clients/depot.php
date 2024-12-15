@@ -52,5 +52,6 @@ const link = '<?= $url->set('/v1/clients') ?>';
 <?= $depot->withUpdate()
   ->addField('name')
   ->addField('remarks')
+  ->addField('type')
   ->setAlert('Client updated!', 'Client successfully updated.') ?>
 </script>

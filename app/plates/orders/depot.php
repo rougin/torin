@@ -18,7 +18,7 @@ const link = '<?= $url->set('/v1/orders') ?>';
 
 <?= $depot->withClose()
   ->withScript($script)
-  ->hideModal('delete-order-modal')
+  // ->hideModal('delete-order-modal')
   ->hideModal('order-detail-modal')
   ->resetField('client_id')
   ->resetField('error')
@@ -26,28 +26,5 @@ const link = '<?= $url->set('/v1/orders') ?>';
   ->resetField('remarks')
   ->resetField('loadError') ?>
 
-<?= $depot->withEdit()
-  ->addField('client_id')
-  ->addField('remarks')
-  ->addField('id')
-  ->showModal('order-detail-modal') ?>
-
 <?= $depot->withLoad($pagee) ?>
-
-<?= $depot->withRemove() ?>
-
-<?= $depot->withStore()
-  ->addField('client_id')
-  ->addField('remarks')
-  ->setAlert('Order created!', 'Order successfully created.') ?>
-
-<?= $depot->withTrash()
-  ->addField('name')
-  ->addField('id')
-  ->showModal('delete-order-modal') ?>
-
-<?= $depot->withUpdate()
-  ->addField('client_id')
-  ->addField('remarks')
-  ->setAlert('Order updated!', 'Order successfully updated.') ?>
 </script>
