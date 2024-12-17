@@ -25,15 +25,13 @@ class Clients
      */
     public function index(ClientDepot $client, Plate $plate, ServerRequestInterface $request)
     {
-        // Prepare the pagination -------------------------------
-        $pagee = (new Pagee)->asAlpine();
+        // Prepare the pagination ----------------------------
+        $pagee = Pagee::fromRequest($request)->asAlpine();
 
-        $pagee->fromRequest($request);
+        $link = $plate->getLinkHelper()->set('clients');
 
-        $pagee->setLink($plate->getLinkHelper()->set('clients'));
-
-        $pagee->setTotal($client->getTotal());
-        // ------------------------------------------------------
+        $pagee->setLink($link)->setTotal($client->getTotal());
+        // ---------------------------------------------------
 
         // Generate the HTML table ---------------------------------------------
         $table = new Table;

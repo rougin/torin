@@ -25,15 +25,13 @@ class Items
      */
     public function index(ItemDepot $item, Plate $plate, ServerRequestInterface $request)
     {
-        // Prepare the pagination -----------------------------
-        $pagee = (new Pagee)->asAlpine();
+        // Prepare the pagination --------------------------
+        $pagee = Pagee::fromRequest($request)->asAlpine();
 
-        $pagee->fromRequest($request);
+        $link = $plate->getLinkHelper()->set('items');
 
-        $pagee->setLink($plate->getLinkHelper()->set('items'));
-
-        $pagee->setTotal($item->getTotal());
-        // ----------------------------------------------------
+        $pagee->setLink($link)->setTotal($item->getTotal());
+        // -------------------------------------------------
 
         // Generate the HTML table -----------------------------------------------
         $table = new Table;

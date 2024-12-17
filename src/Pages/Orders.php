@@ -25,15 +25,13 @@ class Orders
      */
     public function index(OrderDepot $order, Plate $plate, ServerRequestInterface $request)
     {
-        // Prepare the pagination ------------------------------
-        $pagee = (new Pagee)->asAlpine();
+        // Prepare the pagination ---------------------------
+        $pagee = Pagee::fromRequest($request)->asAlpine();
 
-        $pagee->fromRequest($request);
+        $link = $plate->getLinkHelper()->set('orders');
 
-        $pagee->setLink($plate->getLinkHelper()->set('orders'));
-
-        $pagee->setTotal($order->getTotal());
-        // -----------------------------------------------------
+        $pagee->setLink($link)->setTotal($order->getTotal());
+        // --------------------------------------------------
 
         // Generate the HTML table ------------------------------------------
         $table = new Table;
