@@ -25,12 +25,16 @@ class Clients
      */
     public function index(ClientDepot $client, Plate $plate, ServerRequestInterface $request)
     {
+        $data = array('depot' => new Depot('clients'));
+
         // Prepare the pagination ----------------------------
         $pagee = Pagee::fromRequest($request)->asAlpine();
 
         $link = $plate->getLinkHelper()->set('clients');
 
         $pagee->setLink($link)->setTotal($client->getTotal());
+
+        $data['pagee'] = $pagee;
         // ---------------------------------------------------
 
         // Generate the HTML table ---------------------------------------------
@@ -44,8 +48,8 @@ class Clients
         $table->setCell('Client Code', 'left')->withWidth(10)->withName('code');
         $table->setCell('Client Name', 'left')->withWidth(12)->withName('name');
         $table->setCell('Remarks', 'left')->withWidth(15);
-        $table->setCell('Created At', 'left')->withWidth(13)->withName('created_at');
-        $table->setCell('Updated At', 'left')->withWidth(13)->withName('updated_at');
+        $table->setCell('Created At', 'left')->withWidth(13);
+        $table->setCell('Updated At', 'left')->withWidth(13);
         $table->withActions(null, 'left')->withWidth(5);
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
@@ -54,11 +58,9 @@ class Clients
         $table->withLoadErrorText('An error occured in getting the clients.');
         $table->withAlpine();
         $table->withOpacity(50);
+
+        $data['table'] = $table;
         // ---------------------------------------------------------------------
-
-        $depot = new Depot('clients');
-
-        $data = compact('depot', 'pagee', 'table');
 
         return $plate->render('clients.index', $data);
     }

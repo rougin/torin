@@ -54,7 +54,7 @@ class Order extends Model
      */
     public function getCreatedAtAttribute($value)
     {
-        return $value ? date('d M Y h:i:s A', (int) strtotime($value)) : $value;
+        return $value ? date('d M Y h:i A', (int) strtotime($value)) : $value;
     }
 
     /**
@@ -64,6 +64,6 @@ class Order extends Model
      */
     public function getUpdatedAtAttribute($value)
     {
-        return $value ? date('d M Y h:i:s A', (int) strtotime($value)) : $value;
+        return $value ? date('d M Y h:i A', (int) strtotime($value)) : $value;
     }
 }

@@ -25,12 +25,16 @@ class Orders
      */
     public function index(OrderDepot $order, Plate $plate, ServerRequestInterface $request)
     {
+        $data = array('depot' => new Depot('orders'));
+
         // Prepare the pagination ---------------------------
         $pagee = Pagee::fromRequest($request)->asAlpine();
 
         $link = $plate->getLinkHelper()->set('orders');
 
         $pagee->setLink($link)->setTotal($order->getTotal());
+
+        $data['pagee'] = $pagee;
         // --------------------------------------------------
 
         // Generate the HTML table ------------------------------------------
@@ -49,8 +53,8 @@ class Orders
         $table->setCell('Order Code', 'left')->withName('code');
         $table->setCell('Name', 'left');
         $table->setCell('Description', 'left')->withName('detail');
-        $table->setCell('Created At', 'left')->withName('created_at');
-        $table->setCell('Updated At', 'left')->withName('updated_at');
+        $table->setCell('Created At', 'left');
+        $table->setCell('Updated At', 'left');
         $table->withActions(null, 'left');
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
@@ -59,11 +63,9 @@ class Orders
         $table->withLoadErrorText('An error occured in getting the orders.');
         $table->withAlpine();
         $table->withOpacity(50);
+
+        $data['table'] = $table;
         // ------------------------------------------------------------------
-
-        $depot = new Depot('orders');
-
-        $data = compact('depot', 'pagee', 'table');
 
         return $plate->render('orders.index', $data);
     }

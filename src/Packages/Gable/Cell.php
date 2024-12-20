@@ -60,7 +60,7 @@ class Cell extends Element
 
         if (is_string($value))
         {
-            $parsed = str_replace(' ', '_', $value);
+            $parsed = str_replace(' ', '', $value);
 
             $regex = '/[A-Z]([A-Z](?![a-z]))*/';
 
