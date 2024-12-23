@@ -1,20 +1,21 @@
 <?php
 
-namespace Rougin\Torin;
+namespace Rougin\Torin\Http;
 
 use Rougin\Slytherin\Routing\Router;
+use Rougin\Torin\Package;
 
 /**
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Plated extends Package
+class Plates extends Package
 {
     /**
      * @var string
      */
-    protected $namespace = 'Rougin\Torin\Pages';
+    protected $namespace = 'Rougin\Torin\Http\Pages';
 
     /**
      * @var string

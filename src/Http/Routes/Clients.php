@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Torin\Routes;
+namespace Rougin\Torin\Http\Routes;
 
 use Rougin\Dexterity\Message\HttpResponse;
 use Rougin\Dexterity\Message\JsonResponse;
@@ -8,15 +8,15 @@ use Rougin\Dexterity\Route\WithDeleteMethod;
 use Rougin\Dexterity\Route\WithIndexMethod;
 use Rougin\Dexterity\Route\WithStoreMethod;
 use Rougin\Dexterity\Route\WithUpdateMethod;
-use Rougin\Torin\Checks\ItemCheck;
-use Rougin\Torin\Depots\ItemDepot;
+use Rougin\Torin\Checks\ClientCheck;
+use Rougin\Torin\Depots\ClientDepot;
 
 /**
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Items
+class Clients
 {
     use WithDeleteMethod;
     use WithIndexMethod;
@@ -24,24 +24,24 @@ class Items
     use WithUpdateMethod;
 
     /**
-     * @var \Rougin\Torin\Checks\ItemCheck
+     * @var \Rougin\Torin\Checks\ClientCheck
      */
     protected $check;
 
     /**
-     * @var \Rougin\Torin\Depots\ItemDepot
+     * @var \Rougin\Torin\Depots\ClientDepot
      */
-    protected $item;
+    protected $client;
 
     /**
-     * @param \Rougin\Torin\Checks\ItemCheck $check
-     * @param \Rougin\Torin\Depots\ItemDepot $item
+     * @param \Rougin\Torin\Checks\ClientCheck $check
+     * @param \Rougin\Torin\Depots\ClientDepot $client
      */
-    public function __construct(ItemCheck $check, ItemDepot $item)
+    public function __construct(ClientCheck $check, ClientDepot $client)
     {
         $this->check = $check;
 
-        $this->item = $item;
+        $this->client = $client;
     }
 
     /**
@@ -87,7 +87,7 @@ class Items
      */
     protected function isDeleteValid($id)
     {
-        return $this->item->rowExists($id);
+        return $this->client->rowExists($id);
     }
 
     /**
@@ -101,7 +101,7 @@ class Items
     }
 
     /**
-     * Checks if the specified item can be updated.
+     * Checks if the specified client can be updated.
      *
      * @param integer              $id
      * @param array<string, mixed> $parsed
@@ -120,7 +120,7 @@ class Items
      */
     protected function setDeleteData($id)
     {
-        $this->item->delete($id);
+        $this->client->delete($id);
 
         return new JsonResponse('Deleted!', 204);
     }
@@ -138,11 +138,11 @@ class Items
         /** @var integer */
         $page = $params['p'] ?? 1;
 
-        $result = $this->item->get($page, $limit);
+        $result = $this->client->get($page, $limit);
 
-        $items = $result->toArray();
+        $clients = $result->toArray();
 
-        return new JsonResponse($items);
+        return new JsonResponse($clients);
     }
 
     /**
@@ -152,7 +152,7 @@ class Items
      */
     protected function setStoreData($parsed)
     {
-        $this->item->create($parsed);
+        $this->client->create($parsed);
 
         return new JsonResponse('Created!', 201);
     }
@@ -165,7 +165,7 @@ class Items
      */
     protected function setUpdateData($id, $parsed)
     {
-        $this->item->update($id, $parsed);
+        $this->client->update($id, $parsed);
 
         return new JsonResponse('Updated!', 204);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Torin\Pages;
+namespace Rougin\Torin\Http\Pages;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Dexter\Alpine\Depot;

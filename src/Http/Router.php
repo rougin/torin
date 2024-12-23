@@ -1,8 +1,9 @@
 <?php
 
-namespace Rougin\Torin;
+namespace Rougin\Torin\Http;
 
 use Rougin\Slytherin\Routing\Router as Slytherin;
+use Rougin\Torin\Package;
 
 /**
  * @package Torin
@@ -14,7 +15,7 @@ class Router extends Package
     /**
      * @var string
      */
-    protected $namespace = 'Rougin\Torin\Routes';
+    protected $namespace = 'Rougin\Torin\Http\Routes';
 
     /**
      * @var string
