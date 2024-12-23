@@ -88,58 +88,6 @@ class Table extends Element
      */
     public function __toString()
     {
-        return $this->make();
-    }
-
-    /**
-     * @param string $text
-     * @param string $condition
-     * @param string $class
-     *
-     * @return self
-     */
-    public function addBadge($text, $condition, $class = 'text-bg-secondary')
-    {
-        $index = count($this->cols) - 1;
-
-        if (! array_key_exists($index, $this->badges))
-        {
-            $this->badges[$index] = array();
-        }
-
-        $this->badges[$index][] = new Badge($text, $condition, $class);
-
-        return $this;
-    }
-
-    /**
-     * @param \Rougin\Gable\Cell $cell
-     *
-     * @return self
-     */
-    public function addCell(Cell $cell)
-    {
-        if ($this->type === self::TYPE_COL)
-        {
-            $index = count($this->cols) - 1;
-
-            $this->cols[$index]->addCell($cell);
-        }
-        else
-        {
-            $index = count($this->rows) - 1;
-
-            $this->rows[$index]->addCell($cell);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function make()
-    {
         $html = '<table ' . $this->getParsedAttrs() . '>';
 
         if (count($this->cols) > 0)
@@ -221,6 +169,50 @@ class Table extends Element
         $html .= '</table>';
 
         return str_replace('<table >', '<table>', $html);
+    }
+
+    /**
+     * @param string $text
+     * @param string $condition
+     * @param string $class
+     *
+     * @return self
+     */
+    public function addBadge($text, $condition, $class = 'text-bg-secondary')
+    {
+        $index = count($this->cols) - 1;
+
+        if (! array_key_exists($index, $this->badges))
+        {
+            $this->badges[$index] = array();
+        }
+
+        $this->badges[$index][] = new Badge($text, $condition, $class);
+
+        return $this;
+    }
+
+    /**
+     * @param \Rougin\Gable\Cell $cell
+     *
+     * @return self
+     */
+    public function addCell(Cell $cell)
+    {
+        if ($this->type === self::TYPE_COL)
+        {
+            $index = count($this->cols) - 1;
+
+            $this->cols[$index]->addCell($cell);
+        }
+        else
+        {
+            $index = count($this->rows) - 1;
+
+            $this->rows[$index]->addCell($cell);
+        }
+
+        return $this;
     }
 
     /**
