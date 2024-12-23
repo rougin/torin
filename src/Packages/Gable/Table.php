@@ -388,9 +388,18 @@ class Table extends Element
                 $html .= '</button>';
                 $html .= '<div class="dropdown-menu dropdown-menu-end">';
 
+                $hasDanger = false;
+
                 foreach ($this->actions as $action)
                 {
                     $danger = $action->isDanger() ? ' text-danger' : '';
+
+                    if ($action->isDanger() && ! $hasDanger)
+                    {
+                        $html .= '<div><hr class="dropdown-divider"></div>';
+
+                        $hasDanger = true;
+                    }
 
                     $html .= '<div><a class="dropdown-item' . $danger . '" href="javascript:void(0)" @click="' . $action->onClick() . '">' . $action->getName() . '</a></div>';
                 }
