@@ -37,17 +37,22 @@ class Clients
         $data['pagee'] = $pagee;
         // ---------------------------------------------------
 
-        // Generate the HTML table ---------------------------------------------
+        // Generate the HTML table ----------------------------------------------
         $table = new Table;
         $table->setClass('table mb-0');
-
         $table->newColumn();
-        $table->setCell('Type', 'left')->withWidth(5);
-        $table->addBadge('Customer', 'item.type === 0', 'text-bg-success');
-        $table->addBadge('Supplier', 'item.type === 1', 'text-bg-primary');
-        $table->setCell('Client Code', 'left')->withWidth(10)->withName('code');
-        $table->setCell('Client Name', 'left')->withWidth(12)->withName('name');
-        $table->setCell('Remarks', 'left')->withWidth(15);
+
+        $table->setCell('Type', 'left')
+            ->addBadge('Customer', 'item.type === 0', 'text-bg-success')
+            ->addBadge('Supplier', 'item.type === 1', 'text-bg-primary')
+            ->withWidth(5);
+        $table->setCell('Client Name', 'left')
+            ->addHtml('<p class="mb-0" x-text="item.name"></p>')
+            ->addHtml('<p class="mb-0 small text-muted" x-text="item.code"></p>')
+            ->withWidth(22);
+        $table->setCell('Remarks', 'left')
+            ->addHtml('<p class="mb-0 fst-italic" x-text="item.remarks"></p>')
+            ->withWidth(15);
         $table->setCell('Created At', 'left')->withWidth(13);
         $table->setCell('Updated At', 'left')->withWidth(13);
         $table->withActions(null, 'left')->withWidth(5);
@@ -60,7 +65,7 @@ class Clients
         $table->withOpacity(50);
 
         $data['table'] = $table;
-        // ---------------------------------------------------------------------
+        // ----------------------------------------------------------------------
 
         return $plate->render('clients.index', $data);
     }

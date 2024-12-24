@@ -44,6 +44,11 @@ class Table extends Element
     protected $hasAction = false;
 
     /**
+     * @var string[][]
+     */
+    protected $htmls = array();
+
+    /**
      * @var integer
      */
     protected $loadingCount = 0;
@@ -180,7 +185,9 @@ class Table extends Element
      */
     public function addBadge($text, $condition, $class = 'text-bg-secondary')
     {
-        $index = count($this->cols) - 1;
+        $lastRow = count($this->cols) - 1;
+
+        $index = $this->cols[$lastRow]->getLastIndex();
 
         if (! array_key_exists($index, $this->badges))
         {
@@ -211,6 +218,27 @@ class Table extends Element
 
             $this->rows[$index]->addCell($cell);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string $html
+     *
+     * @return self
+     */
+    public function addHtml($html)
+    {
+        $lastRow = count($this->cols) - 1;
+
+        $index = $this->cols[$lastRow]->getLastIndex();
+
+        if (! array_key_exists($index, $this->htmls))
+        {
+            $this->htmls[$index] = array();
+        }
+
+        $this->htmls[$index][] = $html;
 
         return $this;
     }
@@ -371,6 +399,8 @@ class Table extends Element
         {
             $hasBadges = array_key_exists($index, $this->badges);
 
+            $hasHtml = array_key_exists($index, $this->htmls);
+
             $new = new Cell(null, null, $class, null, null, $style, $width);
 
             // Add badges to the specified column cell ---
@@ -412,9 +442,14 @@ class Table extends Element
                 continue;
             }
 
-            if (! $hasBadges)
+            if (! $hasBadges && ! $hasHtml)
             {
                 $new->withAttr('x-text', 'item.' . $cell->getName());
+            }
+
+            if (! $hasBadges && $hasHtml)
+            {
+                $new->setValue(implode('', $this->htmls[$index]));
             }
 
             $this->addCell($new);

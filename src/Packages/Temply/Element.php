@@ -50,6 +50,16 @@ class Element
     }
 
     /**
+     * @param string $id
+     *
+     * @return static
+     */
+    public function withId($id)
+    {
+        return $this->with('id', $id);
+    }
+
+    /**
      * @return string
      */
     protected function getAttrs()

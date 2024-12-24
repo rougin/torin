@@ -69,6 +69,14 @@ class Data extends Element
     }
 
     /**
+     * @return integer
+     */
+    public function getLastIndex()
+    {
+        return count($this->cells) - 1;
+    }
+
+    /**
      * @param \Rougin\Gable\Cell $cell
      *
      * @return self
