@@ -10,15 +10,20 @@
       </template>
     </div>
     <div class="modal-body">
-      <div class="mb-3">
-        <?= $form->label('Name', 'form-label mb-0')->asRequired() ?>
-        <?= $form->input('name', 'form-control')->asModel()->disablesOn('loading') ?>
-        <?= $form->error('error.name') ?>
+      <div class="row mb-3">
+        <div class="col-sm-6">
+          <?= $form->label('Client', 'form-label mb-0') ?>
+          <?= $form->input('client_id', 'form-control')->asModel()->disablesOn('loading') ?>
+          <?= $form->error('error.client_id') ?>
+        </div>
+        <div class="col-sm-6">
+          <?= $form->label('Remarks', 'form-label mb-0') ?>
+          <?= $form->input('remarks', 'form-control')->asModel()->disablesOn('loading') ?>
+          <?= $form->error('error.remarks') ?>
+        </div>
       </div>
       <div>
-        <?= $form->label('Remarks', 'form-label mb-0') ?>
-        <?= $form->input('remarks', 'form-control')->asModel()->disablesOn('loading') ?>
-        <?= $form->error('error.remarks') ?>
+        <?= $form->label('Items', 'form-label mb-0') ?>
       </div>
     </div>
     <div class="modal-footer border-top-0 bg-light">
