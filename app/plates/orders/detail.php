@@ -13,7 +13,7 @@
       <div class="row mb-3">
         <div class="col-sm-6">
           <?= $form->label('Client', 'form-label mb-0') ?>
-          <?= $form->input('client_id', 'form-control')->asModel()->disablesOn('loading') ?>
+          <?= $form->select('client_id', [], 'form-select')->withId('clients')->asModel()->disablesOn('loading') ?>
           <?= $form->error('error.client_id') ?>
         </div>
         <div class="col-sm-6">

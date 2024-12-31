@@ -45,7 +45,7 @@ class Load extends Method
         $fn .= 'self.pagee.page = page;';
         $fn .= 'data.' . $this->pagee->getLimitKey() . ' = ' . $this->pagee->getLimit() . ';';
         $fn .= 'const search = new URLSearchParams(data);';
-        $fn .= 'axios.get(link + \'?\' + search.toString())';
+        $fn .= 'axios.get(\'' . $this->link . '\' + \'?\' + search.toString())';
         $fn .= '.then(function (response)';
         $fn .= '{';
         $fn .= 'const result = response.data;';

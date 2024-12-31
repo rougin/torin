@@ -52,8 +52,8 @@ class Pagee
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param string $limit
-     * @param string $page
+     * @param string                                   $limit
+     * @param string                                   $page
      *
      * @return self
      */

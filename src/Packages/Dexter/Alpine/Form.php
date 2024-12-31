@@ -54,17 +54,17 @@ class Form extends Method
 
         if ($this->type === self::TYPE_CREATE)
         {
-            $fn .= 'axios.post(link, input)';
+            $fn .= 'axios.post(\'' . $this->link . '\', input)';
         }
         else
         {
-            $fn .= 'axios.put(link + \'/\' + id, input)';
+            $fn .= 'axios.put(\'' . $this->link . '\' + \'/\' + id, input)';
         }
 
         $fn .= '.then(function (response)';
         $fn .= '{';
         $fn .= 'self.close();';
-        $fn .= 'Alert.success(\'' . $this->title . '!\', \'' . $this->text . '\');';
+        $fn .= 'Alert.success(\'' . $this->title . '\', \'' . $this->text . '\');';
         $fn .= 'self.load(self.pagee.page);';
         $fn .= '})';
         $fn .= '.catch(function (error)';

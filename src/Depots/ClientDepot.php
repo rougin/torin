@@ -38,6 +38,29 @@ class ClientDepot extends Depot
     }
 
     /**
+     * @return array<string, mixed>[]
+     */
+    public function getSelect()
+    {
+        $items = $this->client->all();
+
+        $output = array();
+
+        foreach ($items as $item)
+        {
+            $row = array();
+
+            $row['value'] = $item->id;
+
+            $row['label'] = $item->name;
+
+            $output[] = $row;
+        }
+
+        return $output;
+    }
+
+    /**
      * @return integer
      */
     public function getTotal()

@@ -47,6 +47,16 @@ class Clients
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
+    public function select()
+    {
+        $items = $this->client->getSelect();
+
+        return new JsonResponse($items);
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     protected function invalidDelete()
     {
         $code = HttpResponse::UNPROCESSABLE;

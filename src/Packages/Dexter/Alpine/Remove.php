@@ -41,11 +41,11 @@ class Remove extends Method
 
         $fn .= 'self.loading = true;';
         $fn .= 'self.error = {};';
-        $fn .= 'axios.delete(link + \'/\' + id, input)';
+        $fn .= 'axios.delete(\'' . $this->link . '\' + \'/\' + id, input)';
         $fn .= '.then(function (response)';
         $fn .= '{';
         $fn .= 'self.close();';
-        $fn .= 'Alert.success(\'' . $this->title . '!\', \'' . $this->text . '\');';
+        $fn .= 'Alert.success(\'' . $this->title . '\', \'' . $this->text . '\');';
         $fn .= 'self.load(self.pagee.page);';
         $fn .= '})';
         $fn .= '.catch(function (error)';

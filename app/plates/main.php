@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <title>Torin - Simple inventory management.</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto">
+  <?= $block->add('styles') ?>
   <style type="text/css">
     html, body { font-family: 'Roboto'; }
     .ex-pointer { cursor: pointer; }
   </style>
-  <?= $block->add('styles') ?>
 </head>
 <body style="background: #ebebeb;">
   <?= $block->content() ?>

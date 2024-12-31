@@ -24,12 +24,17 @@ class Method
     /**
      * @var string
      */
-    protected $parent;
+    protected $link = '';
 
     /**
      * @var string
      */
     protected $name;
+
+    /**
+     * @var string
+     */
+    protected $parent;
 
     /**
      * @var string[]
@@ -104,6 +109,18 @@ class Method
     public function resetField($name)
     {
         $this->resets[] = $name;
+
+        return $this;
+    }
+
+    /**
+     * @param string $link
+     *
+     * @return self
+     */
+    public function setLink($link)
+    {
+        $this->link = $link;
 
         return $this;
     }

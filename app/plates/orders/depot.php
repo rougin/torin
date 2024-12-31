@@ -1,6 +1,4 @@
 <script type="text/javascript">
-const link = '<?= $url->set('/v1/orders') ?>';
-
 <?= $script = $form->script('orders')
   ->with('client_id')
   ->with('remarks')
@@ -26,5 +24,24 @@ const link = '<?= $url->set('/v1/orders') ?>';
   ->resetField('remarks')
   ->resetField('loadError') ?>
 
-<?= $depot->withLoad($pagee) ?>
+<?= $depot->withLoad($pagee)
+  ->setLink($url->set('/v1/orders')) ?>
+
+axios.get('<?= $url->set('/v1/clients/select') ?>')
+  .then(response =>
+  {
+    let config = { options: response.data };
+
+    config.create = false;
+    config.plugins = [ 'dropdown_input' ];
+    config.labelField = 'label';
+    config.searchField = 'label';
+    config.sortField = 'label';
+    config.valueField = 'value';
+
+    setTimeout(() =>
+    {
+      new TomSelect('#clients', config);
+    }, 1000);
+  });
 </script>

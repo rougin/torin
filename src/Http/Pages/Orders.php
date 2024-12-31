@@ -17,8 +17,8 @@ use Rougin\Torin\Depots\OrderDepot;
 class Orders
 {
     /**
-     * @param \Rougin\Torin\Depots\OrderDepot $order
-     * @param \Rougin\Temply\Plate $plate
+     * @param \Rougin\Torin\Depots\OrderDepot          $order
+     * @param \Rougin\Temply\Plate                     $plate
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return string

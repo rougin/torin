@@ -34,6 +34,8 @@ class Router extends Package
         // Client -------------------------------------
         $self->delete('clients/:id', 'Clients@delete');
 
+        $self->get('clients/select', 'Clients@select');
+
         $self->get('clients', 'Clients@index');
 
         $self->put('clients/:id', 'Clients@update');

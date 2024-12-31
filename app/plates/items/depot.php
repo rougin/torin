@@ -1,6 +1,4 @@
 <script type="text/javascript">
-const link = '<?= $url->set('/v1/items') ?>';
-
 <?= $script = $form->script('items')
   ->with('name')
   ->with('detail')
@@ -32,14 +30,17 @@ const link = '<?= $url->set('/v1/items') ?>';
   ->addField('id')
   ->showModal('item-detail-modal') ?>
 
-<?= $depot->withLoad($pagee) ?>
+<?= $depot->withLoad($pagee)
+  ->setLink($url->set('/v1/items')) ?>
 
-<?= $depot->withRemove() ?>
+<?= $depot->withRemove()
+  ->setLink($url->set('/v1/items')) ?>
 
 <?= $depot->withStore()
   ->addField('name')
   ->addField('detail')
-  ->setAlert('Item created!', 'Item successfully created.') ?>
+  ->setAlert('Item created!', 'Item successfully created.')
+  ->setLink($url->set('/v1/items')) ?>
 
 <?= $depot->withTrash()
   ->addField('name')
@@ -49,5 +50,6 @@ const link = '<?= $url->set('/v1/items') ?>';
 <?= $depot->withUpdate()
   ->addField('name')
   ->addField('detail')
-  ->setAlert('Item updated!', 'Item successfully updated.') ?>
+  ->setAlert('Item updated!', 'Item successfully updated.')
+  ->setLink($url->set('/v1/items')) ?>
 </script>

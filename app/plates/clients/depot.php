@@ -1,6 +1,4 @@
 <script type="text/javascript">
-const link = '<?= $url->set('/v1/clients') ?>';
-
 <?= $script = $form->script('clients')
   ->with('name')
   ->with('remarks')
@@ -34,15 +32,18 @@ const link = '<?= $url->set('/v1/clients') ?>';
   ->addField('id')
   ->showModal('client-detail-modal') ?>
 
-<?= $depot->withLoad($pagee) ?>
+<?= $depot->withLoad($pagee)
+  ->setLink($url->set('/v1/clients')) ?>
 
-<?= $depot->withRemove() ?>
+<?= $depot->withRemove()
+  ->setLink($url->set('/v1/clients')) ?>
 
 <?= $depot->withStore()
   ->addField('name')
   ->addField('remarks')
   ->addField('type')
-  ->setAlert('Client created!', 'Client successfully created.') ?>
+  ->setAlert('Client created!', 'Client successfully created.')
+  ->setLink($url->set('/v1/clients')) ?>
 
 <?= $depot->withTrash()
   ->addField('name')
@@ -53,5 +54,6 @@ const link = '<?= $url->set('/v1/clients') ?>';
   ->addField('name')
   ->addField('remarks')
   ->addField('type')
-  ->setAlert('Client updated!', 'Client successfully updated.') ?>
+  ->setAlert('Client updated!', 'Client successfully updated.')
+  ->setLink($url->set('/v1/clients')) ?>
 </script>
