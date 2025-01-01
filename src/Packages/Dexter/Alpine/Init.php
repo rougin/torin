@@ -37,6 +37,12 @@ class Init extends Method
     {
         $fn = 'function ()';
         $fn .= '{';
+
+        foreach ($this->selects as $select)
+        {
+            $fn .= $select;
+        }
+
         $fn .= 'this.load(' . $this->page . ');';
         $fn .= '}';
 

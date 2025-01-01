@@ -22,6 +22,11 @@ class Method
     protected $modals = array();
 
     /**
+     * @var \Rougin\Dexter\Alpine\Select[]
+     */
+    protected $selects = array();
+
+    /**
      * @var string
      */
     protected $link = '';
@@ -69,6 +74,18 @@ class Method
     public function addField($field)
     {
         $this->fields[] = $field;
+
+        return $this;
+    }
+
+    /**
+     * @param string $id
+     * @param string|null $link
+     * @return self
+     */
+    public function addSelect($id, $link = null)
+    {
+        $this->selects[] = new Select($id, $link);
 
         return $this;
     }

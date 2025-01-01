@@ -12,7 +12,8 @@
 
 <?= $pagee->toObject('orders') ?>
 
-<?= $depot->withInit($pagee->getPage()) ?>
+<?= $depot->withInit($pagee->getPage())
+  ->addSelect('#clients', $url->set('/v1/clients/select')) ?>
 
 <?= $depot->withClose()
   ->withScript($script)
@@ -26,22 +27,4 @@
 
 <?= $depot->withLoad($pagee)
   ->setLink($url->set('/v1/orders')) ?>
-
-axios.get('<?= $url->set('/v1/clients/select') ?>')
-  .then(response =>
-  {
-    let config = { options: response.data };
-
-    config.create = false;
-    config.plugins = [ 'dropdown_input' ];
-    config.labelField = 'label';
-    config.searchField = 'label';
-    config.sortField = 'label';
-    config.valueField = 'value';
-
-    setTimeout(() =>
-    {
-      new TomSelect('#clients', config);
-    }, 1000);
-  });
 </script>
