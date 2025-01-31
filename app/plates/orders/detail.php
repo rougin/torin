@@ -12,18 +12,25 @@
     <div class="modal-body">
       <div class="row mb-3">
         <div class="col-sm-6">
-          <?= $form->label('Client', 'form-label mb-0') ?>
+          <?= $form->label('Type of Order', 'form-label mb-0') ?>
+          <?= $form->select('type', [ 'Sale', 'Purchase', 'Transfer' ], 'form-select')->withId('type')->asModel()->disablesOn('loading') ?>
+          <?= $form->error('error.type') ?>
+        </div>
+        <div class="col-sm-6">
+          <?= $form->label('Name of Client', 'form-label mb-0') ?>
           <?= $form->select('client_id', [], 'form-select')->withId('clients')->asModel()->disablesOn('loading') ?>
           <?= $form->error('error.client_id') ?>
         </div>
-        <div class="col-sm-6">
+      </div>
+      <div class="mb-3">
+        <?= $form->label('Items', 'form-label mb-0') ?>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
           <?= $form->label('Remarks', 'form-label mb-0') ?>
           <?= $form->input('remarks', 'form-control')->asModel()->disablesOn('loading') ?>
           <?= $form->error('error.remarks') ?>
         </div>
-      </div>
-      <div>
-        <?= $form->label('Items', 'form-label mb-0') ?>
       </div>
     </div>
     <div class="modal-footer border-top-0 bg-light">

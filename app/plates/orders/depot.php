@@ -1,6 +1,7 @@
 <script type="text/javascript">
 <?= $script = $form->script('orders')
   ->with('client_id')
+  ->with('type')
   ->with('remarks')
   ->with('items', array())
   ->with('empty', false)
@@ -27,4 +28,11 @@
 
 <?= $depot->withLoad($pagee)
   ->setLink($url->set('/v1/orders')) ?>
+
+<?= $depot->withStore()
+  ->addField('client_id')
+  ->addField('remarks')
+  ->addField('type')
+  ->setAlert('Client created!', 'Client successfully created.')
+  ->setLink($url->set('/v1/clients')) ?>
 </script>

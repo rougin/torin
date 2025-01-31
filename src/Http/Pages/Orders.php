@@ -7,6 +7,7 @@ use Rougin\Dexter\Alpine\Depot;
 use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
 use Rougin\Temply\Plate;
+use Rougin\Torin\Depots\ItemDepot;
 use Rougin\Torin\Depots\OrderDepot;
 
 /**
@@ -17,13 +18,14 @@ use Rougin\Torin\Depots\OrderDepot;
 class Orders
 {
     /**
+     * @param \Rougin\Torin\Depots\ItemDepot           $item
      * @param \Rougin\Torin\Depots\OrderDepot          $order
      * @param \Rougin\Temply\Plate                     $plate
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return string
      */
-    public function index(OrderDepot $order, Plate $plate, ServerRequestInterface $request)
+    public function index(ItemDepot $item, OrderDepot $order, Plate $plate, ServerRequestInterface $request)
     {
         $data = array('depot' => new Depot('orders'));
 
