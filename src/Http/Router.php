@@ -32,9 +32,9 @@ class Router extends Package
         $self->prefix($this->prefix, $this->namespace);
 
         // Client -------------------------------------
-        $self->delete('clients/:id', 'Clients@delete');
-
         $self->get('clients/select', 'Clients@select');
+
+        $self->delete('clients/:id', 'Clients@delete');
 
         $self->get('clients', 'Clients@index');
 
@@ -44,6 +44,8 @@ class Router extends Package
         // --------------------------------------------
 
         // Item -----------------------------------
+        $self->get('items/select', 'Items@select');
+
         $self->delete('items/:id', 'Items@delete');
 
         $self->get('items', 'Items@index');

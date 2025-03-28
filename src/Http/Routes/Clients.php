@@ -49,9 +49,7 @@ class Clients
      */
     public function select()
     {
-        $items = $this->client->getSelect();
-
-        return new JsonResponse($items);
+        return new JsonResponse($this->client->getSelect());
     }
 
     /**

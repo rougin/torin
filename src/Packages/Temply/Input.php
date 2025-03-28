@@ -36,6 +36,14 @@ class Input extends Element
     }
 
     /**
+     * @return self
+     */
+    public function asNumber()
+    {
+        return $this->withType('number');
+    }
+
+    /**
      * TODO: This is a specific code for "alpinejs".
      *
      * @param string|null $name

@@ -47,6 +47,14 @@ class Items
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
+    public function select()
+    {
+        return new JsonResponse($this->item->getSelect());
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     protected function invalidDelete()
     {
         $code = HttpResponse::UNPROCESSABLE;

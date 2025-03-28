@@ -79,13 +79,14 @@ class Method
     }
 
     /**
+     * @param string $name
      * @param string $id
      * @param string|null $link
      * @return self
      */
-    public function addSelect($id, $link = null)
+    public function addSelect($name, $id, $link = null)
     {
-        $this->selects[] = new Select($id, $link);
+        $this->selects[] = new Select($name, $id, $link);
 
         return $this;
     }

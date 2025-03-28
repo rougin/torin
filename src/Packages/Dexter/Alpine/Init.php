@@ -40,7 +40,9 @@ class Init extends Method
 
         foreach ($this->selects as $select)
         {
-            $fn .= $select;
+            $name = 'this.' . $select->getName();
+
+            $fn .= $name . ' = ' . $select;
         }
 
         $fn .= 'this.load(' . $this->page . ');';

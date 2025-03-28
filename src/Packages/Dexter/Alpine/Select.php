@@ -14,7 +14,7 @@ class Select
     /**
      * @var string
      */
-    protected $id = '';
+    protected $id;
 
     /**
      * @var string|null
@@ -22,11 +22,19 @@ class Select
     protected $link = null;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @param string $name
      * @param string $id
      * @param string|null $link
      */
-    public function __construct($id, $link = null)
+    public function __construct($name, $id, $link = null)
     {
+        $this->name = $name;
+
         $this->id = $id;
 
         $this->link = $link;
@@ -37,29 +45,33 @@ class Select
      */
     public function __toString()
     {
-        $html = 'new TomSelect(\'' . $this->id . '\');';
+        $html = 'new TomSelect(\'' . $this->id . '\', {';
+        $html .= 'create: false,';
+        $html .= 'plugins: [ \'dropdown_input\' ],';
+        $html .= 'labelField: \'label\',';
+        $html .= 'searchField: \'label\',';
+        $html .= 'sortField: \'label\',';
+        $html .= 'valueField: \'value\'';
 
-        if ($this->link === null)
+        if ($this->link)
         {
-            return $html;
+            $html .= ',preload: true,';
+            $html .= 'load: function(query, cb) {';
+            $html .= '  const url = \'' . $this->link . '\';';
+            $html .= '  fetch(url).then(response => response.json())';
+            $html .= '    .then(json => cb(json))';
+            $html .= '    .catch(() => { cb() });';
+            $html .= '}';
         }
 
-        $html = 'axios.get(\'' . $this->link . '\')';
-        $html .= '.then(response =>';
-        $html .= '{';
-        $html .= 'let config = { options: response.data };';
-        $html .= 'config.create = false;';
-        $html .= 'config.plugins = [ \'dropdown_input\' ];';
-        $html .= 'config.labelField = \'label\';';
-        $html .= 'config.searchField = \'label\';';
-        $html .= 'config.sortField = \'label\';';
-        $html .= 'config.valueField = \'value\';';
-        $html .= 'setTimeout(function ()';
-        $html .= '{';
-        $html .= 'new TomSelect(\'' . $this->id . '\', config);';
-        $html .= '}, 1000);';
-        $html .= '});';
+        return $html . '});';
+    }
 
-        return $html;
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

@@ -1,5 +1,5 @@
 <div class="modal fade" id="order-detail-modal" data-bs-backdrop="static" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered">
+<div class="modal-dialog modal-dialog-centered modal-scrollable">
   <div class="modal-content">
     <div class="modal-header text-white border-bottom-0" :class="{ 'bg-primary': id, 'bg-secondary': !id }">
       <template x-if="id">
@@ -11,20 +11,54 @@
     </div>
     <div class="modal-body">
       <div class="row mb-3">
-        <div class="col-sm-6">
-          <?= $form->label('Type of Order', 'form-label mb-0') ?>
-          <?= $form->select('type', [ 'Sale', 'Purchase', 'Transfer' ], 'form-select')->withId('type')->asModel()->disablesOn('loading') ?>
-          <?= $form->error('error.type') ?>
-        </div>
-        <div class="col-sm-6">
-          <?= $form->label('Name of Client', 'form-label mb-0') ?>
+        <div class="col-sm-8">
+          <?= $form->label('Name of Client', 'form-label mb-0')->asRequired() ?>
           <?= $form->select('client_id', [], 'form-select')->withId('clients')->asModel()->disablesOn('loading') ?>
           <?= $form->error('error.client_id') ?>
         </div>
+        <div class="col-sm-4">
+          <?= $form->label('Type of Order', 'form-label mb-0')->asRequired() ?>
+          <?= $form->select('type', [ 'Sale', 'Purchase', 'Transfer' ], 'form-select')->withId('type')->asModel()->disablesOn('loading') ?>
+          <?= $form->error('error.type') ?>
+        </div>
+      </div>
+      <hr>
+      <div class="mb-3">
+        <div class="row">
+          <div class="col-sm-6">
+            <?= $form->label('Item to add', 'form-label mb-0 small') ?>
+            <?= $form->select('item_id', [], 'form-select')->withId('items')->asModel()->disablesOn('loading') ?>
+          </div>
+          <div class="col-sm-3">
+            <?= $form->label('Quantity', 'form-label mb-0 small') ?>
+            <?= $form->input('quantity', 'form-control')->asNumber()->asModel()->disablesOn('loading') ?>
+          </div>
+          <div class="col-sm-3 align-self-end mb-1">
+            <?= $form->button('Add to order', 'btn btn-sm btn-secondary')->onClick('add')->disablesOn('loading') ?>
+          </div>
+        </div>
       </div>
       <div class="mb-3">
-        <?= $form->label('Items', 'form-label mb-0') ?>
+        <table class="table">
+          <thead>
+            <tr class="fw-bold small">
+              <td width="80%">Name of Item</td>
+              <td width="20%">Quantity</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            <template x-for="item in cart">
+              <tr>
+                <td x-text="item.name"></td>
+                <td x-text="item.quantity"></td>
+                <td></td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
       </div>
+      <hr>
       <div class="row">
         <div class="col-sm-12">
           <?= $form->label('Remarks', 'form-label mb-0') ?>

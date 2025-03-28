@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string       $name
  * @property string       $detail
  *
+ * @method \Rougin\Torin\Models\Item[]    all()
  * @method integer                        count()
  * @method boolean                        delete()
  * @method \Rougin\Torin\Models\Item      create(array<string, mixed> $data)
