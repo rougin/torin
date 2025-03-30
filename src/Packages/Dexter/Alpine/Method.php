@@ -14,6 +14,11 @@ class Method
     /**
      * @var string[]
      */
+    protected $arrays = array();
+
+    /**
+     * @var string[]
+     */
     protected $fields = array();
 
     /**
@@ -87,6 +92,18 @@ class Method
     public function addSelect($name, $id, $link = null)
     {
         $this->selects[] = new Select($name, $id, $link);
+
+        return $this;
+    }
+
+    /**
+     * @return self
+     */
+    public function asArray()
+    {
+        $index = count($this->fields) - 1;
+
+        $this->arrays[] = $this->fields[$index];
 
         return $this;
     }

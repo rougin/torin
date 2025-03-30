@@ -37,6 +37,7 @@
   ->addField('client_id')
   ->addField('remarks')
   ->addField('type')
+  ->addField('cart')->asArray()
   ->setAlert('Client created!', 'Client successfully created.')
   ->setLink($url->set('/v1/clients')) ?>
 
@@ -46,12 +47,28 @@ orders.add = function ()
 
   if (! opt) return;
 
-  let item = {};
-  item.id = parseInt(this.item_id);
-  item.name = opt.textContent;
-  item.quantity = this.quantity;
+  let row = { id: parseInt(this.item_id) };
+  row.name = opt.textContent;
+  row.quantity = parseInt(this.quantity);
 
-  this.cart.push(item);
+  let last = null;
+
+  this.cart.forEach(function (item, index)
+  {
+    if (item.id === row.id)
+    {
+      last = index;
+    }
+  });
+
+  if (last !== null)
+  {
+    this.cart[last].quantity += row.quantity;
+  }
+  else
+  {
+    this.cart.push(row);
+  }
 
   this.ts_items.clear();
 

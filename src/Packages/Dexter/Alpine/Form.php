@@ -46,7 +46,29 @@ class Form extends Method
 
         foreach ($this->fields as $field)
         {
-            $fn .= 'input.append(\'' . $field . '\', self.' . $field . ');';
+            if (! in_array($field, $this->arrays))
+            {
+                $fn .= 'input.append(\'' . $field . '\', self.' . $field . ');';
+
+                continue;
+            }
+
+            // Traverse each item object and append them to the FormData instance --------------------
+            $fn .= 'self.' . $field . '.forEach(function (item, index)';
+            $fn .= '{';
+            $fn .= '  if (! (item instanceof Object))';
+            $fn .= '  {';
+            $fn .= '    input.append(\'' . $field . '[\' + index + \']\', item);';
+
+            $fn .= '    return;';
+            $fn .= '  }';
+
+            $fn .= '  Object.keys(item).forEach(function (key)';
+            $fn .= '  {';
+            $fn .= '    input.append(\'' . $field . '[\' + index + \'][\' + key + \']\', item[key]);';
+            $fn .= '  });';
+            $fn .= '});';
+            // ---------------------------------------------------------------------------------------
         }
 
         $fn .= 'self.loading = true;';
