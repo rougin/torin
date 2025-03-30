@@ -34,7 +34,7 @@
             <?= $form->input('quantity', 'form-control')->asNumber()->asModel()->disablesOn('loading') ?>
           </div>
           <div class="col-sm-3 align-self-end mb-1">
-            <?= $form->button('Add to order', 'btn btn-sm btn-secondary')->onClick('add')->disablesOn('loading') ?>
+            <?= $form->button('Add to order', 'btn btn-sm btn-secondary')->onClick('add')->disablesOn('loading || ! item_id || ! quantity') ?>
           </div>
         </div>
       </div>
@@ -42,18 +42,27 @@
         <table class="table">
           <thead>
             <tr class="fw-bold small">
-              <td width="80%">Name of Item</td>
+              <td width="80%">Item Name</td>
               <td width="20%">Quantity</td>
               <td></td>
             </tr>
           </thead>
           <tbody>
-            <template x-for="item in cart">
+            <template x-if="cart.length === 0">
               <tr>
-                <td x-text="item.name"></td>
-                <td x-text="item.quantity"></td>
-                <td></td>
+                <td colspan="3" class="text-center small">No items added.</td>
               </tr>
+            </template>
+            <template x-if="cart.length > 0">
+              <template x-for="(item, index) in cart">
+                <tr>
+                  <td x-text="item.name"></td>
+                  <td x-text="item.quantity"></td>
+                  <td>
+                    <button type="button" class="btn-close" @click="cart.splice(index, 1)"></button>
+                  </td>
+                </tr>
+              </template>
             </template>
           </tbody>
         </table>

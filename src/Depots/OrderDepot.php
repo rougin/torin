@@ -26,6 +26,44 @@ class OrderDepot extends Depot
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
+     * @return \Rougin\Torin\Models\Order
+     */
+    public function create($data)
+    {
+        $load = array();
+
+        /** @var integer */
+        $clientId = $data['client_id'];
+        $load['client_id'] = $clientId;
+
+        /** @var integer */
+        $type = $data['type'];
+        $load['type'] = $type;
+
+        $load['code'] = $this->getCode($type);
+
+        $load['status'] = Order::STATUS_PENDING;
+
+        /** @var string|null */
+        $remarks = $data['remarks'];
+        $load['remarks'] = $remarks;
+
+        if (array_key_exists('created_by', $data))
+        {
+            /** @var integer */
+            $createdBy = $data['created_by'];
+            $load['created_by'] = $createdBy;
+        }
+
+        // TODO: Create "order_item" table ---
+        // -----------------------------------
+
+        return $this->order->create($load);
+    }
+
+    /**
      * @return integer
      */
     public function getTotal()
@@ -37,15 +75,31 @@ class OrderDepot extends Depot
      * @param integer $page
      * @param integer $limit
      *
-     * @return \Rougin\Torin\Models\Item[]
+     * @return \Rougin\Torin\Models\Order[]
      */
     protected function getItems($page, $limit)
     {
-        $model = $this->order->limit($limit);
+        $model = $this->order->with(['client']);
+
+        $model = $model->limit($limit);
 
         $offset = $this->getOffset($page, $limit);
 
-        /** @var \Rougin\Torin\Models\Item[] */
         return $model->offset($offset)->get();
+    }
+
+    /**
+     * @param integer $type
+     * @return string
+     */
+    protected function getCode($type)
+    {
+        $total = $this->getTotal();
+
+        $count = sprintf('%05d', $total);
+
+        $code = $type . '-' . date('Ymd');
+
+        return $code . '-' . $count;
     }
 }

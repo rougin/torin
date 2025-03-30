@@ -53,8 +53,8 @@ class Orders
         $table->addBadge('Fulfilled', 'item.type === 1', 'text-bg-success');
         $table->addBadge('Pending', 'item.type === 0', 'text-bg-warning');
         $table->setCell('Order Code', 'left')->withName('code');
-        $table->setCell('Name', 'left');
-        $table->setCell('Description', 'left')->withName('detail');
+        $table->setCell('Client Name', 'left')->withName('client.name');
+        $table->setCell('Remarks', 'left')->withName('remarks');
         $table->setCell('Created At', 'left');
         $table->setCell('Updated At', 'left');
         $table->withActions(null, 'left');

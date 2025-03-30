@@ -30,6 +30,12 @@ class Order extends Model
 {
     use SoftDeletes;
 
+    const STATUS_CANCELLED = 2;
+
+    const STATUS_PENDING = 0;
+
+    const STATUS_COMPLETED = 1;
+
     /**
      * @var string[]
      */
@@ -46,6 +52,14 @@ class Order extends Model
      * @var string
      */
     protected $connection = 'torin';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 
     /**
      * @param string $value
