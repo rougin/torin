@@ -27,8 +27,8 @@ class Select
     protected $name;
 
     /**
-     * @param string $name
-     * @param string $id
+     * @param string      $name
+     * @param string      $id
      * @param string|null $link
      */
     public function __construct($name, $id, $link = null)

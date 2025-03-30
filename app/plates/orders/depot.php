@@ -39,7 +39,7 @@
   ->addField('type')
   ->addField('cart')->asArray()
   ->setAlert('Client created!', 'Client successfully created.')
-  ->setLink($url->set('/v1/clients')) ?>
+  ->setLink($url->set('/v1/orders')) ?>
 
 orders.add = function ()
 {

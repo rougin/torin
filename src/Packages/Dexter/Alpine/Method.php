@@ -84,9 +84,10 @@ class Method
     }
 
     /**
-     * @param string $name
-     * @param string $id
+     * @param string      $name
+     * @param string      $id
      * @param string|null $link
+     *
      * @return self
      */
     public function addSelect($name, $id, $link = null)

@@ -14,10 +14,21 @@ class OrderCheck extends Request
     /**
      * @var array<string, string>
      */
-    protected $labels = array();
+    protected $labels =
+    [
+        'client_id' => 'Client Name',
+        'cart' => 'Cart',
+        'remarks' => 'Remarks',
+        'type' => 'Order Type',
+    ];
 
     /**
      * @var array<string, string>
      */
-    protected $rules = array();
+    protected $rules =
+    [
+        'cart' => 'required',
+        'client_id' => 'required',
+        'type' => 'required',
+    ];
 }

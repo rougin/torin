@@ -12,13 +12,13 @@
     <div class="modal-body">
       <div class="row mb-3">
         <div class="col-sm-8">
-          <?= $form->label('Name of Client', 'form-label mb-0')->asRequired() ?>
+          <?= $form->label('Client Name', 'form-label mb-0')->asRequired() ?>
           <?= $form->select('client_id', [], 'form-select')->withId('clients')->asModel()->disablesOn('loading') ?>
           <?= $form->error('error.client_id') ?>
         </div>
         <div class="col-sm-4">
-          <?= $form->label('Type of Order', 'form-label mb-0')->asRequired() ?>
-          <?= $form->select('type', [ 'Sale', 'Purchase', 'Transfer' ], 'form-select')->withId('type')->asModel()->disablesOn('loading') ?>
+          <?= $form->label('Order Type', 'form-label mb-0')->asRequired() ?>
+          <?= $form->select('type', ['Sale', 'Purchase', 'Transfer'], 'form-select')->withId('type')->asModel()->disablesOn('loading') ?>
           <?= $form->error('error.type') ?>
         </div>
       </div>
