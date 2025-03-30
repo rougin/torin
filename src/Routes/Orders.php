@@ -1,9 +1,13 @@
 <?php
 
-namespace Rougin\Torin\Http\Routes;
+namespace Rougin\Torin\Routes;
 
+use Rougin\Dexterity\Message\HttpResponse;
 use Rougin\Dexterity\Message\JsonResponse;
+use Rougin\Dexterity\Route\WithDeleteMethod;
 use Rougin\Dexterity\Route\WithIndexMethod;
+use Rougin\Dexterity\Route\WithStoreMethod;
+use Rougin\Dexterity\Route\WithUpdateMethod;
 use Rougin\Torin\Checks\OrderCheck;
 use Rougin\Torin\Depots\OrderDepot;
 

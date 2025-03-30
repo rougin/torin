@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Torin\Http\Pages;
+namespace Rougin\Torin\Pages;
 
 use Rougin\Temply\Plate;
 

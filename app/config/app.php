@@ -157,8 +157,8 @@ return array(
          * @link below on how to create a package for Slytherin.
          * @link https://github.com/rougin/slytherin/wiki/IntegrationInterface-Implementation
          */
-        'Rougin\Torin\Http\Plates',
-        'Rougin\Torin\Http\Router',
+        'Rougin\Torin\Plates',
+        'Rougin\Torin\Router',
 
         /**
          * This section specifies the packages came from Weasley.
