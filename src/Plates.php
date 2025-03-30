@@ -9,7 +9,7 @@ use Rougin\Slytherin\Routing\Router;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Plated extends Package
+class Plates extends Package
 {
     /**
      * @var string
