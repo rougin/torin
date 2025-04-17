@@ -22,52 +22,54 @@
           <?= $form->error('error.type') ?>
         </div>
       </div>
-      <hr>
-      <div class="mb-3">
-        <div class="row">
-          <div class="col-sm-6">
-            <?= $form->label('Item to add', 'form-label mb-0 small') ?>
-            <?= $form->select('item_id', [], 'form-select')->withId('items')->asModel()->disablesOn('loading') ?>
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="mb-3">
+            <div class="row align-items-end">
+              <div class="col-sm-7">
+                <?= $form->label('Item to add', 'form-label mb-0 small') ?>
+                <?= $form->select('item_id', [], 'form-select')->withId('items')->asModel()->disablesOn('loading') ?>
+              </div>
+              <div class="col-sm-3">
+                <?= $form->label('Quantity', 'form-label mb-0 small') ?>
+                <?= $form->input('quantity', 'form-control')->asNumber()->asModel()->disablesOn('loading') ?>
+              </div>
+              <div class="col-sm-2 align-self-end">
+                <?= $form->button('Add', 'btn btn-secondary')->onClick('add')->disablesOn('loading || ! item_id || ! quantity') ?>
+              </div>
+            </div>
           </div>
-          <div class="col-sm-3">
-            <?= $form->label('Quantity', 'form-label mb-0 small') ?>
-            <?= $form->input('quantity', 'form-control')->asNumber()->asModel()->disablesOn('loading') ?>
-          </div>
-          <div class="col-sm-3 align-self-end mb-1">
-            <?= $form->button('Add to order', 'btn btn-sm btn-secondary')->onClick('add')->disablesOn('loading || ! item_id || ! quantity') ?>
+          <div>
+            <table class="table">
+              <thead>
+                <tr class="fw-bold small">
+                  <td width="80%">Item Name</td>
+                  <td width="20%">Quantity</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                <template x-if="cart.length === 0">
+                  <tr>
+                    <td colspan="3" class="text-center small">No items added.</td>
+                  </tr>
+                </template>
+                <template x-if="cart.length > 0">
+                  <template x-for="(item, index) in cart">
+                    <tr>
+                      <td x-text="item.name"></td>
+                      <td x-text="item.quantity"></td>
+                      <td>
+                        <button type="button" class="btn-close" @click="cart.splice(index, 1)"></button>
+                      </td>
+                    </tr>
+                  </template>
+                </template>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <div class="mb-3">
-        <table class="table">
-          <thead>
-            <tr class="fw-bold small">
-              <td width="80%">Item Name</td>
-              <td width="20%">Quantity</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-            <template x-if="cart.length === 0">
-              <tr>
-                <td colspan="3" class="text-center small">No items added.</td>
-              </tr>
-            </template>
-            <template x-if="cart.length > 0">
-              <template x-for="(item, index) in cart">
-                <tr>
-                  <td x-text="item.name"></td>
-                  <td x-text="item.quantity"></td>
-                  <td>
-                    <button type="button" class="btn-close" @click="cart.splice(index, 1)"></button>
-                  </td>
-                </tr>
-              </template>
-            </template>
-          </tbody>
-        </table>
-      </div>
-      <hr>
       <div class="row">
         <div class="col-sm-12">
           <?= $form->label('Remarks', 'form-label mb-0') ?>
