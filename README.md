@@ -23,8 +23,10 @@ $ composer update
 Running `Torin` as an app requires the [PHP's web server](https://www.php.net/manual/en/features.commandline.webserver.php):
 
 ``` bash
-php -S localhost:80 -t .\app\public
+$ php -S localhost:80 -t .\app\public
 ```
+
+Then open a web browser with the URL to http://localhost.
 
 ## Change log
 
