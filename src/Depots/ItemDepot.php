@@ -38,6 +38,16 @@ class ItemDepot extends Depot
     }
 
     /**
+     * @param integer $id
+     *
+     * @return \Rougin\Torin\Models\Item|null
+     */
+    public function find($id)
+    {
+        return $this->item->with('orders')->find($id);
+    }
+
+    /**
      * @return array<string, mixed>[]
      */
     public function getSelect()
