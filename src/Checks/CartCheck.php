@@ -24,6 +24,7 @@ class CartCheck extends Request
     [
         'item_id' => 'An item',
         'quantity' => 'Quantity',
+        'type' => 'Order Type',
     ];
 
     /**
@@ -33,6 +34,7 @@ class CartCheck extends Request
     [
         'item_id' => 'required',
         'quantity' => 'required',
+        'type' => 'required',
     ];
 
     /**

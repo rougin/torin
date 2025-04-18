@@ -17,11 +17,19 @@ class Error
     protected $field;
 
     /**
-     * @param string $field
+     * @var boolean
      */
-    public function __construct($field)
+    protected $first;
+
+    /**
+     * @param string $field
+     * @param boolean $first
+     */
+    public function __construct($field, $first = false)
     {
         $this->field = $field;
+
+        $this->first = $first;
     }
 
     /**
@@ -32,7 +40,16 @@ class Error
         $html = '';
 
         $html .= '<template x-if="' . $this->field . '">';
-        $html .= '<p class="text-danger small mb-0" x-text="' . $this->field . '[0]"></p>';
+
+        if ($this->first)
+        {
+            $html .= '<p class="text-danger small mb-0" x-text="' . $this->field . '"></p>';
+        }
+        else
+        {
+            $html .= '<p class="text-danger small mb-0" x-text="' . $this->field . '[0]"></p>';
+        }
+
         $html .= '</template>';
 
         return $html;

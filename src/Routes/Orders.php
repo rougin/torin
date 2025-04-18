@@ -55,7 +55,7 @@ class Orders
 
         if (! $check->isParsedValid($request))
         {
-            return new JsonResponse($check->errors(), 422);
+            return new JsonResponse($check->firstError(), 422);
         }
 
         return new JsonResponse(true);

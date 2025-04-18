@@ -44,12 +44,13 @@ class FormHelper implements HelperInterface
      * TODO: This is a specific code for "alpinejs".
      *
      * @param string $field
+     * @param boolean $first
      *
      * @return \Rougin\Temply\Error
      */
-    public function error($field)
+    public function error($field, $first = false)
     {
-        return new Error($field);
+        return new Error($field, $first);
     }
 
     /**

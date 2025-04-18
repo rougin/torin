@@ -68,6 +68,7 @@ orders.add = function ()
   const self = this;
 
   const data = new FormData;
+  data.append('type', this.type);
   data.append('quantity', row.quantity);
   data.append('item_id', row.id);
 
@@ -80,18 +81,18 @@ orders.add = function ()
       }
 
       this.cart[last].quantity += row.quantity;
+
+      this.ts_items.clear();
+
+      this.quantity = null;
     })
     .catch(function (error)
     {
-      self.error = error.response.data;
+      self.error.item_id = error.response.data;
     })
     .finally(function ()
     {
       self.loading = false;
     });
-
-  this.ts_items.clear();
-
-  this.quantity = null;
 };
 </script>

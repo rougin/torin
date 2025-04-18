@@ -40,8 +40,7 @@
             </div>
           </div>
           <div class="mt-3">
-            <?= $form->error('error.item_id') ?>
-            <?= $form->error('error.quantity') ?>
+            <?= $form->error('error.item_id', true) ?>
           </div>
           <div>
             <table class="table mb-0">
