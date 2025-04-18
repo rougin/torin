@@ -36,6 +36,12 @@ class Order extends Model
 
     const STATUS_COMPLETED = 1;
 
+    const TYPE_SALE = 0;
+
+    const TYPE_PURCHASE = 1;
+
+    const TYPE_TRANSFER = 2;
+
     /**
      * @var string[]
      */
@@ -79,5 +85,13 @@ class Order extends Model
     public function getUpdatedAtAttribute($value)
     {
         return $value ? date('d M Y h:i A', (int) strtotime($value)) : $value;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function items()
+    {
+        return $this->belongsToMany(Item::class, 'item_order', 'order_id', 'item_id');
     }
 }

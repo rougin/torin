@@ -59,6 +59,24 @@ class CartCheck extends Request
             return count($this->errors) === 0;
         }
 
+        /** @var integer */
+        $itemId = $data['item_id'];
+
+        $item = $this->item->find($itemId);
+
+        if (! $item)
+        {
+            $this->setError('item_id', 'Item not found');
+        }
+
+        /** @var integer */
+        $quantity = $data['quantity'];
+
+        if ($item && $item->quantity < $quantity)
+        {
+            $this->setError('quantity', 'Not enough quantity');
+        }
+
         return count($this->errors) === 0;
     }
 }

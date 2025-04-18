@@ -3,14 +3,16 @@
 namespace Rougin\Torin\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Rougin\Torin\Models\Order;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @property integer      $id
- * @property integer|null $parent_id
- * @property string       $code
- * @property string       $name
- * @property string       $detail
+ * @property integer                      $id
+ * @property integer|null                 $parent_id
+ * @property string                       $code
+ * @property string                       $name
+ * @property string                       $detail
+ * @property \Rougin\Torin\Models\Order[] $orders
  *
  * @method \Rougin\Torin\Models\Item[]    all()
  * @method integer                        count()
@@ -57,6 +59,23 @@ class Item extends Model
     }
 
     /**
+     * @return integer
+     */
+    public function getQuantityAttribute()
+    {
+        $quantity = 0;
+
+        foreach ($this->orders as $order)
+        {
+            if ($order->type !== Order::TYPE_SALE)
+            {
+                $quantity += $order->pivot->quantity;
+            }
+        }
+        return $quantity;
+    }
+
+    /**
      * @param string $value
      *
      * @return string
@@ -64,5 +83,15 @@ class Item extends Model
     public function getUpdatedAtAttribute($value)
     {
         return $value ? date('d M Y h:i A', (int) strtotime($value)) : $value;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function orders()
+    {
+        $pivot = 'item_order';
+
+        return $this->belongsToMany(Order::class, $pivot, 'item_id', 'order_id')->withPivot('quantity');
     }
 }
