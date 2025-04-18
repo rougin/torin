@@ -43,7 +43,7 @@ class FormHelper implements HelperInterface
     /**
      * TODO: This is a specific code for "alpinejs".
      *
-     * @param string $field
+     * @param string  $field
      * @param boolean $first
      *
      * @return \Rougin\Temply\Error

@@ -3,16 +3,16 @@
 namespace Rougin\Torin\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Rougin\Torin\Models\Order;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property integer                      $id
  * @property integer|null                 $parent_id
  * @property string                       $code
- * @property string                       $name 
+ * @property string                       $name
  * @property string                       $detail
  * @property \Rougin\Torin\Models\Order[] $orders
+ * @property integer                      $quantity
  *
  * @method \Rougin\Torin\Models\Item[]    all()
  * @method \Rougin\Torin\Models\Item      create(array<string, mixed> $data)
@@ -70,7 +70,9 @@ class Item extends Model
         {
             if ($order->type !== Order::TYPE_SALE)
             {
+                // TODO: Check how to type-hint "pivot" ---
                 $quantity += $order->pivot->quantity;
+                // ----------------------------------------
             }
         }
         return $quantity;
@@ -91,8 +93,6 @@ class Item extends Model
      */
     public function orders()
     {
-        $pivot = 'item_order';
-
-        return $this->belongsToMany(Order::class, $pivot, 'item_id', 'order_id')->withPivot('quantity');
+        return $this->belongsToMany(Order::class, 'item_order', 'item_id', 'order_id')->withPivot('quantity');
     }
 }

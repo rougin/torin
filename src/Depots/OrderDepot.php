@@ -90,6 +90,7 @@ class OrderDepot extends Depot
 
     /**
      * @param integer $type
+     *
      * @return string
      */
     protected function getCode($type)

@@ -44,7 +44,7 @@ class Orders
     }
 
     /**
-     * @param \Rougin\Torin\Depots\ItemDepot $item
+     * @param \Rougin\Torin\Depots\ItemDepot           $item
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return \Psr\Http\Message\ResponseInterface

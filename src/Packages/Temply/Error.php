@@ -22,7 +22,7 @@ class Error
     protected $first;
 
     /**
-     * @param string $field
+     * @param string  $field
      * @param boolean $first
      */
     public function __construct($field, $first = false)

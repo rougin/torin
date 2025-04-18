@@ -39,7 +39,7 @@
               </div>
             </div>
           </div>
-          <div class="mt-3">
+          <div class="mb-3">
             <?= $form->error('error.item_id', true) ?>
           </div>
           <div>
