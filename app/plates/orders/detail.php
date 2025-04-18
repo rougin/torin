@@ -24,7 +24,7 @@
       </div>
       <div class="card mb-3">
         <div class="card-body">
-          <div class="mb-3">
+          <div>
             <div class="row align-items-end">
               <div class="col-sm-7">
                 <?= $form->label('Item to add', 'form-label mb-0 small') ?>
@@ -39,8 +39,12 @@
               </div>
             </div>
           </div>
+          <div class="mt-3">
+            <?= $form->error('error.item_id') ?>
+            <?= $form->error('error.quantity') ?>
+          </div>
           <div>
-            <table class="table">
+            <table class="table mb-0">
               <thead>
                 <tr class="fw-bold small">
                   <td width="80%">Item Name</td>

@@ -61,14 +61,34 @@ orders.add = function ()
     }
   });
 
-  if (last !== null)
-  {
-    this.cart[last].quantity += row.quantity;
-  }
-  else
-  {
-    this.cart.push(row);
-  }
+  this.loading = true;
+
+  this.error = {};
+
+  const self = this;
+
+  const data = new FormData;
+  data.append('quantity', row.quantity);
+  data.append('item_id', row.id);
+
+  axios.post('/v1/orders/check', data)
+    .then(function ()
+    {
+      if (last === null)
+      {
+        return this.cart.push(row);
+      }
+
+      this.cart[last].quantity += row.quantity;
+    })
+    .catch(function (error)
+    {
+      self.error = error.response.data;
+    })
+    .finally(function ()
+    {
+      self.loading = false;
+    });
 
   this.ts_items.clear();
 

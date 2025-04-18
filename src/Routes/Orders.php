@@ -2,11 +2,14 @@
 
 namespace Rougin\Torin\Routes;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Dexterity\Message\HttpResponse;
 use Rougin\Dexterity\Message\JsonResponse;
 use Rougin\Dexterity\Route\WithIndexMethod;
 use Rougin\Dexterity\Route\WithStoreMethod;
+use Rougin\Torin\Checks\CartCheck;
 use Rougin\Torin\Checks\OrderCheck;
+use Rougin\Torin\Depots\ItemDepot;
 use Rougin\Torin\Depots\OrderDepot;
 
 /**
@@ -38,6 +41,24 @@ class Orders
         $this->check = $check;
 
         $this->order = $order;
+    }
+
+    /**
+     * @param \Rougin\Torin\Depots\ItemDepot $item
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function check(ItemDepot $item, ServerRequestInterface $request)
+    {
+        $check = new CartCheck($item);
+
+        if (! $check->isParsedValid($request))
+        {
+            return new JsonResponse($check->errors(), 422);
+        }
+
+        return new JsonResponse(true);
     }
 
     /**
