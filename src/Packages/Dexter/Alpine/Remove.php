@@ -36,7 +36,7 @@ class Remove extends Method
 
         foreach ($this->fields as $field)
         {
-            $fn .= 'self.' . $field . ' = item.' . $field . ';';
+            $fn .= $field->getSelf() . ' = ' . $field->getItem() . ';';
         }
 
         $fn .= 'self.loading = true;';

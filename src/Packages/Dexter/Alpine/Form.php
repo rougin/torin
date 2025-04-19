@@ -46,29 +46,30 @@ class Form extends Method
 
         foreach ($this->fields as $field)
         {
-            if (! in_array($field, $this->arrays))
+            $name = $field->getName();
+
+            if (! $field->isArray())
             {
-                $fn .= 'input.append(\'' . $field . '\', self.' . $field . ');';
+                $fn .= 'input.append(\'' . $name . '\', ' . $field->getSelf() . ');';
 
                 continue;
             }
 
-            // Traverse each item object and append them to the FormData instance --------------------
-            $fn .= 'self.' . $field . '.forEach(function (item, index)';
+            // Traverse each item object and append them to the FormData instance -------------------
+            $fn .= $field->getSelf() . '.forEach(function (item, index)';
             $fn .= '{';
             $fn .= '  if (! (item instanceof Object))';
             $fn .= '  {';
-            $fn .= '    input.append(\'' . $field . '[\' + index + \']\', item);';
-
+            $fn .= '    input.append(\'' . $name . '[\' + index + \']\', item);';
             $fn .= '    return;';
             $fn .= '  }';
 
             $fn .= '  Object.keys(item).forEach(function (key)';
             $fn .= '  {';
-            $fn .= '    input.append(\'' . $field . '[\' + index + \'][\' + key + \']\', item[key]);';
+            $fn .= '    input.append(\'' . $name . '[\' + index + \'][\' + key + \']\', item[key]);';
             $fn .= '  });';
             $fn .= '});';
-            // ---------------------------------------------------------------------------------------
+            // --------------------------------------------------------------------------------------
         }
 
         $fn .= 'self.loading = true;';

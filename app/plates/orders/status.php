@@ -5,7 +5,7 @@
       <div class="modal-title fs-5 fw-bold" id="order-detail-modal-label">Changer order status?</div>
     </div>
     <div class="modal-body">
-      <p>Are you sure that you want to change the order status to <span class="fw-bold text-uppercase" x-text="status === STATUS_COMPLETED ? 'Completed' : (status === STATUS_CANCELLED ? 'Cancelled' : 'Pending')"></span>?</p>
+      <p>Are you sure that you want to change the order status to <span class="fw-bold text-uppercase" x-text="status === STATUS_COMPLETED ? 'Fulfilled' : (status === STATUS_CANCELLED ? 'Cancelled' : 'Pending')"></span>?</p>
       <?= $form->error('error.mark') ?>
     </div>
     <div class="modal-footer border-top-0 bg-light">

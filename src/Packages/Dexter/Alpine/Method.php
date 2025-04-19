@@ -17,7 +17,7 @@ class Method
     protected $arrays = array();
 
     /**
-     * @var string[]
+     * @var \Rougin\Dexter\Alpine\Field[]
      */
     protected $fields = array();
 
@@ -72,13 +72,14 @@ class Method
     }
 
     /**
-     * @param string $field
+     * @param string  $field
+     * @param boolean $item
      *
      * @return self
      */
-    public function addField($field)
+    public function addField($field, $item = true)
     {
-        $this->fields[] = $field;
+        $this->fields[] = new Field($field, $item);
 
         return $this;
     }
@@ -104,7 +105,7 @@ class Method
     {
         $index = count($this->fields) - 1;
 
-        $this->arrays[] = $this->fields[$index];
+        $this->fields[$index]->asArray();
 
         return $this;
     }

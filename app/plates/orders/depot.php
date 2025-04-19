@@ -43,7 +43,7 @@
   ->setLink($url->set('/v1/orders')) ?>
 
 <?= $depot->withModal('mark')
-  ->addField('status')
+  ->addField('status', false)
   ->addField('id')
   ->showModal('mark-order-modal') ?>
 
