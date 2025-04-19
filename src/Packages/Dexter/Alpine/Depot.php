@@ -71,6 +71,16 @@ class Depot
     }
 
     /**
+     * @return \Rougin\Dexter\Alpine\Modal
+     */
+    public function withModal($name)
+    {
+        $modal = new Modal($this->name);
+
+        return $modal->setName($name);
+    }
+
+    /**
      * @return \Rougin\Dexter\Alpine\Remove
      */
     public function withRemove()

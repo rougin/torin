@@ -40,19 +40,19 @@ class Orders
         $data['pagee'] = $pagee;
         // --------------------------------------------------
 
-        // Generate the HTML table --------------------------------------------
+        // Generate the HTML table ----------------------------------------------------------
         $table = new Table;
         $table->setClass('table mb-0');
 
         $table->newColumn();
         $table->setCell('Type', 'left')->withWidth(5);
-        $table->addBadge('Purchase', 'item.type === 1', 'text-bg-primary');
-        $table->addBadge('Sales', 'item.type === 0', 'text-bg-success');
-        $table->addBadge('Transfer', 'item.type === 2', 'text-bg-secondary');
+        $table->addBadge('Purchase', 'item.type === TYPE_PURCHASE', 'text-bg-primary');
+        $table->addBadge('Sales', 'item.type === TYPE_SALE', 'text-bg-success');
+        $table->addBadge('Transfer', 'item.type === TYPE_TRANSFER', 'text-bg-secondary');
         $table->setCell('Status', 'left')->withWidth(5);
-        $table->addBadge('Cancelled', 'item.status === 2', 'text-bg-danger');
-        $table->addBadge('Fulfilled', 'item.status === 1', 'text-bg-success');
-        $table->addBadge('Pending', 'item.status === 0', 'text-bg-warning');
+        $table->addBadge('Cancelled', 'item.status === STATUS_COMPLETED', 'text-bg-danger');
+        $table->addBadge('Fulfilled', 'item.status === STATUS_CANCELLED', 'text-bg-success');
+        $table->addBadge('Pending', 'item.status === STATUS_PENDING', 'text-bg-warning');
         $table->setCell('Order Code', 'left')->withName('code')->withWidth(13);
         $table->setCell('Client Name', 'left')->withName('client.name');
         $table->setCell('Remarks', 'left')->withName('remarks');
@@ -62,7 +62,7 @@ class Orders
         $table->withActions(null, 'left')->withWidth(5);
         $action = new Action;
         $action->setName('Mark as Complete');
-        $action->ifClicked('mark(item, 2)');
+        $action->ifClicked('mark(item, STATUS_COMPLETED)');
         $table->addAction($action);
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
@@ -74,7 +74,7 @@ class Orders
         $table->withOpacity(50);
 
         $data['table'] = $table;
-        // --------------------------------------------------------------------
+        // ----------------------------------------------------------------------------------
 
         return $plate->render('orders.index', $data);
     }

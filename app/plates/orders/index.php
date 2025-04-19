@@ -40,6 +40,7 @@
 
     <?= $plate->add('orders.delete', compact('form')) ?>
     <?= $plate->add('orders.detail', compact('form')) ?>
+    <?= $plate->add('orders.status', compact('form')) ?>
   </div>
 <?= $block->end() ?>
 

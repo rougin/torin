@@ -166,6 +166,18 @@ class Method
      *
      * @return self
      */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return self
+     */
     public function showModal($name)
     {
         $this->modals[$name] = 'show';

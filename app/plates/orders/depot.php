@@ -1,5 +1,11 @@
 <script type="text/javascript">
 <?= $script = $form->script('orders')
+  ->with('STATUS_CANCELLED', 2)
+  ->with('STATUS_PENDING', 0)
+  ->with('STATUS_COMPLETED', 1)
+  ->with('TYPE_SALE', 0)
+  ->with('TYPE_PURCHASE', 1)
+  ->with('TYPE_TRANSFER', 2)
   ->with('client_id')
   ->with('type')
   ->with('remarks')
@@ -12,6 +18,7 @@
   ->with('quantity', null)
   ->with('cart', array())
   ->with('code', null)
+  ->with('status', null)
   ->withError()
   ->withLoading() ?>
 
@@ -24,6 +31,7 @@
 <?= $depot->withClose()
   ->withScript($script)
   ->hideModal('delete-order-modal')
+  ->hideModal('mark-order-modal')
   ->hideModal('order-detail-modal')
   ->resetField('client_id')
   ->resetField('error')
@@ -33,6 +41,11 @@
 
 <?= $depot->withLoad($pagee)
   ->setLink($url->set('/v1/orders')) ?>
+
+<?= $depot->withModal('mark')
+  ->addField('status')
+  ->addField('id')
+  ->showModal('mark-order-modal') ?>
 
 <?= $depot->withRemove()
   ->setLink($url->set('/v1/orders')) ?>
