@@ -6,13 +6,10 @@
 
   # Use https://search.nixos.org/packages to find packages
   packages = [
-    # pkgs.go
-    # pkgs.python311
-    # pkgs.python311Packages.pip
-    # pkgs.nodejs_20
-    # pkgs.nodePackages.nodemon
     pkgs.php83
     pkgs.php83Packages.composer
+    pkgs.php83Packages.php-cs-fixer
+    pkgs.php83Packages.phpstan
   ];
 
   # Sets environment variables in the workspace
