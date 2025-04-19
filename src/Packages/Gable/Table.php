@@ -177,6 +177,17 @@ class Table extends Element
     }
 
     /**
+     * @param \Rougin\Gable\Action $action
+     * @return self
+     */
+    public function addAction(Action $action)
+    {
+        $this->actions[] = $action;
+
+        return $this;
+    }
+
+    /**
      * @param string $text
      * @param string $condition
      * @param string $class
@@ -472,9 +483,9 @@ class Table extends Element
 
         $action->ifClicked($clicked);
 
-        $action->setDanger(true);
+        $action->asDanger();
 
-        $this->actions[] = $action;
+        $this->addAction($action);
 
         return $this;
     }
@@ -587,7 +598,7 @@ class Table extends Element
 
         $action->ifClicked($clicked);
 
-        $this->actions[] = $action;
+        $this->addAction($action);
 
         return $this;
     }

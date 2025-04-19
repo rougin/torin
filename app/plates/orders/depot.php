@@ -65,12 +65,13 @@ orders.add = function ()
 
   this.error = {};
 
-  const self = this;
-
   const data = new FormData;
+
   data.append('type', this.type);
   data.append('quantity', row.quantity);
   data.append('item_id', row.id);
+
+  const self = this;
 
   axios.post('/v1/orders/check', data)
     .then(function ()

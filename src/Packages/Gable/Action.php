@@ -25,6 +25,24 @@ class Action
     protected $name = null;
 
     /**
+     * @return self
+     */
+    public function asDanger()
+    {
+        $this->danger = true;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * @param string $action
      *
      * @return self
@@ -50,26 +68,6 @@ class Action
     public function onClick()
     {
         return $this->action;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param boolean $danger
-     *
-     * @return self
-     */
-    public function setDanger($danger)
-    {
-        $this->danger = $danger;
-
-        return $this;
     }
 
     /**

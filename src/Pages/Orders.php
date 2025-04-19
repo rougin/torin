@@ -4,6 +4,7 @@ namespace Rougin\Torin\Pages;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Dexter\Alpine\Depot;
+use Rougin\Gable\Action;
 use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
 use Rougin\Temply\Plate;
@@ -39,27 +40,33 @@ class Orders
         $data['pagee'] = $pagee;
         // --------------------------------------------------
 
-        // Generate the HTML table ------------------------------------------
+        // Generate the HTML table --------------------------------------------
         $table = new Table;
         $table->setClass('table mb-0');
 
         $table->newColumn();
-        $table->setCell('Type', 'left');
+        $table->setCell('Type', 'left')->withWidth(5);
         $table->addBadge('Purchase', 'item.type === 1', 'text-bg-primary');
         $table->addBadge('Sales', 'item.type === 0', 'text-bg-success');
         $table->addBadge('Transfer', 'item.type === 2', 'text-bg-secondary');
-        $table->setCell('Status', 'left');
+        $table->setCell('Status', 'left')->withWidth(5);
         $table->addBadge('Cancelled', 'item.status === 2', 'text-bg-danger');
         $table->addBadge('Fulfilled', 'item.status === 1', 'text-bg-success');
         $table->addBadge('Pending', 'item.status === 0', 'text-bg-warning');
-        $table->setCell('Order Code', 'left')->withName('code');
+        $table->setCell('Order Code', 'left')->withName('code')->withWidth(13);
         $table->setCell('Client Name', 'left')->withName('client.name');
         $table->setCell('Remarks', 'left')->withName('remarks');
-        $table->setCell('Created At', 'left');
-        $table->setCell('Updated At', 'left');
-        $table->withActions(null, 'left');
+        $table->setCell('Created At', 'left')->withWidth(14);
+        $table->setCell('Updated At', 'left')->withWidth(14);
+
+        $table->withActions(null, 'left')->withWidth(5);
+        $action = new Action;
+        $action->setName('Mark as Complete');
+        $action->ifClicked('mark(item, 2)');
+        $table->addAction($action);
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
+
         $table->withLoading();
         $table->withNoItemsText('No orders found.');
         $table->withLoadErrorText('An error occured in getting the orders.');
@@ -67,7 +74,7 @@ class Orders
         $table->withOpacity(50);
 
         $data['table'] = $table;
-        // ------------------------------------------------------------------
+        // --------------------------------------------------------------------
 
         return $plate->render('orders.index', $data);
     }
