@@ -22,7 +22,7 @@
 
 <?= $depot->withClose()
   ->withScript($script)
-  // ->hideModal('delete-order-modal')
+  ->hideModal('delete-order-modal')
   ->hideModal('order-detail-modal')
   ->resetField('client_id')
   ->resetField('error')
@@ -32,6 +32,14 @@
 
 <?= $depot->withLoad($pagee)
   ->setLink($url->set('/v1/orders')) ?>
+
+<?= $depot->withRemove()
+  ->setLink($url->set('/v1/orders')) ?>
+
+<?= $depot->withTrash()
+  ->addField('name')
+  ->addField('id')
+  ->showModal('delete-order-modal') ?>
 
 <?= $depot->withStore()
   ->addField('client_id')
