@@ -77,14 +77,14 @@ orders.add = function ()
     {
       if (last === null)
       {
-        return this.cart.push(row);
+        self.cart.push(row);
       }
 
-      this.cart[last].quantity += row.quantity;
+      self.cart[last].quantity += row.quantity;
 
-      this.ts_items.clear();
+      self.ts_items.clear();
 
-      this.quantity = null;
+      self.quantity = null;
     })
     .catch(function (error)
     {

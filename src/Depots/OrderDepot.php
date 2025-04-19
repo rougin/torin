@@ -27,10 +27,11 @@ class OrderDepot extends Depot
 
     /**
      * @param array<string, mixed> $data
+     * @param integer|null         $actor
      *
      * @return \Rougin\Torin\Models\Order
      */
-    public function create($data)
+    public function create($data, $actor = null)
     {
         $load = array();
 
@@ -68,6 +69,11 @@ class OrderDepot extends Depot
             $quantity = $item['quantity'];
 
             $row = array('quantity' => $quantity);
+
+            if ($actor)
+            {
+                $row['created_by'] = $actor;
+            }
 
             /** @var integer */
             $itemId = $item['id'];
@@ -110,7 +116,7 @@ class OrderDepot extends Depot
      */
     protected function getCode($type)
     {
-        $total = $this->getTotal();
+        $total = $this->getTotal() + 1;
 
         $count = sprintf('%05d', $total);
 
