@@ -85,11 +85,31 @@ class OrderDepot extends Depot
     }
 
     /**
+     * @param integer $id
+     *
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        return $this->findRow($id)->delete();
+    }
+
+    /**
      * @return integer
      */
     public function getTotal()
     {
         return $this->order->count();
+    }
+
+    /**
+     * @param integer $id
+     *
+     * @return boolean
+     */
+    public function rowExists($id)
+    {
+        return $this->order->find($id) !== null;
     }
 
     /**
@@ -123,5 +143,16 @@ class OrderDepot extends Depot
         $code = $type . '-' . date('Ymd');
 
         return $code . '-' . $count;
+    }
+
+    /**
+     * @param integer $id
+     *
+     * @return \Rougin\Torin\Models\Order
+     * @throws \UnexpectedValueException
+     */
+    protected function findRow($id)
+    {
+        return $this->order->findOrFail($id);
     }
 }

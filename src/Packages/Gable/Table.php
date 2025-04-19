@@ -178,6 +178,7 @@ class Table extends Element
 
     /**
      * @param \Rougin\Gable\Action $action
+     *
      * @return self
      */
     public function addAction(Action $action)

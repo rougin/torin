@@ -54,13 +54,15 @@ class Router extends Package
         $self->post('items', 'Items@store');
         // ----------------------------------------
 
-        // Order -----------------------------------
+        // Order ------------------------------------
+        $self->delete('orders/:id', 'Orders@delete');
+
         $self->get('orders', 'Orders@index');
 
         $self->post('orders/check', 'Orders@check');
 
         $self->post('orders', 'Orders@store');
-        // -----------------------------------------
+        // ------------------------------------------
 
         return $self;
     }
