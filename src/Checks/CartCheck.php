@@ -47,11 +47,11 @@ class CartCheck extends Request
     }
 
     /**
-     * @param array<mixed, mixed>|null $data
+     * @param array<string, string>|null $data
      *
      * @return boolean
      */
-    public function valid(array $data = null)
+    public function valid($data = null)
     {
         $valid = parent::valid($data);
 
@@ -60,8 +60,7 @@ class CartCheck extends Request
             return count($this->errors) === 0;
         }
 
-        /** @var integer */
-        $itemId = $data['item_id'];
+        $itemId = (int) $data['item_id'];
 
         $item = $this->item->find($itemId);
 
@@ -72,11 +71,9 @@ class CartCheck extends Request
             return count($this->errors) === 0;
         }
 
-        /** @var integer */
-        $quantity = $data['quantity'];
+        $quantity = (int) $data['quantity'];
 
-        /** @var integer */
-        $type = $data['type'];
+        $type = (int) $data['type'];
 
         if ($type === Order::TYPE_SALE && $item->quantity < $quantity)
         {

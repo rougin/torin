@@ -58,15 +58,30 @@ class Item extends Model
     {
         $row = array('id' => $this->id);
 
+        $row['code'] = $this->code;
+
         $row['name'] = $this->name;
 
-        $row['description'] = $this->detail;
-
         $row['quantity'] = $this->quantity;
+
+        $row['detail'] = $this->detail;
 
         $row['created_at'] = $this->created_at;
 
         $row['updated_at'] = $this->updated_at;
+
+        return $row;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function asSelect()
+    {
+        $row = array();
+
+        $row['value'] = $this->id;
+        $row['label'] = $this->name;
 
         return $row;
     }
@@ -86,18 +101,30 @@ class Item extends Model
      */
     public function getQuantityAttribute()
     {
-        $quantity = 0;
+        $total = 0;
 
         foreach ($this->orders as $order)
         {
-            if ($order->type !== Order::TYPE_SALE)
+            if ($order->status !== Order::STATUS_COMPLETED)
             {
-                // @phpstan-ignore-next-line --------
-                $quantity += $order->pivot->quantity;
-                // ----------------------------------
+                continue;
             }
+
+            // @phpstan-ignore-next-line ----
+            $value = $order->pivot->quantity;
+            // ------------------------------
+
+            if ($order->type === Order::TYPE_SALE)
+            {
+                $total = $total - $value;
+
+                continue;
+            }
+
+            $total = $total + $value;
         }
-        return $quantity;
+
+        return $total;
     }
 
     /**

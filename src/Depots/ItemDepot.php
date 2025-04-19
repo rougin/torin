@@ -58,13 +58,7 @@ class ItemDepot extends Depot
 
         foreach ($items as $item)
         {
-            $row = array();
-
-            $row['value'] = $item->id;
-
-            $row['label'] = $item->name;
-
-            $output[] = $row;
+            $output[] = $item->asSelect();
         }
 
         return $output;
