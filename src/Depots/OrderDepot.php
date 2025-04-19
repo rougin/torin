@@ -26,6 +26,19 @@ class OrderDepot extends Depot
     }
 
     /**
+     * @param integer $id
+     * @param integer $status
+     *
+     * @return boolean
+     */
+    public function changeStatus($id, $status)
+    {
+        $row = $this->findRow($id);
+
+        return $row->update(compact('status'));
+    }
+
+    /**
      * @param array<string, mixed> $data
      * @param integer|null         $actor
      *

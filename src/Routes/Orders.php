@@ -64,6 +64,24 @@ class Orders
     }
 
     /**
+     * @param integer                                  $id
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function status($id, ServerRequestInterface $request)
+    {
+        /** @var array<string, string> */
+        $data = $request->getParsedBody();
+
+        $status = (int) $data['status'];
+
+        $this->order->changeStatus($id, $status);
+
+        return new JsonResponse(true, 204);
+    }
+
+    /**
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function invalidDelete()

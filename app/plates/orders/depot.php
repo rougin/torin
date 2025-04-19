@@ -120,4 +120,35 @@ orders.add = function ()
       self.loading = false;
     });
 };
+
+orders.change = function(id, status)
+{
+  const self = this;
+
+  this.loading = true;
+  this.error = {};
+
+  const data = new FormData();
+  data.append('status', status);
+
+  axios.post('/v1/orders/' + id + '/status', data)
+    .then(function()
+    {
+      const text = 'The status of the order has been sucessfully updated.';
+
+      self.close();
+
+      Alert.success('Order status changed!', text);
+
+      self.load();
+    })
+    .catch(function (error)
+    {
+      self.error.mark = error.response.data;
+    })
+    .finally(function()
+    {
+      self.loading = false;
+    });
+};
 </script>
