@@ -71,12 +71,15 @@ class Depot
     }
 
     /**
+     * @param string $name
+     *
      * @return \Rougin\Dexter\Alpine\Modal
      */
     public function withModal($name)
     {
         $modal = new Modal($this->name);
 
+        /** @var \Rougin\Dexter\Alpine\Modal */
         return $modal->setName($name);
     }
 

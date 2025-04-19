@@ -150,6 +150,7 @@ class BodyParams implements MiddlewareInterface
                     continue;
                 }
 
+                /** @var string */
                 $filename = tempnam(sys_get_temp_dir(), 'php');
 
                 file_put_contents($filename, $body);
@@ -228,6 +229,7 @@ class BodyParams implements MiddlewareInterface
                 {
                     $temp = sys_get_temp_dir();
 
+                    /** @var string */
                     $filename = tempnam($temp, 'php');
 
                     file_put_contents($filename, $body);

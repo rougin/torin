@@ -44,7 +44,7 @@ class Order extends Model
     const TYPE_TRANSFER = 2;
 
     /**
-     * @var string[]
+     * @var array<integer, string>
      */
     protected $fillable =
     [

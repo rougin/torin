@@ -36,7 +36,7 @@ class Client extends Model
     const TYPE_SUPPLIER = 1;
 
     /**
-     * @var string[]
+     * @var array<integer, string>
      */
     protected $fillable =
     [

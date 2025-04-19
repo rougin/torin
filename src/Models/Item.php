@@ -36,7 +36,7 @@ class Item extends Model
     use SoftDeletes;
 
     /**
-     * @var string[]
+     * @var array<integer, string>
      */
     protected $fillable =
     [
