@@ -45,6 +45,7 @@ class Items
         $table->setCell('Item Code', 'left')->withWidth(10)->withName('code');
         $table->setCell('Name', 'left')->withWidth(15);
         $table->setCell('Description', 'left')->withWidth(15)->withName('detail');
+        $table->setCell('Quantity', 'right')->withWidth(10);
         $table->setCell('Created At', 'left')->withWidth(12);
         $table->setCell('Updated At', 'left')->withWidth(12);
         $table->withActions(null, 'left')->withWidth(5);

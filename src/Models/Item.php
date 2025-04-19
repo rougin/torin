@@ -50,6 +50,26 @@ class Item extends Model
     protected $connection = 'torin';
 
     /**
+     * @return array<string, mixed>
+     */
+    public function asRow()
+    {
+        $row = array('id' => $this->id);
+
+        $row['name'] = $this->name;
+
+        $row['description'] = $this->detail;
+
+        $row['quantity'] = $this->quantity;
+
+        $row['created_at'] = $this->created_at;
+
+        $row['updated_at'] = $this->updated_at;
+
+        return $row;
+    }
+
+    /**
      * @param string $value
      *
      * @return string
