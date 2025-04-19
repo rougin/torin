@@ -50,8 +50,8 @@ class Orders
         $table->addBadge('Sales', 'item.type === TYPE_SALE', 'text-bg-success');
         $table->addBadge('Transfer', 'item.type === TYPE_TRANSFER', 'text-bg-secondary');
         $table->setCell('Status', 'left')->withWidth(5);
-        $table->addBadge('Cancelled', 'item.status === STATUS_COMPLETED', 'text-bg-danger');
-        $table->addBadge('Fulfilled', 'item.status === STATUS_CANCELLED', 'text-bg-success');
+        $table->addBadge('Cancelled', 'item.status === STATUS_CANCELLED', 'text-bg-danger');
+        $table->addBadge('Fulfilled', 'item.status === STATUS_COMPLETED', 'text-bg-success');
         $table->addBadge('Pending', 'item.status === STATUS_PENDING', 'text-bg-warning');
         $table->setCell('Order Code', 'left')->withName('code')->withWidth(13);
         $table->setCell('Client Name', 'left')->withName('client.name');

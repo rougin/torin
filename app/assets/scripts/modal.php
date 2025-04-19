@@ -1,5 +1,5 @@
 <div class="modal fade" id="cuel-alert-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-  <div class="modal-dialog modal-dialog-centered modal-sm">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div id="cuel-alert-modal-header">
         <span class="modal-title fs-5 fw-bold" id="cuel-alert-modal-title"></span>
