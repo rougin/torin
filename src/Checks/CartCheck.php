@@ -3,6 +3,7 @@
 namespace Rougin\Torin\Checks;
 
 use Rougin\Torin\Depots\ItemDepot;
+use Rougin\Torin\Models\Order;
 use Rougin\Valdi\Request;
 
 /**
@@ -67,12 +68,17 @@ class CartCheck extends Request
         if (! $item)
         {
             $this->setError('item_id', 'Item not found');
+
+            return count($this->errors) === 0;
         }
 
         /** @var integer */
         $quantity = $data['quantity'];
 
-        if ($item && $item->quantity < $quantity)
+        /** @var integer */
+        $type = $data['type'];
+
+        if ($type === Order::TYPE_SALE && $item->quantity < $quantity)
         {
             $this->setError('quantity', 'Not enough quantity');
         }
