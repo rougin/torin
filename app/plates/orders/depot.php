@@ -11,6 +11,7 @@
   ->with('item_id', null)
   ->with('quantity', null)
   ->with('cart', array())
+  ->with('code', null)
   ->withError()
   ->withLoading() ?>
 
@@ -36,11 +37,6 @@
 <?= $depot->withRemove()
   ->setLink($url->set('/v1/orders')) ?>
 
-<?= $depot->withTrash()
-  ->addField('name')
-  ->addField('id')
-  ->showModal('delete-order-modal') ?>
-
 <?= $depot->withStore()
   ->addField('client_id')
   ->addField('remarks')
@@ -48,6 +44,11 @@
   ->addField('cart')->asArray()
   ->setAlert('Client created!', 'Client successfully created.')
   ->setLink($url->set('/v1/orders')) ?>
+
+<?= $depot->withTrash()
+  ->addField('code')
+  ->addField('id')
+  ->showModal('delete-order-modal') ?>
 
 orders.add = function ()
 {
@@ -87,6 +88,8 @@ orders.add = function ()
       if (last === null)
       {
         self.cart.push(row);
+
+        last = 0;
       }
 
       self.cart[last].quantity += row.quantity;

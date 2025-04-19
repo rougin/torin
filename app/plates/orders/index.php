@@ -38,6 +38,7 @@
       </div>
     </div>
 
+    <?= $plate->add('orders.delete', compact('form')) ?>
     <?= $plate->add('orders.detail', compact('form')) ?>
   </div>
 <?= $block->end() ?>
