@@ -57,10 +57,25 @@ class OrderDepot extends Depot
             $load['created_by'] = $createdBy;
         }
 
-        // TODO: Create "order_item" table ---
-        // -----------------------------------
+        $order = $this->order->create($load);
 
-        return $this->order->create($load);
+        /** @var array<string, mixed>[] */
+        $items = $data['cart'];
+
+        foreach ($items as $item)
+        {
+            /** @var integer */
+            $quantity = $item['quantity'];
+
+            $row = array('quantity' => $quantity);
+
+            /** @var integer */
+            $itemId = $item['id'];
+
+            $order->items()->attach($itemId, $row);
+        }
+
+        return $order;
     }
 
     /**
