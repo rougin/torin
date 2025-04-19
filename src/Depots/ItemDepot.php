@@ -159,4 +159,14 @@ class ItemDepot extends Depot
         /** @var \Rougin\Torin\Models\Item[] */
         return $model->offset($offset)->get();
     }
+
+    /**
+     * @param \Rougin\Torin\Models\Item $row
+     *
+     * @return array<string, mixed>
+     */
+    protected function parseRow($row)
+    {
+        return $row->asRow();
+    }
 }

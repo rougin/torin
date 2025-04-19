@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string                       $detail
  * @property \Rougin\Torin\Models\Order[] $orders
  * @property integer                      $quantity
+ * @property string                       $created_at
+ * @property string|null                  $updated_at
  *
  * @method \Rougin\Torin\Models\Item[]    all()
  * @method \Rougin\Torin\Models\Item      create(array<string, mixed> $data)
@@ -90,9 +92,9 @@ class Item extends Model
         {
             if ($order->type !== Order::TYPE_SALE)
             {
-                // TODO: Check how to type-hint "pivot" ---
+                // @phpstan-ignore-next-line --------
                 $quantity += $order->pivot->quantity;
-                // ----------------------------------------
+                // ----------------------------------
             }
         }
         return $quantity;
