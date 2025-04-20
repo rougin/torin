@@ -1,8 +1,3 @@
-# Instructions
-Consider the following information below as your primary memory bank for the rest of this conversation.
-When responding to my subsequent questions or requests, please prioritize the information provided below.
-Refer back to it as needed to ensure your answers and generated content are consistent with these instructions.
-
 # Project overview
 You are building a simple inventory management system, where users can manage items (products), clients (customers, suppliers), and orders (sales, purchases).
 
@@ -97,7 +92,7 @@ You are building a simple inventory management system, where users can manage it
 2. For brackets, use the [Allman indentation style](https://en.wikipedia.org/wiki/Indentation_style#Allman).
 3. Use [php-cs-fixer](https://cs.symfony.com/) and read `phpstyle.php` for the its rules.
 4. Always use one word for variables (e.g., `$userAddress` to `$address`).
-5. Do not include `<?php` at the beginning of template files in the `app/plates`.
+5. Do not include `<?php` and `php` at the beginning of template files in the `app/plates`.
 6. Use 2 spacing when creating templates in `app/plates`.
 
 # Notes and considerations
@@ -118,7 +113,7 @@ You are building a simple inventory management system, where users can manage it
 
 Strictly adhere to the following structures when generating code:
 
-* For creating modals in general:
+* For creating modals in general
 ```
 <div class="modal fade" id="[NAME]-modal" data-bs-backdrop="static" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
@@ -143,7 +138,7 @@ Strictly adhere to the following structures when generating code:
 </div>
 ```
 
-* For creating modals for deletion:
+* For creating modals for deletion
 ```
 <div class="modal fade" id="delete-[NAME]-modal" data-bs-backdrop="static" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
@@ -169,7 +164,16 @@ Strictly adhere to the following structures when generating code:
 </div>
 ```
 
-# Conclusion
-For any information not explicitly mentioned in this memory bank, you can rely on your general knowledge.
-However, when there is a conflict or ambiguity, the information in this memory bank should take precedence.
-Please confirm that you have understood these instructions and are ready to proceed.
+* For input fields
+```
+<div class="mb-3">
+  <?= $form->label('[NAME]', 'form-label mb-0')->asRequired() ?>
+  <?= $form->input('[NAME]', 'form-control')->asModel()->disablesOn('loading') ?>
+  <?= $form->error('error.[NAME]') ?>
+</div>
+```
+
+* For form buttons
+```
+<?= $form->button('[ACTION]')->withClass('btn btn-secondary')->disablesOn('loading') ?>
+```
