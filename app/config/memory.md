@@ -1,6 +1,5 @@
 # Project overview
 You are building a simple inventory management system, where users can manage items (products), clients (customers, suppliers), and orders (sales, purchases).
-You will be using the latest PHP version but for coding style, always stick to PHP 5.3. It is also using alpine.js and Bootstrap 5 and its icon set (Bootstrap Icons).
 
 # Technology stack
 * Alpine.js (https://alpinejs.dev/)
@@ -9,6 +8,8 @@ You will be using the latest PHP version but for coding style, always stick to P
 * CSS (https://css-tricks.com/)
 * HTML (https://html.com/)
 * JavaScript (https://www.javascript.com/)
+* Laravel Eloquent (https://laravel.com/docs/12.x/eloquent)
+* Phinx (https://book.cakephp.org/phinx/0/en/index.html)
 * PHP (https://www.php.net/)
 
 # Core functionalities
@@ -76,7 +77,15 @@ You will be using the latest PHP version but for coding style, always stick to P
 ```
 
 # Entry point and execution flow
-xxx
+1. Entry point of the project is `app/public/index.php`.
+2. Prior in running the project, Composer is autoloaded first.
+3. The `System` class is loaded to get the packages to be used.
+  * The list of packages to be loaded are found in `packages` field in `app/config/app.php`.
+4. One of the packages to be loaded is the `Package` class.
+  * This also loads the `Plates` and `Router` classes.
+5. `System` class will now get the received URI (e.g., `/hello-world`).
+6. The received URI will be checked in `Plates` and `Router` classes.
+7. If found, the specified route class will be called from `Pages` or `Routes` folder.
 
 # Coding style
 1. Strictly conform to the [PSR-12](https://www.php-fig.org/psr/psr-12/) standard.
@@ -86,5 +95,7 @@ xxx
 
 # Notes and considerations
 1. Do not hallucinate, always check the project's source code to get examples.
-3. Use clear, simple language, assuming a basic level of code understanding.
-2. Scan the `vendor` directory for files and use them as reference for code generation.
+2. Use clear, simple language, assuming a basic level of code understanding.
+3. Scan the `vendor` directory for files and use them as reference for code generation.
+4. Always conform to the [SOLID principles](https://en.wikipedia.org/wiki/SOLID).
+5. Use coding style and design patterns on PHP 5.3.
