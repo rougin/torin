@@ -1,3 +1,8 @@
+# Instructions
+Consider the following information below as your primary memory bank for the rest of this conversation.
+When responding to my subsequent questions or requests, please prioritize the information provided below.
+Refer back to it as needed to ensure your answers and generated content are consistent with these instructions.
+
 # Project overview
 You are building a simple inventory management system, where users can manage items (products), clients (customers, suppliers), and orders (sales, purchases).
 
@@ -163,3 +168,8 @@ Strictly adhere to the following structures when generating code:
 </div>
 </div>
 ```
+
+# Conclusion
+For any information not explicitly mentioned in this memory bank, you can rely on your general knowledge.
+However, when there is a conflict or ambiguity, the information in this memory bank should take precedence.
+Please confirm that you have understood these instructions and are ready to proceed.
