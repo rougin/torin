@@ -92,6 +92,8 @@ You are building a simple inventory management system, where users can manage it
 2. For brackets, use the [Allman indentation style](https://en.wikipedia.org/wiki/Indentation_style#Allman).
 3. Use [php-cs-fixer](https://cs.symfony.com/) and read `phpstyle.php` for the its rules.
 4. Always use one word for variables (e.g., `$userAddress` to `$address`).
+5. There is no `<?php` or `php` code line when creating templates in `app/plates`.
+6. Use 2 spacing when creating files in `app/plates`. Retain 4 spacing in other folders.
 
 # Notes and considerations
 1. Do not hallucinate, always check the project's source code to get examples.
@@ -103,7 +105,7 @@ You are building a simple inventory management system, where users can manage it
 
 # Code templates
 
-## General Modal
+## Modal (Default Template)
 ```
 <?php
 <div class="modal fade" id="[NAME]-modal" data-bs-backdrop="static" tabindex="-1">
