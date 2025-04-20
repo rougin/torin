@@ -103,6 +103,12 @@ You are building a simple inventory management system, where users can manage it
 5. Use coding style and design patterns on PHP 5.3 (`array()` instead of `[]`).
 6. For class properties that are using arrays, use brackets (`[]`) instead.
 
+# Strategies
+1. When creating modal templates, always add them first in `index.php` of the plate folder:
+  ```
+  <?= $plate->add('[FOLDER].[NAME]', compact('form')) ?>
+  ```
+
 # Code templates
 
 Strictly adhere to the following structures when generating code:
