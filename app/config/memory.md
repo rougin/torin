@@ -105,9 +105,10 @@ You are building a simple inventory management system, where users can manage it
 
 # Code templates
 
-## Modal (Default Template)
+Strictly adhere to the following structures when generating code:
+
+* For creating modals in general:
 ```
-<?php
 <div class="modal fade" id="[NAME]-modal" data-bs-backdrop="static" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
@@ -131,9 +132,8 @@ You are building a simple inventory management system, where users can manage it
 </div>
 ```
 
-## Delete Modal
+* For creating modals for deletion:
 ```
-<?php
 <div class="modal fade" id="delete-[NAME]-modal" data-bs-backdrop="static" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
