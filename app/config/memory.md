@@ -1,120 +1,109 @@
-# Project overview
-You are building a simple inventory management system, where users can manage items (products), clients (customers, suppliers), and orders (sales, purchases).
+# Purpose
+* Your purpose is to help me with tasks like writing code, fixing code, and understanding code.
+* I will share my goals and projects with you, and you will assist me in crafting the code I need.
+* Always follow the prescribed instructions below with context awareness.
 
 # Technology stack
-* Alpine.js (https://alpinejs.dev/)
-* Bootstrap 5 (https://getbootstrap.com/)
-* Bootstrap Icons (https://icons.getbootstrap.com/)
-* CSS (https://css-tricks.com/)
-* HTML (https://html.com/)
-* JavaScript (https://www.javascript.com/)
-* Laravel Eloquent (https://laravel.com/docs/12.x/eloquent)
-* Phinx (https://book.cakephp.org/phinx/0/en/index.html)
-* PHP (https://www.php.net/)
-
-# Core functionalities
-1. Create, read, update, and delete items.
-2. Create, read, update, and delete clients.
-3. Create, read, update, and delete orders.
-
-# Database schema
-* `clients` table
-  - `id` - the primary key, must be unique and not nullable.
-  - `parent_id` - if not empty, it means that it is attached to another client.
-  - `type` - the category of a client:
-    `0` - the client is a customer.
-    `1` - the client is a supplier.
-  - `code` - the unique client code. Should be in this format: `01-20241215-00001`.
-    `01` - based on the `type` column.
-    `20241215` - current date the client is created (uses `Ymd` format in PHP).
-    `00001` - total of clients + 1. `00001` means it is the first client created.
-* `items` table
-  - `id` - the primary key, must be unique and not nullable.
-  - `parent_id` - if not empty, it means that it is attached to another item.
-  - `code` - the unique item code. Should be in this format: `00-20241215-00001`.
-    `00` - no bearing, but might be updated in the future.
-    `20241215` - current date the item is created (uses `Ymd` format in PHP).
-    `00001` - total of items + 1. `00001` means it is the first item created.
-* `orders` table
-  - `id` - the primary key, must be unique and not nullable.
-  - `client_id` - assigned client from `clients`.
-  - `type` - the category of an order:
-    `0` - the order is a sale.
-    `1` - the order is a purchase.
-    `2` - the order is a transfer. Used for transferring stock without sales nor purchases.
-  - `status` - current status of an order:
-    `0` - the order is still pending. Requires to be delivered or purchased to the client.
-    `1` - the order is completed. The `quantity` from `item_order` database table will now be used as existing quantity to attached item.
-    `3` - the order is cancelled. The client or the user cancelled the order.
-  - `code` - the unique client code. Should be in this format: `1-20250419-00001`.
-    `01` - based on the `type` column.
-    `20241215` - current date the order is created (uses `Ymd` format in PHP).
-    `00001` - total of orders + 1. `00001` means it is the first order created.
-  - `remarks` - additional information in the order.
-* `item_order` table
-  - `id` - the primary key, must be unique and not nullable.
-  - `item_id` - assigned item from `items`.
-  - `order_id` - assigned order from `orders`.
-  - `quantity` - number of quantity of an item from the order.
+* Always consider the following technologies below:
+  - Alpine.js (https://alpinejs.dev/)
+  - Bootstrap 5 (https://getbootstrap.com/)
+  - Bootstrap Icons (https://icons.getbootstrap.com/)
+  - CSS (https://css-tricks.com/)
+  - Dexterity (https://github.com/rougin/dexterity)
+  - HTML (https://html.com/)
+  - JavaScript (https://www.javascript.com/)
+  - Laravel Eloquent (https://laravel.com/docs/12.x/eloquent)
+  - Phinx (https://book.cakephp.org/phinx/0/en/index.html)
+  - PHP (https://www.php.net/)
+  - Slytherin (https://github.com/rougin/slytherin)
+  - Valitron (https://github.com/vlucas/valitron)
+* Never use any third-party packages unless required.
+* The stack uses `Slytherin` as the micro-framework.
+* Pure PHP must be encouraged in all implementations.
+* This project also uses `Front Controller` pattern.
 
 # File structure
-```
-.
-├── app - hosts the project-specific files (e.g., configuration, templates)
-│   ├── assets - contains PHP-based JavaScript functionalities
-│   ├── config - includes configuration files (e.g., project-specific config, database connection)
-│   ├── plates - resides the templates to the project
-│   └── public - the front-controller of the project
-├── src - contains the core source code of the project
-│   ├── Checks - provides validation logic to the entire project
-│   ├── Depots - acts as a layer between the database and the business logic
-│   ├── Models - contains Eloquent models, mostly used as constructors in depots
-│   ├── Packages - hosts the third-party packages
-│   ├── Pages - hosts the HTTP routes for the template pages
-│   ├── Phinx - contains the database migrations using Phinx
-│   ├── Routes - hosts the HTTP routes for the API endpoints
-├── tests - contains unit tests for the project
-```
+* See the file structure below for the project:
+  ```
+  .
+  ├── app - hosts the project-specific files (e.g., configuration, templates)
+  │   ├── assets - contains PHP-based JavaScript functionalities
+  │   ├── config - includes configuration files (e.g., project-specific config, database connection)
+  │   ├── plates - resides the templates to the project
+  │   └── public - the front-controller of the project
+  ├── src - contains the core source code of the project
+  │   ├── Checks - provides validation logic to the entire project
+  │   ├── Depots - acts as a layer between the database and the business logic
+  │   ├── Models - contains Eloquent models, mostly used as constructors in depots
+  │   ├── Packages - hosts the third-party packages
+  │   ├── Pages - hosts the HTTP routes for the template pages
+  │   ├── Phinx - contains the database migrations using Phinx
+  │   ├── Routes - hosts the HTTP routes for the API endpoints
+  ├── tests - contains unit tests for the project
+  ```
+* For template files, the following folders are used exclusively:
+  ```
+  .
+  ├── app - hosts the project-specific files (e.g., configuration, templates)
+  │   ├── assets - contains PHP-based JavaScript functionalities
+  │   ├── plates - resides the templates to the project
+  ├── src - contains the core source code of the project
+  │   ├── Packages - hosts the third-party packages
+  │   ├── Pages - hosts the HTTP routes for the template pages
+  ```
+* The rest of the other folders are used for RESTful APIs.
 
 # Entry point and execution flow
-1. Entry point of the project is `app/public/index.php`.
-2. Prior in running the project, Composer is autoloaded first.
-3. The `System` class is loaded to get the packages to be used.
-  * The list of packages to be loaded are found in `packages` field in `app/config/app.php`.
-4. One of the packages to be loaded is the `Package` class.
-  * This also loads the `Plates` and `Router` classes.
-5. `System` class will now get the received URI (e.g., `/hello-world`).
-6. The received URI will be checked in `Plates` and `Router` classes.
-7. If found, the specified route class will be called from `Pages` or `Routes` folder.
+1. Each incoming HTTP request goes to `app/public/index.php`.
+2. Once received, `Composer` is autoloaded first.
+3. The `System` class will be loaded to load the packages.
+4. The packages for loading are found in `packages` field of `app/config/app.php`.
+5. One of the packages to be loaded is the `Package` class.
+6. The `Package` class also loads the `Plates` and `Router` classes.
+5. The `System` class will now get the received URI (e.g., `/hello-world`).
+6. The received URI will be checked against `Plates` and `Router`.
+7. If found, the class in `Pages` or `Routes` will be called.
 
 # Coding style
-1. Strictly conform to the [PSR-12](https://www.php-fig.org/psr/psr-12/) standard.
-2. For brackets, use the [Allman indentation style](https://en.wikipedia.org/wiki/Indentation_style#Allman).
-3. Use [php-cs-fixer](https://cs.symfony.com/) and read `phpstyle.php` for the its rules.
-4. Always use one word for variables (e.g., `$userAddress` to `$address`).
-5. Do not include `<?php` and `php` at the beginning of template files in the `app/plates`.
-6. Use 2 spacing when creating templates in `app/plates`.
+1. Use coding style and design patterns on PHP 5.3 (`array()` instead of `[]`).
+2. Strictly conform to the PSR-12 standard.
+3. For curly brackets, strictly use the Allman indentation style:
+  ``` php
+  if ($allowed)
+  { // Curly brackets always in new line
+    // ...
+  }
+  ```
+4. Use [php-cs-fixer](https://cs.symfony.com/) and read `phpstyle.php` for the its rules.
+5. Use one word for variables (e.g., `$userAddress` to `$address`).
+6. Do not include `<?php` and `php` at the beginning of template files in the `app/plates`.
+7. For class properties that are using arrays, use brackets (`[]`) instead:
+  ``` php
+  class Sample
+  {
+      protected $names =
+      [ // Always use square brackets and in new line
+          'Gryffindor',
+          'Hufflepuff',
+          'Ravenclaw',
+          'Slytherin',
+      ];
+  }
+  ```
+8. Use 2 spacing when creating templates in `app/plates`.
+9. Always use guarded `if` statements. Never use `else` statements if possible.
+10. Only use pure PHP in all template files.
 
 # Notes and considerations
-1. Do not hallucinate, always check the project's source code to get examples.
-2. Use clear, simple language, assuming a basic level of code understanding.
+1. Always design implementations that conforms to SOLID principles.
+2. Do not hallucinate, always check the source code to get examples.
 3. Scan the `vendor` directory for files and use them as reference for code generation.
-4. Design implementations that conforms to [SOLID principles](https://en.wikipedia.org/wiki/SOLID).
-5. Use coding style and design patterns on PHP 5.3 (`array()` instead of `[]`).
-6. For class properties that are using arrays, use brackets (`[]`) instead.
-
-# Strategies
-1. When creating modal templates, always add them first in `index.php` of the plate folder:
-  ```
-  <?= $plate->add('[FOLDER].[NAME]', compact('form')) ?>
-  ```
+4. Strictly adhere to code structures found in `Code templates`.
+5. Use clear, simple language, assuming a basic level of code understanding.
 
 # Code templates
-
-Strictly adhere to the following structures when generating code:
-
 * For creating modals in general
-```
+``` html
 <div class="modal fade" id="[NAME]-modal" data-bs-backdrop="static" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
@@ -137,9 +126,8 @@ Strictly adhere to the following structures when generating code:
 </div>
 </div>
 ```
-
 * For creating modals for deletion
-```
+``` html
 <div class="modal fade" id="delete-[NAME]-modal" data-bs-backdrop="static" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
@@ -163,17 +151,49 @@ Strictly adhere to the following structures when generating code:
 </div>
 </div>
 ```
-
 * For input fields
-```
+``` html
 <div class="mb-3">
   <?= $form->label('[NAME]', 'form-label mb-0')->asRequired() ?>
   <?= $form->input('[NAME]', 'form-control')->asModel()->disablesOn('loading') ?>
   <?= $form->error('error.[NAME]') ?>
 </div>
 ```
-
 * For form buttons
-```
+``` html
 <?= $form->button('[ACTION]')->withClass('btn btn-secondary')->disablesOn('loading') ?>
+```
+* Sections of an HTTP route
+``` php
+/**
+ * @param \Rougin\Torin\Depots\ItemDepot           $item
+ * @param \Psr\Http\Message\ServerRequestInterface $request
+ *
+ * @return \Psr\Http\Message\ResponseInterface
+ */
+public function index(ItemDepot $item, ServerRequestInterface $request)
+{
+    // Validation goes here (e.g., ItemCheck)
+
+    // Processing of data goes here (e.g., ItemDepot)
+
+    return /* Returning the response */;
+}
+```
+* Anatomy of a simple class
+``` php
+namespace /*[NAMESPACE]*/; // Always refer to the file structure (e.g., Rougin\Torin\Routes)
+
+/**
+ * @package [PROJECT NAME]
+ *
+ * @author [AUTHOR] <[AUTHOR_EMAIL]>
+ */
+class Sample
+{
+    public function hello()
+    {
+        return 'Hello world!';
+    }
+}
 ```
