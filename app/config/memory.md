@@ -67,17 +67,18 @@
 # Coding style
 1. Use coding style and design patterns on PHP 5.3 (`array()` instead of `[]`).
 2. Strictly conform to the PSR-12 standard.
-3. For curly brackets, strictly use the Allman indentation style:
+3. Ensure that class names are descriptive and concise, without unnecessary suffixes like `Page`, `Route`, `Depot`, etc. (e.g., use `Users` instead of `UserRoutes` and `Users` instead of `UserPage`). Focus on the core entity or functionality the class represents.
+4. For curly brackets, strictly use the Allman indentation style:
   ``` php
   if ($allowed)
   { // Curly brackets always in new line
     // ...
   }
   ```
-4. Use [php-cs-fixer](https://cs.symfony.com/) and read `phpstyle.php` for the its rules.
-5. Use one word for variables (e.g., `$userAddress` to `$address`).
-6. Do not include `<?php` and `php` at the beginning of template files in the `app/plates`.
-7. For class properties that are using arrays, use brackets (`[]`) instead:
+5. Use [php-cs-fixer](https://cs.symfony.com/) and read `phpstyle.php` for the its rules.
+6. Use one word for variables (e.g., `$userAddress` to `$address`).
+7. Do not include `<?php` and `php` at the beginning of template files in the `app/plates`.
+8. For class properties that are using arrays, use brackets (`[]`) instead:
   ``` php
   class Sample
   {
@@ -90,9 +91,9 @@
       ];
   }
   ```
-8. Use 2 spacing when creating templates in `app/plates`.
-9. Always use guarded `if` statements. Never use `else` statements if possible.
-10. Only use pure PHP in all template files.
+9. Use 2 spacing when creating templates in `app/plates`.
+10. Always use guarded `if` statements. Avoid using else statements whenever possible. Handle the negative or empty conditions first using an `if` statement with a `return`, `continue`, or a simple output, and then proceed with the main logic outside of that `if` block.
+11. Never use the `Plates` template engine for generating views. All template files within the `app/plates` directory must be written using pure PHP.
 
 # Notes and considerations
 1. Always design implementations that conforms to SOLID principles.
