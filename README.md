@@ -1,44 +1,44 @@
 # Torin
 
-Simple inventory management.
+A simple inventory management package written in PHP.
 
 ## Installation
 
-Clone the `Torin` project using [Git](https://git-scm.com/):
+Clone the package using [Git](https://git-scm.com/):
 
 ``` bash
 $ git clone https://github.com/rougin/torin.git "Torin"
 $ cd "Torin" && rm -rf .git
 ```
 
-Once downloaded, use `Composer` to install its required packages:
+Once downloaded, use `Composer` to install its dependencies:
 
 ``` bash
 $ cd Torin
-$ composer update
+$ composer install
 ```
 
 ## Running as an app
 
-Running `Torin` as an app requires the [PHP's web server](https://www.php.net/manual/en/features.commandline.webserver.php):
+Serve with [PHP's built-in web server](https://www.php.net/manual/en/features.commandline.webserver.php):
 
 ``` bash
 $ php -S localhost:80 -t .\app\public
 ```
 
-Then open a web browser with the URL to http://localhost.
+Then open http://localhost in a web browser.
 
 ## Change log
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+See [CHANGELOG](CHANGELOG.md) for more recent changes.
 
 ## Development
 
-`Torin` is also configured for running unit tests with automating code quality and documentation.
+Includes tools for code quality, coding style, and unit tests.
 
 ### Code quality
 
-`Torin` uses [phpstan](https://phpstan.org/) for maintaining its code quality:
+Analyze code quality using [phpstan](https://phpstan.org/):
 
 ``` bash
 $ phpstan
@@ -46,7 +46,7 @@ $ phpstan
 
 ### Coding style
 
-Maintaining its coding style requires [php-cs-fixer](https://cs.symfony.com/):
+Enforce coding style using [php-cs-fixer](https://cs.symfony.com/):
 
 ``` bash
 $ php-cs-fixer fix --config=phpstyle.php
@@ -54,7 +54,7 @@ $ php-cs-fixer fix --config=phpstyle.php
 
 ### Unit tests
 
-Running unit tests were configured for [phpunit](https://phpunit.de/index.html):
+Execute unit tests using [phpunit](https://phpunit.de/index.html):
 
 ``` bash
 $ composer test
