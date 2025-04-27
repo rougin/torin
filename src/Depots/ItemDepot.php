@@ -2,7 +2,7 @@
 
 namespace Rougin\Torin\Depots;
 
-use Rougin\Dexterity\Depot;
+use Rougin\Dexterity\Depots\EloquentDepot;
 use Rougin\Torin\Models\Item;
 
 /**
@@ -10,19 +10,19 @@ use Rougin\Torin\Models\Item;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ItemDepot extends Depot
+class ItemDepot extends EloquentDepot
 {
     /**
      * @var \Rougin\Torin\Models\Item
      */
-    protected $item;
+    protected $model;
 
     /**
      * @param \Rougin\Torin\Models\Item $item
      */
     public function __construct(Item $item)
     {
-        $this->item = $item;
+        $this->model = $item;
     }
 
     /**
@@ -34,7 +34,7 @@ class ItemDepot extends Depot
     {
         $data['code'] = $this->getCode();
 
-        return $this->item->create($data);
+        return parent::create($data);
     }
 
     /**
@@ -44,7 +44,7 @@ class ItemDepot extends Depot
      */
     public function find($id)
     {
-        return $this->item->with('orders')->find($id);
+        return $this->model->with('orders')->find($id);
     }
 
     /**
@@ -52,7 +52,7 @@ class ItemDepot extends Depot
      */
     public function getSelect()
     {
-        $items = $this->item->all();
+        $items = $this->model->all();
 
         $output = array();
 
@@ -62,24 +62,6 @@ class ItemDepot extends Depot
         }
 
         return $output;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getTotal()
-    {
-        return $this->item->count();
-    }
-
-    /**
-     * @param integer $id
-     *
-     * @return boolean
-     */
-    public function rowExists($id)
-    {
-        return $this->item->find($id) !== null;
     }
 
     /**
@@ -104,27 +86,6 @@ class ItemDepot extends Depot
     }
 
     /**
-     * @param integer $id
-     *
-     * @return boolean
-     */
-    protected function deleteRow($id)
-    {
-        return $this->findRow($id)->delete();
-    }
-
-    /**
-     * @param integer $id
-     *
-     * @return \Rougin\Torin\Models\Item
-     * @throws \UnexpectedValueException
-     */
-    protected function findRow($id)
-    {
-        return $this->item->findOrFail($id);
-    }
-
-    /**
      * @return string
      */
     protected function getCode()
@@ -136,22 +97,6 @@ class ItemDepot extends Depot
         $code = sprintf('%05d', $total);
 
         return '00-' . $time . '-' . $code;
-    }
-
-    /**
-     * @param integer $page
-     * @param integer $limit
-     *
-     * @return \Rougin\Torin\Models\Item[]
-     */
-    protected function getItems($page, $limit)
-    {
-        $model = $this->item->limit($limit);
-
-        $offset = $this->getOffset($page, $limit);
-
-        /** @var \Rougin\Torin\Models\Item[] */
-        return $model->offset($offset)->get();
     }
 
     /**

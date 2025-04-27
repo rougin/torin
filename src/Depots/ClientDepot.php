@@ -2,7 +2,7 @@
 
 namespace Rougin\Torin\Depots;
 
-use Rougin\Dexterity\Depot;
+use Rougin\Dexterity\Depots\EloquentDepot;
 use Rougin\Torin\Models\Client;
 
 /**
@@ -10,19 +10,19 @@ use Rougin\Torin\Models\Client;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class ClientDepot extends Depot
+class ClientDepot extends EloquentDepot
 {
     /**
      * @var \Rougin\Torin\Models\Client
      */
-    protected $client;
+    protected $model;
 
     /**
      * @param \Rougin\Torin\Models\Client $client
      */
     public function __construct(Client $client)
     {
-        $this->client = $client;
+        $this->model = $client;
     }
 
     /**
@@ -34,7 +34,7 @@ class ClientDepot extends Depot
     {
         $data['code'] = $this->getCode();
 
-        return $this->client->create($data);
+        return $this->model->create($data);
     }
 
     /**
@@ -42,7 +42,7 @@ class ClientDepot extends Depot
      */
     public function getSelect()
     {
-        $items = $this->client->all();
+        $items = $this->model->all();
 
         $output = array();
 
@@ -58,24 +58,6 @@ class ClientDepot extends Depot
         }
 
         return $output;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getTotal()
-    {
-        return $this->client->count();
-    }
-
-    /**
-     * @param integer $id
-     *
-     * @return boolean
-     */
-    public function rowExists($id)
-    {
-        return $this->client->find($id) !== null;
     }
 
     /**
@@ -104,27 +86,6 @@ class ClientDepot extends Depot
     }
 
     /**
-     * @param integer $id
-     *
-     * @return boolean
-     */
-    protected function deleteRow($id)
-    {
-        return $this->findRow($id)->delete();
-    }
-
-    /**
-     * @param integer $id
-     *
-     * @return \Rougin\Torin\Models\Client
-     * @throws \UnexpectedValueException
-     */
-    protected function findRow($id)
-    {
-        return $this->client->findOrFail($id);
-    }
-
-    /**
      * @return string
      */
     protected function getCode()
@@ -136,21 +97,5 @@ class ClientDepot extends Depot
         $code = sprintf('%05d', $total);
 
         return '01-' . $time . '-' . $code;
-    }
-
-    /**
-     * @param integer $page
-     * @param integer $limit
-     *
-     * @return \Rougin\Torin\Models\Client[]
-     */
-    protected function getItems($page, $limit)
-    {
-        $model = $this->client->limit($limit);
-
-        $offset = $this->getOffset($page, $limit);
-
-        /** @var \Rougin\Torin\Models\Client[] */
-        return $model->offset($offset)->get();
     }
 }

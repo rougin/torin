@@ -2,7 +2,7 @@
 
 namespace Rougin\Torin\Depots;
 
-use Rougin\Dexterity\Depot;
+use Rougin\Dexterity\Depots\EloquentDepot;
 use Rougin\Torin\Models\Order;
 
 /**
@@ -10,19 +10,19 @@ use Rougin\Torin\Models\Order;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class OrderDepot extends Depot
+class OrderDepot extends EloquentDepot
 {
     /**
      * @var \Rougin\Torin\Models\Order
      */
-    protected $order;
+    protected $model;
 
     /**
      * @param \Rougin\Torin\Models\Order $order
      */
     public function __construct(Order $order)
     {
-        $this->order = $order;
+        $this->model = $order;
     }
 
     /**
@@ -71,8 +71,9 @@ class OrderDepot extends Depot
             $load['created_by'] = $createdBy;
         }
 
-        $order = $this->order->create($load);
+        $order = $this->model->create($load);
 
+        // Add specified items per order ----------
         /** @var array<string, mixed>[] */
         $items = $data['cart'];
 
@@ -93,53 +94,9 @@ class OrderDepot extends Depot
 
             $order->items()->attach($itemId, $row);
         }
+        // ----------------------------------------
 
         return $order;
-    }
-
-    /**
-     * @param integer $id
-     *
-     * @return boolean
-     */
-    public function delete($id)
-    {
-        return $this->findRow($id)->delete();
-    }
-
-    /**
-     * @return integer
-     */
-    public function getTotal()
-    {
-        return $this->order->count();
-    }
-
-    /**
-     * @param integer $id
-     *
-     * @return boolean
-     */
-    public function rowExists($id)
-    {
-        return $this->order->find($id) !== null;
-    }
-
-    /**
-     * @param integer $page
-     * @param integer $limit
-     *
-     * @return \Rougin\Torin\Models\Order[]
-     */
-    protected function getItems($page, $limit)
-    {
-        $model = $this->order->with(['client']);
-
-        $model = $model->limit($limit);
-
-        $offset = $this->getOffset($page, $limit);
-
-        return $model->offset($offset)->get();
     }
 
     /**
@@ -156,16 +113,5 @@ class OrderDepot extends Depot
         $code = $type . '-' . date('Ymd');
 
         return $code . '-' . $count;
-    }
-
-    /**
-     * @param integer $id
-     *
-     * @return \Rougin\Torin\Models\Order
-     * @throws \UnexpectedValueException
-     */
-    protected function findRow($id)
-    {
-        return $this->order->findOrFail($id);
     }
 }
