@@ -154,6 +154,7 @@ class Items
         $filter = new Filter;
 
         $filter->setAsString('name', $search)->asSearch();
+        $filter->setAsString('code', $search)->asSearch();
 
         $this->item->withFilter($filter);
         // -----------------------------------------------
