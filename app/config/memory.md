@@ -137,7 +137,7 @@
       <div class="modal-title fs-5 fw-bold" id="[NAME]-modal-label">Delete [NAME]?</div>
     </div>
     <div class="modal-body">
-      <p>Are you sure that you want to delete the [NAME] <span class="fw-bold" x-text="name"></span>?</p>
+      <p class="mb-0">Are you sure that you want to delete the [NAME] <span class="fw-bold" x-text="name"></span>?</p>
       <?= $form->error('error.delete') ?>
     </div>
     <div class="modal-footer border-top-0 bg-light">

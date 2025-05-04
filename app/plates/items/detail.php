@@ -3,7 +3,7 @@
   <div class="modal-content">
     <div class="modal-header text-white border-bottom-0" :class="{ 'bg-primary': id, 'bg-secondary': !id }">
       <template x-if="id">
-        <div class="modal-title fs-5 fw-bold" id="item-detail-modal-label">Update Item Details</div>
+        <div class="modal-title fs-5 fw-bold" id="item-detail-modal-label">Update Item</div>
       </template>
       <template x-if="! id">
         <div class="modal-title fs-5 fw-bold" id="item-detail-modal-label">Create New Item</div>
@@ -29,7 +29,7 @@
       </div>
       <?= $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
       <template x-if="id">
-        <?= $form->button('Update Details', 'btn btn-primary')->onClick('update(id)')->disablesOn('loading') ?>
+        <?= $form->button('Update', 'btn btn-primary')->onClick('update(id)')->disablesOn('loading') ?>
       </template>
       <template x-if="! id">
         <?= $form->button('Create New', 'btn btn-secondary')->onClick('store')->disablesOn('loading') ?>
