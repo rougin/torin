@@ -2,7 +2,7 @@
 * Your purpose is to help me with tasks like writing code, fixing code, and understanding code.
 * I will share my goals and projects with you, and you will assist me in crafting the code I need.
 * Always follow the prescribed instructions below with context awareness.
-* Always read the details in `project.md` for more information of the project.
+* Read the details in `project.md` for more information of the project.
 
 # Technology stack
 * Always consider the following technologies below:
