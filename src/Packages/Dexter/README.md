@@ -4,7 +4,7 @@ A simple utility PHP package for handling front-end related code using [alpine.j
 
 ## Installation
 
-Install the `Dexterity` package via [Composer](https://getcomposer.org/):
+Install the package using [Composer](https://getcomposer.org/):
 
 ``` bash
 $ composer require rougin/dexterity
@@ -49,15 +49,15 @@ class Items
 
 ## Change log
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+See [CHANGELOG](CHANGELOG.md) for more recent changes.
 
 ## Development
 
-`Dexterity` is also configured for running unit tests with automating code quality and documentation.
+Includes tools for code quality, coding style, and unit tests.
 
 ### Code quality
 
-`Dexterity` uses [phpstan](https://phpstan.org/) for maintaining its code quality:
+Analyze code quality using [phpstan](https://phpstan.org/):
 
 ``` bash
 $ phpstan
@@ -65,7 +65,7 @@ $ phpstan
 
 ### Coding style
 
-Maintaining its coding style requires [php-cs-fixer](https://cs.symfony.com/):
+Enforce coding style using [php-cs-fixer](https://cs.symfony.com/):
 
 ``` bash
 $ php-cs-fixer fix --config=phpstyle.php
@@ -73,7 +73,7 @@ $ php-cs-fixer fix --config=phpstyle.php
 
 ### Unit tests
 
-Running unit tests were configured for [phpunit](https://phpunit.de/index.html):
+Execute unit tests using [phpunit](https://phpunit.de/index.html):
 
 ``` bash
 $ composer test
