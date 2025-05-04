@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Dexter\Alpine;
+namespace Rougin\Dexal;
 
 use JShrink\Minifier;
 
@@ -17,7 +17,7 @@ class Method
     protected $arrays = array();
 
     /**
-     * @var \Rougin\Dexter\Alpine\Field[]
+     * @var \Rougin\Dexal\Field[]
      */
     protected $fields = array();
 
@@ -27,7 +27,7 @@ class Method
     protected $modals = array();
 
     /**
-     * @var \Rougin\Dexter\Alpine\Select[]
+     * @var \Rougin\Dexal\Select[]
      */
     protected $selects = array();
 

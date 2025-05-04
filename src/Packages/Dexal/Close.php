@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Dexter\Alpine;
+namespace Rougin\Dexal;
 
 use Rougin\Temply\Script;
 

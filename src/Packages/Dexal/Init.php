@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Dexter\Alpine;
+namespace Rougin\Dexal;
 
 /**
  * @package Dexterity

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Dexter\Alpine;
+namespace Rougin\Dexal;
 
 use Rougin\Gable\Pagee;
 
@@ -12,7 +12,7 @@ use Rougin\Gable\Pagee;
 class Depot
 {
     /**
-     * @var \Rougin\Dexter\Alpine\Method[]
+     * @var \Rougin\Dexal\Method[]
      */
     protected $fns = array();
 
@@ -35,7 +35,7 @@ class Depot
     }
 
     /**
-     * @return \Rougin\Dexter\Alpine\Close
+     * @return \Rougin\Dexal\Close
      */
     public function withClose()
     {
@@ -43,7 +43,7 @@ class Depot
     }
 
     /**
-     * @return \Rougin\Dexter\Alpine\Edit
+     * @return \Rougin\Dexal\Edit
      */
     public function withEdit()
     {
@@ -53,7 +53,7 @@ class Depot
     /**
      * @param integer $page
      *
-     * @return \Rougin\Dexter\Alpine\Init
+     * @return \Rougin\Dexal\Init
      */
     public function withInit($page = 1)
     {
@@ -63,7 +63,7 @@ class Depot
     /**
      * @param \Rougin\Gable\Pagee $pagee
      *
-     * @return \Rougin\Dexter\Alpine\Load
+     * @return \Rougin\Dexal\Load
      */
     public function withLoad(Pagee $pagee)
     {
@@ -73,18 +73,18 @@ class Depot
     /**
      * @param string $name
      *
-     * @return \Rougin\Dexter\Alpine\Modal
+     * @return \Rougin\Dexal\Modal
      */
     public function withModal($name)
     {
         $modal = new Modal($this->name);
 
-        /** @var \Rougin\Dexter\Alpine\Modal */
+        /** @var \Rougin\Dexal\Modal */
         return $modal->setName($name);
     }
 
     /**
-     * @return \Rougin\Dexter\Alpine\Remove
+     * @return \Rougin\Dexal\Remove
      */
     public function withRemove()
     {
@@ -92,7 +92,7 @@ class Depot
     }
 
     /**
-     * @return \Rougin\Dexter\Alpine\Store
+     * @return \Rougin\Dexal\Store
      */
     public function withStore()
     {
@@ -100,7 +100,7 @@ class Depot
     }
 
     /**
-     * @return \Rougin\Dexter\Alpine\Trash
+     * @return \Rougin\Dexal\Trash
      */
     public function withTrash()
     {
@@ -108,7 +108,7 @@ class Depot
     }
 
     /**
-     * @return \Rougin\Dexter\Alpine\Update
+     * @return \Rougin\Dexal\Update
      */
     public function withUpdate()
     {

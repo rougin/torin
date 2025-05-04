@@ -1,13 +1,13 @@
-# Dexterity
+# Dexal
 
-A simple utility PHP package for handling front-end related code using [alpine.js](https://alpinejs.dev/).
+A simple utility PHP package for templates using [alpine.js](https://alpinejs.dev/).
 
 ## Installation
 
 Install the package using [Composer](https://getcomposer.org/):
 
 ``` bash
-$ composer require rougin/dexterity
+$ composer require rougin/dexal
 ```
 
 ## Basic usage
@@ -19,7 +19,7 @@ Use the `Depot` class to create CRUD methods:
 
 // ...
 
-use Rougin\Dexter\Alpine\Depot;
+use Rougin\Dexal\Depot;
 
 class Items
 {

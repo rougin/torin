@@ -3,7 +3,7 @@
 namespace Rougin\Torin\Pages;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Rougin\Dexter\Alpine\Depot;
+use Rougin\Dexal\Depot;
 use Rougin\Gable\Action;
 use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;

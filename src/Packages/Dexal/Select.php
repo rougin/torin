@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Dexter\Alpine;
+namespace Rougin\Dexal;
 
 /**
  * TODO: This is a specific code for "tom-select".
