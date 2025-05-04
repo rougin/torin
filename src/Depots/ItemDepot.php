@@ -34,6 +34,7 @@ class ItemDepot extends EloquentDepot
     {
         $data['code'] = $this->getCode();
 
+        /** @var \Rougin\Torin\Models\Item */
         return parent::create($data);
     }
 
@@ -72,6 +73,7 @@ class ItemDepot extends EloquentDepot
      */
     public function update($id, $data)
     {
+        /** @var \Rougin\Torin\Models\Item */
         $row = $this->findRow($id);
 
         /** @var string */

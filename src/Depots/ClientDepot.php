@@ -68,6 +68,7 @@ class ClientDepot extends EloquentDepot
      */
     public function update($id, $data)
     {
+        /** @var \Rougin\Torin\Models\Client */
         $row = $this->findRow($id);
 
         /** @var string */

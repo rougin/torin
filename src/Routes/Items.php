@@ -147,23 +147,24 @@ class Items
         /** @var integer */
         $page = $params['p'] ?? 1;
 
-        // Add filter to search items by keyword ---------
+        // Add filter to search items by keyword -------------
         /** @var string|null */
         $search = $params['k'] ?? null;
 
-        $filter = new Filter;
+        if ($search)
+        {
+            $filter = new Filter;
 
-        $filter->setAsString('name', $search)->asSearch();
-        $filter->setAsString('code', $search)->asSearch();
+            $filter->setAsString('name', $search)->asSearch();
+            $filter->setAsString('code', $search)->asSearch();
 
-        $this->item->withFilter($filter);
-        // -----------------------------------------------
+            $this->item->withFilter($filter);
+        }
+        // ---------------------------------------------------
 
         $result = $this->item->get($page, $limit);
 
-        $items = $result->toArray();
-
-        return new JsonResponse($items);
+        return new JsonResponse($result->toArray());
     }
 
     /**
