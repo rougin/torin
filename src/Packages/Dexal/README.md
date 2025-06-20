@@ -52,7 +52,8 @@ class Items
 
 ### withInit
 
-`withInit` creates an `init` method. It will then initialize any defined `Select` classes.
+Creates an `init` method. It will then initialize any defined `Select` classes.
+
 It will also call the `load` method for getting the results for the specified page:
 
 ``` html
@@ -68,7 +69,7 @@ It will also call the `load` method for getting the results for the specified pa
 
 ### withLoad
 
-`withLoad` creates the `load` method. This is used for loading data based on `Pagee` data:
+Creates the `load` method. This is used for loading data based on `Pagee` data:
 
 ``` html
 // app/plates/items/depot.php
@@ -81,6 +82,30 @@ It will also call the `load` method for getting the results for the specified pa
   ->setLink($url->set('/v1/items')) ?>
 </script>
 ```
+
+### withStore
+
+[documentation about `withStore`]
+
+### withEdit
+
+[documentation about `withEdit`]
+
+### withUpdate
+
+[documentation about `withUpdate`]
+
+### withTrash
+
+[documentation about `withTrash`]
+
+### withRemove
+
+[documentation about `withRemove`]
+
+### withClose
+
+[documentation about `withClose`]
 
 ## Change log
 
