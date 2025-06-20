@@ -83,29 +83,124 @@ Creates the `load` method. This is used for loading data based on `Pagee` data:
 </script>
 ```
 
+> [!NOTE]
+> This requires a `Pagee` class from the `Gable` package for pagination.
+
 ### withStore
 
 [documentation about `withStore`]
+
+``` html
+// app/plates/items/depot.php
+
+<script type="text/javascript">
+
+// ...
+
+<?= $depot->withStore()
+  ->addField('name')
+  ->addField('detail')
+  ->setAlert('Item created!', 'Item successfully created.')
+  ->setLink($url->set('/v1/items')) ?>
+```
 
 ### withEdit
 
 [documentation about `withEdit`]
 
+``` html
+// app/plates/items/depot.php
+
+<script type="text/javascript">
+
+// ...
+
+<?= $depot->withEdit()
+  ->addField('name')
+  ->addField('detail')
+  ->addField('id')
+  ->showModal('item-detail-modal') ?>
+</script>
+```
+
 ### withUpdate
 
 [documentation about `withUpdate`]
+
+``` html
+// app/plates/items/depot.php
+
+<script type="text/javascript">
+
+// ...
+
+<?= $depot->withUpdate()
+  ->addField('name')
+  ->addField('detail')
+  ->setAlert('Item updated!', 'Item successfully updated.')
+  ->setLink($url->set('/v1/items')) ?>
+</script>
+```
 
 ### withTrash
 
 [documentation about `withTrash`]
 
+``` html
+// app/plates/items/depot.php
+
+<script type="text/javascript">
+
+// ...
+
+<?= $depot->withTrash()
+  ->addField('name')
+  ->addField('id')
+  ->showModal('delete-item-modal') ?>
+</script>
+```
+
 ### withRemove
 
 [documentation about `withRemove`]
 
+``` html
+// app/plates/items/depot.php
+
+<script type="text/javascript">
+
+// ...
+
+<?= $depot->withUpdate()
+  ->addField('name')
+  ->addField('detail')
+  ->setAlert('Item updated!', 'Item successfully updated.')
+  ->setLink($url->set('/v1/items')) ?>
+</script>
+```
+
 ### withClose
 
 [documentation about `withClose`]
+
+``` html
+// app/plates/items/depot.php
+
+<script type="text/javascript">
+
+// ...
+
+<?= $depot->withClose()
+  ->withScript($script)
+  ->hideModal('delete-item-modal')
+  ->hideModal('item-detail-modal')
+  ->resetField('detail')
+  ->resetField('error')
+  ->resetField('id')
+  ->resetField('name')
+  ->resetField('loadError') ?>
+</script>
+```
 
 ## Change log
 
