@@ -52,9 +52,7 @@ class Items
 
 ### withInit
 
-Creates an `init` method. It will then initialize any defined `Select` classes.
-
-It will also call the `load` method for getting the results for the specified page:
+Creates an `init` JavaScript method. This method initializes any defined `Select` elements using the `TomSelect` JavaScript library. After initialization, it calls the `load` method, typically with the initial page number to fetch data:
 
 ``` html
 // app/plates/items/depot.php
@@ -69,7 +67,7 @@ It will also call the `load` method for getting the results for the specified pa
 
 ### withLoad
 
-Creates the `load` method. This is used for loading data based on `Pagee` data:
+Creates the `load` JavaScript method. This method fetches paginated data from a specified API endpoint using an `Axios` GET request. It takes a `Pagee` object from the `Gable` package, constructs a query string with pagination parameters, and sends the request. Upon receiving a response, it updates the component's `items` data property with the fetched data and the `pagee` data property with pagination details (limit, pages, total). It also manages the `loading` state during the request and sets the `loadError` state on failure:
 
 ``` html
 // app/plates/items/depot.php
@@ -88,7 +86,7 @@ Creates the `load` method. This is used for loading data based on `Pagee` data:
 
 ### withStore
 
-[documentation about `withStore`]
+Creates a `store` method. This is used for sending a `POST` request to the specified link to create a new item. It collects data from the defined fields, and shows an alert upon successful creation before reloading the data:
 
 ``` html
 // app/plates/items/depot.php
@@ -106,7 +104,7 @@ Creates the `load` method. This is used for loading data based on `Pagee` data:
 
 ### withEdit
 
-[documentation about `withEdit`]
+Creates an `edit` JavaScript method. This method is used to populate a modal with the data of a selected item. It takes an `item` object as a parameter and assigns its properties to the corresponding fields in the modal. It can also show or hide other modals:
 
 ``` html
 // app/plates/items/depot.php
@@ -125,7 +123,7 @@ Creates the `load` method. This is used for loading data based on `Pagee` data:
 
 ### withUpdate
 
-[documentation about `withUpdate`]
+Creates an `update` JavaScript method. This method is used for sending a `PUT` request to the specified link to update an existing item. It collects data from the defined fields, includes the item's ID in the request, and shows an alert upon successful update before reloading the data:
 
 ``` html
 // app/plates/items/depot.php
@@ -144,7 +142,7 @@ Creates the `load` method. This is used for loading data based on `Pagee` data:
 
 ### withTrash
 
-[documentation about `withTrash`]
+Creates a `trash` JavaScript method. This method is used to populate a modal for confirming the deletion of an item. It takes an `item` object as a parameter and assigns its properties to the corresponding fields in the modal. It can also show or hide other modals:
 
 ``` html
 // app/plates/items/depot.php
@@ -162,7 +160,7 @@ Creates the `load` method. This is used for loading data based on `Pagee` data:
 
 ### withRemove
 
-[documentation about `withRemove`]
+Creates a `remove` JavaScript method. This method is used for sending a `DELETE` request to the specified link to remove an item. It takes the item's ID as a parameter, includes it in the request, and shows an alert upon successful deletion before reloading the data:
 
 ``` html
 // app/plates/items/depot.php
@@ -181,7 +179,7 @@ Creates the `load` method. This is used for loading data based on `Pagee` data:
 
 ### withClose
 
-[documentation about `withClose`]
+Creates a `close` JavaScript method. This method is used to close modals and reset the values of specified fields. It can also hide other modals and reset fields based on a provided script:
 
 ``` html
 // app/plates/items/depot.php
