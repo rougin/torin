@@ -107,69 +107,73 @@ class Table extends Element
             $html .= '</thead>';
         }
 
-        if (count($this->rows) > 0)
+        if (count($this->rows) === 0)
         {
-            $html .= '<tbody>';
+            $html .= '</table>';
 
-            if ($this->alpineName && $this->loadingName)
-            {
-                $cells = count($this->cols[0]->getCells());
-
-                $html .= '<template x-if="items.length === 0 && ' . $this->loadingName . '">';
-                $html .= '<template x-data="{ length: items && items.length ? items.length : ' . $this->loadingCount . ' }" x-for="i in length">';
-                $html .= '<tr>';
-
-                foreach (range(1, $cells) as $item)
-                {
-                    $html .= '<td class="align-middle placeholder-glow">';
-                    $html .= '<span class="placeholder col-12"></span>';
-                    $html .= '</td>';
-                }
-
-                $html .= '</tr>';
-                $html .= '</template>';
-                $html .= '</template>';
-
-                // Show "no items found" text if loading is enabled -------------------------
-                $html .= '<template x-if="items.length === 0 && ' . $this->noItemsKey . '">';
-                $html .= '<tr>';
-                $html .= '<td colspan="' . $cells . '" class="align-middle text-center">';
-                $html .= '<span>' . $this->noItemsText . '</span>';
-                $html .= '</td>';
-                $html .= '</tr>';
-                $html .= '</template>';
-                // --------------------------------------------------------------------------
-
-                // Show "loading error" text if there is an error when loading --------------------------
-                $html .= '<template x-if="! ' . $this->loadingName . ' && ' . $this->loadErrorKey . '">';
-                $html .= '<tr>';
-                $html .= '<td colspan="' . $cells . '" class="align-middle text-center">';
-                $html .= '<span>' . $this->loadErrorText . '</span>';
-                $html .= '</td>';
-                $html .= '</tr>';
-                $html .= '</template>';
-                // --------------------------------------------------------------------------------------
-            }
-
-            if ($this->alpineName)
-            {
-                $html .= '<template x-if="items && items.length > 0">';
-                $html .= '<template x-for="item in ' . $this->alpineName . '">';
-            }
-
-            foreach ($this->rows as $row)
-            {
-                $html .= $row->toHtml();
-            }
-
-            if ($this->alpineName)
-            {
-                $html .= '</template>';
-                $html .= '</template>';
-            }
-
-            $html .= '</tbody>';
+            return str_replace('<table >', '<table>', $html);
         }
+
+        $html .= '<tbody>';
+
+        if ($this->alpineName && $this->loadingName)
+        {
+            $cells = count($this->cols[0]->getCells());
+
+            $html .= '<template x-if="items.length === 0 && ' . $this->loadingName . '">';
+            $html .= '<template x-data="{ length: items && items.length ? items.length : ' . $this->loadingCount . ' }" x-for="i in length">';
+            $html .= '<tr>';
+
+            for ($i = 0; $i < range(1, $cells); $i++)
+            {
+                $html .= '<td class="align-middle placeholder-glow">';
+                $html .= '<span class="placeholder col-12"></span>';
+                $html .= '</td>';
+            }
+
+            $html .= '</tr>';
+            $html .= '</template>';
+            $html .= '</template>';
+
+            // Show "no items found" text if loading is enabled -------------------------
+            $html .= '<template x-if="items.length === 0 && ' . $this->noItemsKey . '">';
+            $html .= '<tr>';
+            $html .= '<td colspan="' . $cells . '" class="align-middle text-center">';
+            $html .= '<span>' . $this->noItemsText . '</span>';
+            $html .= '</td>';
+            $html .= '</tr>';
+            $html .= '</template>';
+            // --------------------------------------------------------------------------
+
+            // Show "loading error" text if there is an error when loading --------------------------
+            $html .= '<template x-if="! ' . $this->loadingName . ' && ' . $this->loadErrorKey . '">';
+            $html .= '<tr>';
+            $html .= '<td colspan="' . $cells . '" class="align-middle text-center">';
+            $html .= '<span>' . $this->loadErrorText . '</span>';
+            $html .= '</td>';
+            $html .= '</tr>';
+            $html .= '</template>';
+            // --------------------------------------------------------------------------------------
+        }
+
+        if ($this->alpineName)
+        {
+            $html .= '<template x-if="items && items.length > 0">';
+            $html .= '<template x-for="item in ' . $this->alpineName . '">';
+        }
+
+        foreach ($this->rows as $row)
+        {
+            $html .= $row->toHtml();
+        }
+
+        if ($this->alpineName)
+        {
+            $html .= '</template>';
+            $html .= '</template>';
+        }
+
+        $html .= '</tbody>';
 
         $html .= '</table>';
 
@@ -223,13 +227,13 @@ class Table extends Element
             $index = count($this->cols) - 1;
 
             $this->cols[$index]->addCell($cell);
-        }
-        else
-        {
-            $index = count($this->rows) - 1;
 
-            $this->rows[$index]->addCell($cell);
+            return $this;
         }
+
+        $index = count($this->rows) - 1;
+
+        $this->rows[$index]->addCell($cell);
 
         return $this;
     }
@@ -332,14 +336,18 @@ class Table extends Element
 
             foreach ($col->getCells() as $cell)
             {
-                if (array_key_exists($cell->getName(), $item))
-                {
-                    $this->setCell($item[$cell->getName()]);
-                }
-                else
+                $name = $cell->getName();
+
+                $exists = array_key_exists($name, $item);
+
+                if (! $exists)
                 {
                     $this->setEmptyCell();
+
+                    continue;
                 }
+
+                $this->setCell($item[$cell->getName()]);
             }
         }
 
