@@ -1,6 +1,6 @@
 # Valdi
 
-A simple Valitron-based validation package.
+A simple validation package based on [Valitron](https://github.com/vlucas/valitron).
 
 ## Installation
 

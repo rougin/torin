@@ -95,6 +95,6 @@ class Request extends Check
             $parsed[$aliases[$key]] = $value;
         }
 
-        return (array) $parsed;
+        return $parsed;
     }
 }

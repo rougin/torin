@@ -99,11 +99,11 @@ class Check
         }
 
         /** @var array<string, mixed> */
-        $array = $this->errors[$key];
+        $items = $this->errors[$key];
 
-        array_push($array, $text);
+        $items[] = $text;
 
-        $this->errors[$key] = $array;
+        $this->errors[$key] = $items;
 
         return $this;
     }

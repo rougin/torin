@@ -79,7 +79,7 @@ class System
 
         $config->load($this->root . '/app/config');
 
-        /** @var array<string, mixed> */
+        /** @var string[] */
         $packages = $config->get('app.packages');
         // ------------------------------------------
 
