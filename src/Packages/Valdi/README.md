@@ -73,7 +73,7 @@ class UserCheck extends Check
         return $this->labels;
     }
 
-    public function rules(array $data)
+    public function rules($data)
     {
         // Add conditions to custom rules here ---
         // ---------------------------------------

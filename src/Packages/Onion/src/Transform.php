@@ -45,7 +45,7 @@ class Transform implements MiddlewareInterface
      *
      * @return array<string, mixed>
      */
-    protected function map(array $items)
+    protected function map($items)
     {
         foreach ($items as $key => $value)
         {

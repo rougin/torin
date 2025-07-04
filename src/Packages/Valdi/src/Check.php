@@ -76,7 +76,7 @@ class Check
      *
      * @return array<string, string>
      */
-    public function rules(array $data)
+    public function rules($data)
     {
         return $this->rules;
     }
