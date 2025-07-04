@@ -70,7 +70,7 @@ class BodyParams implements MiddlewareInterface
         $boundary = substr($input, 0, $endOfFirstLine);
 
         // Split form-data into each entry ---
-        /** @var array<string> */
+        /** @var string[] */
         $parts = explode($boundary, $input);
         // -----------------------------------
 
@@ -95,14 +95,14 @@ class BodyParams implements MiddlewareInterface
 
             $body = substr($part, $startOfBody, -2);
 
-            /** @var array<string> */
+            /** @var string[] */
             $headerParts = preg_split('#; |\r\n#', $head);
 
             $key = '';
 
             $thisHeader = array();
 
-            // Parse the mini headers, obtain the key
+            // Parse the mini headers, obtain the key ---------------------
             foreach ($headerParts as $headerPart)
             {
                 if (! preg_match('#(.*)(=|: )(.*)#', $headerPart, $keyVal))
@@ -126,6 +126,7 @@ class BodyParams implements MiddlewareInterface
 
                 $thisHeader[$keyVal[1]] = $keyVal[3];
             }
+            // ------------------------------------------------------------
 
             if ($key === '')
             {
@@ -171,10 +172,8 @@ class BodyParams implements MiddlewareInterface
                 continue;
             }
 
-            /** @var array<string, string> */
             $current = &$return;
 
-            /** @var array<string, string> */
             $currentHeader = &$header;
 
             $l = count($nameParts);
@@ -182,14 +181,11 @@ class BodyParams implements MiddlewareInterface
             for ($i = 0; $i < $l; $i++)
             {
                 // Strip the array access tokens ------------------------
-                /**
-                 * @var string
-                 */
+                /** @var string */
                 $namePart = preg_replace('#[\[\]]#', '', $nameParts[$i]);
                 // ------------------------------------------------------
 
-                // If we are at the end of the depth of this entry,
-                // add data to array
+                // Add data to array if at the end of the depth of this entry ---
                 if ($i != $l - 1)
                 {
                     // Advance into the array -----------------------------
@@ -219,6 +215,7 @@ class BodyParams implements MiddlewareInterface
 
                     continue;
                 }
+                // --------------------------------------------------------------
 
                 if (is_array($current))
                 {
