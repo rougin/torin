@@ -19,9 +19,6 @@ class BodyParams implements MiddlewareInterface
     protected $complex = array('PATCH', 'PUT', 'DELETE');
 
     /**
-     * Process an incoming server request and return a response, optionally delegating
-     * to the next middleware component to create the response.
-     *
      * @param \Psr\Http\Message\ServerRequestInterface      $request
      * @param \Rougin\Slytherin\Middleware\HandlerInterface $handler
      *
@@ -36,7 +33,8 @@ class BodyParams implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        $post = (array) $request->getParsedBody();
+        /** @var array<string, mixed> */
+        $post = $request->getParsedBody();
 
         /** @var string */
         $contents = file_get_contents('php://input');
@@ -48,10 +46,10 @@ class BodyParams implements MiddlewareInterface
 
         if (strpos($contents, 'form-data') !== false)
         {
-            $parsed = $this->parseRequest($contents);
+            $parsed = $this->parse($contents);
         }
 
-        $parsed = array_merge($post, (array) $parsed);
+        $parsed = array_merge($post, $parsed);
 
         $request = $request->withParsedBody($parsed);
 
@@ -65,7 +63,7 @@ class BodyParams implements MiddlewareInterface
      *
      * @return array<mixed, mixed>
      */
-    protected function parseRequest($input)
+    protected function parse($input)
     {
         $endOfFirstLine = (int) strpos($input, "\r\n");
 
@@ -147,6 +145,7 @@ class BodyParams implements MiddlewareInterface
                 if (! isset($thisHeader['filename']))
                 {
                     $header[$key] = $thisHeader;
+
                     continue;
                 }
 
@@ -165,9 +164,10 @@ class BodyParams implements MiddlewareInterface
 
                 $item['size'] = filesize($body);
 
-                $return[$key] = (array) $item;
+                $return[$key] = $item;
 
                 $header[$key] = $thisHeader;
+
                 continue;
             }
 
@@ -246,7 +246,7 @@ class BodyParams implements MiddlewareInterface
 
                     if (is_array($current))
                     {
-                        $current[$namePart] = (array) $file;
+                        $current[$namePart] = $file;
                     }
                 }
 

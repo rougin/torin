@@ -14,9 +14,6 @@ use Rougin\Slytherin\Middleware\MiddlewareInterface;
 class FormParser implements MiddlewareInterface
 {
     /**
-     * Process an incoming server request and return a response, optionally delegating
-     * to the next middleware component to create the response.
-     *
      * @param \Psr\Http\Message\ServerRequestInterface      $request
      * @param \Rougin\Slytherin\Middleware\HandlerInterface $handler
      *
@@ -31,7 +28,7 @@ class FormParser implements MiddlewareInterface
         $data = json_decode($result, true);
 
         /** @var array<string, string> */
-        $post = (array) $request->getParsedBody();
+        $post = $request->getParsedBody();
 
         if (! $data)
         {
