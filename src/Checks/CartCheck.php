@@ -57,7 +57,7 @@ class CartCheck extends Request
 
         if (! $data || ! $valid)
         {
-            return count($this->errors) === 0;
+            return false;
         }
 
         $itemId = (int) $data['item_id'];

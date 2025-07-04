@@ -128,7 +128,7 @@ class UserCheck extends Request
 {
     // ...
 
-    public function valid(array $data = null)
+    public function valid($data = null)
     {
         // Always include if has aliases defined ---
         $data = $this->setAlias($data);

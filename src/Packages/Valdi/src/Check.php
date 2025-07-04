@@ -111,11 +111,11 @@ class Check
     /**
      * Checks if the payload is valid againsts the specified rules.
      *
-     * @param array<mixed, mixed>|null $data
+     * @param array<mixed, mixed> $data
      *
      * @return boolean
      */
-    public function valid(array $data = null)
+    public function valid($data = null)
     {
         $valid = new Validator;
 

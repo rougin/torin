@@ -35,7 +35,10 @@ class Request extends Check
      */
     public function isParamsValid(ServerRequestInterface $request)
     {
-        return $this->valid($request->getQueryParams());
+        /** @var array<string, string> */
+        $params = $request->getQueryParams();
+
+        return $this->valid($params);
     }
 
     /**
@@ -60,7 +63,7 @@ class Request extends Check
      *
      * @return boolean
      */
-    public function valid(array $data = null)
+    public function valid($data = null)
     {
         return parent::valid($this->setAlias($data));
     }
@@ -72,11 +75,11 @@ class Request extends Check
      *
      * @return array<string, mixed>
      */
-    protected function setAlias(array $data = null)
+    protected function setAlias($data = null)
     {
         $aliases = $this->alias();
 
-        $parsed = array();
+        $items = array();
 
         if ($data === null)
         {
@@ -87,14 +90,14 @@ class Request extends Check
         {
             if (! isset($aliases[$key]))
             {
-                $parsed[$key] = $value;
+                $items[$key] = $value;
 
                 continue;
             }
 
-            $parsed[$aliases[$key]] = $value;
+            $items[$aliases[$key]] = $value;
         }
 
-        return $parsed;
+        return $items;
     }
 }
