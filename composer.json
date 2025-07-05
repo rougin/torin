@@ -16,6 +16,7 @@
     "illuminate/database": "*",
     "rougin/dexterity": "dev-master",
     "rougin/gable": "dev-master",
+    "rougin/onion": "dev-master",
     "rougin/slytherin": "~0.9",
     "rougin/weasley": "~0.7",
     "staticka/staticka": "~0.4",
