@@ -4,7 +4,7 @@ namespace Rougin\Torin\Checks;
 
 use Rougin\Torin\Depots\ItemDepot;
 use Rougin\Torin\Models\Order;
-use Rougin\Valdi\Request;
+use Rougin\Validia\Request;
 
 /**
  * @package Torin

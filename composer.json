@@ -18,11 +18,11 @@
     "rougin/gable": "dev-master",
     "rougin/onion": "dev-master",
     "rougin/slytherin": "~0.9",
+    "rougin/validia": "dev-master",
     "rougin/weasley": "~0.7",
     "staticka/staticka": "~0.4",
     "tedivm/jshrink": "~1.0",
-    "vlucas/phpdotenv": "~2.0",
-    "vlucas/valitron": "~1.4"
+    "vlucas/phpdotenv": "~2.0"
   },
   "require-dev":
   {
@@ -35,10 +35,8 @@
     "psr-4":
     {
       "Rougin\\Dexal\\": "src/Packages/Dexal/src",
-      "Rougin\\Onion\\": "src/Packages/Onion/src",
       "Rougin\\Temply\\": "src/Packages/Temply/src",
-      "Rougin\\Torin\\": "src",
-      "Rougin\\Valdi\\": "src/Packages/Valdi/src"
+      "Rougin\\Torin\\": "src"
     }
   },
   "autoload-dev":
@@ -46,10 +44,8 @@
     "psr-4":
     {
       "Rougin\\Dexal\\": "tests/Packages/Dexal/src",
-      "Rougin\\Onion\\": "tests/Packages/Onion/src",
       "Rougin\\Temply\\": "tests/Packages/Temply/src",
-      "Rougin\\Torin\\": "tests",
-      "Rougin\\Valdi\\": "tests/Packages/Valdi/src"
+      "Rougin\\Torin\\": "tests"
     }
   },
   "scripts":

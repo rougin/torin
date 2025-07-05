@@ -2,7 +2,7 @@
 
 namespace Rougin\Torin\Checks;
 
-use Rougin\Valdi\Request;
+use Rougin\Validia\Request;
 
 /**
  * @package Torin
