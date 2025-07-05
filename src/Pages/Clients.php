@@ -2,7 +2,7 @@
 
 namespace Rougin\Torin\Pages;
 
-use Rougin\Dexal\Depot;
+use Rougin\Dexterine\Depot;
 use Rougin\Gable\Table;
 use Rougin\Torin\Depots\ClientDepot;
 
