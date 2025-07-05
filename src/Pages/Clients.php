@@ -4,9 +4,9 @@ namespace Rougin\Torin\Pages;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Dexal\Depot;
+use Rougin\Fortem\Plate;
 use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
-use Rougin\Temply\Plate;
 use Rougin\Torin\Depots\ClientDepot;
 
 /**
@@ -18,7 +18,7 @@ class Clients
 {
     /**
      * @param \Rougin\Torin\Depots\ClientDepot         $client
-     * @param \Rougin\Temply\Plate                     $plate
+     * @param \Rougin\Fortem\Plate                     $plate
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return string

@@ -15,12 +15,11 @@
     "php": ">=5.4.0",
     "illuminate/database": "*",
     "rougin/dexterity": "dev-master",
+    "rougin/fortem": "dev-master",
     "rougin/gable": "dev-master",
     "rougin/onion": "dev-master",
-    "rougin/slytherin": "~0.9",
     "rougin/validia": "dev-master",
     "rougin/weasley": "~0.7",
-    "staticka/staticka": "~0.4",
     "tedivm/jshrink": "~1.0",
     "vlucas/phpdotenv": "~2.0"
   },
@@ -35,7 +34,6 @@
     "psr-4":
     {
       "Rougin\\Dexal\\": "src/Packages/Dexal/src",
-      "Rougin\\Temply\\": "src/Packages/Temply/src",
       "Rougin\\Torin\\": "src"
     }
   },
@@ -44,7 +42,6 @@
     "psr-4":
     {
       "Rougin\\Dexal\\": "tests/Packages/Dexal/src",
-      "Rougin\\Temply\\": "tests/Packages/Temply/src",
       "Rougin\\Torin\\": "tests"
     }
   },

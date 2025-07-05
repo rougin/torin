@@ -2,7 +2,7 @@
 
 namespace Rougin\Torin\Pages;
 
-use Rougin\Temply\Plate;
+use Rougin\Fortem\Plate;
 
 /**
  * @package Torin
@@ -12,7 +12,7 @@ use Rougin\Temply\Plate;
 class Hello
 {
     /**
-     * @param \Rougin\Temply\Plate $plate
+     * @param \Rougin\Fortem\Plate $plate
      *
      * @return string
      */

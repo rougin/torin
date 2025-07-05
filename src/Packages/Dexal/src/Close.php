@@ -2,7 +2,7 @@
 
 namespace Rougin\Dexal;
 
-use Rougin\Temply\Script;
+use Rougin\Fortem\Script;
 
 /**
  * @package Dexterity
@@ -17,7 +17,7 @@ class Close extends Method
     protected $name = 'close';
 
     /**
-     * @var \Rougin\Temply\Script|null
+     * @var \Rougin\Fortem\Script|null
      */
     protected $script = null;
 
@@ -59,7 +59,7 @@ class Close extends Method
     }
 
     /**
-     * @param \Rougin\Temply\Script $script
+     * @param \Rougin\Fortem\Script $script
      *
      * @return self
      */

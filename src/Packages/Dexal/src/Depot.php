@@ -22,7 +22,7 @@ class Depot
     protected $name;
 
     /**
-     * @var \Rougin\Temply\Script|null
+     * @var \Rougin\Fortem\Script|null
      */
     protected $script = null;
 

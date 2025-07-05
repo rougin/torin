@@ -4,10 +4,10 @@ namespace Rougin\Torin\Pages;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Dexal\Depot;
+use Rougin\Fortem\Plate;
 use Rougin\Gable\Action;
 use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
-use Rougin\Temply\Plate;
 use Rougin\Torin\Depots\ItemDepot;
 use Rougin\Torin\Depots\OrderDepot;
 
@@ -21,7 +21,7 @@ class Orders
     /**
      * @param \Rougin\Torin\Depots\ItemDepot           $item
      * @param \Rougin\Torin\Depots\OrderDepot          $order
-     * @param \Rougin\Temply\Plate                     $plate
+     * @param \Rougin\Fortem\Plate                     $plate
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return string
