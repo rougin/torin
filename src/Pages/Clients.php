@@ -2,10 +2,7 @@
 
 namespace Rougin\Torin\Pages;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Dexal\Depot;
-use Rougin\Fortem\Plate;
-use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
 use Rougin\Torin\Depots\ClientDepot;
 
@@ -14,28 +11,24 @@ use Rougin\Torin\Depots\ClientDepot;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Clients
+class Clients extends Page
 {
     /**
-     * @param \Rougin\Torin\Depots\ClientDepot         $client
-     * @param \Rougin\Fortem\Plate                     $plate
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Rougin\Torin\Depots\ClientDepot $client
      *
      * @return string
      */
-    public function index(ClientDepot $client, Plate $plate, ServerRequestInterface $request)
+    public function index(ClientDepot $client)
     {
         $data = array('depot' => new Depot('clients'));
 
-        // Prepare the pagination ----------------------------
-        $pagee = Pagee::fromRequest($request)->asAlpine();
+        // Prepare the pagination ---------------
+        $total = $client->getTotal();
 
-        $link = $plate->getLinkHelper()->set('clients');
-
-        $pagee->setLink($link)->setTotal($client->getTotal());
+        $pagee = $this->pagee('clients', $total);
 
         $data['pagee'] = $pagee;
-        // ---------------------------------------------------
+        // --------------------------------------
 
         // Generate the HTML table ----------------------------------------------
         $table = new Table;
@@ -67,6 +60,6 @@ class Clients
         $data['table'] = $table;
         // ----------------------------------------------------------------------
 
-        return $plate->render('clients.index', $data);
+        return $this->render('clients.index', $data);
     }
 }

@@ -2,13 +2,9 @@
 
 namespace Rougin\Torin\Pages;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Dexal\Depot;
-use Rougin\Fortem\Plate;
 use Rougin\Gable\Action;
-use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
-use Rougin\Torin\Depots\ItemDepot;
 use Rougin\Torin\Depots\OrderDepot;
 
 /**
@@ -16,29 +12,24 @@ use Rougin\Torin\Depots\OrderDepot;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Orders
+class Orders extends Page
 {
     /**
-     * @param \Rougin\Torin\Depots\ItemDepot           $item
-     * @param \Rougin\Torin\Depots\OrderDepot          $order
-     * @param \Rougin\Fortem\Plate                     $plate
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Rougin\Torin\Depots\OrderDepot $order
      *
      * @return string
      */
-    public function index(ItemDepot $item, OrderDepot $order, Plate $plate, ServerRequestInterface $request)
+    public function index(OrderDepot $order)
     {
         $data = array('depot' => new Depot('orders'));
 
-        // Prepare the pagination ---------------------------
-        $pagee = Pagee::fromRequest($request)->asAlpine();
+        // Prepare the pagination --------------
+        $total = $order->getTotal();
 
-        $link = $plate->getLinkHelper()->set('orders');
-
-        $pagee->setLink($link)->setTotal($order->getTotal());
+        $pagee = $this->pagee('orders', $total);
 
         $data['pagee'] = $pagee;
-        // --------------------------------------------------
+        // -------------------------------------
 
         // Generate the HTML table ----------------------------------------------------------
         $table = new Table;
@@ -76,6 +67,6 @@ class Orders
         $data['table'] = $table;
         // ----------------------------------------------------------------------------------
 
-        return $plate->render('orders.index', $data);
+        return $this->render('orders.index', $data);
     }
 }

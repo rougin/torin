@@ -2,10 +2,7 @@
 
 namespace Rougin\Torin\Pages;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Rougin\Dexal\Depot;
-use Rougin\Fortem\Plate;
-use Rougin\Gable\Pagee;
 use Rougin\Gable\Table;
 use Rougin\Torin\Depots\ItemDepot;
 
@@ -14,28 +11,24 @@ use Rougin\Torin\Depots\ItemDepot;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Items
+class Items extends Page
 {
     /**
-     * @param \Rougin\Torin\Depots\ItemDepot           $item
-     * @param \Rougin\Fortem\Plate                     $plate
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Rougin\Torin\Depots\ItemDepot $item
      *
      * @return string
      */
-    public function index(ItemDepot $item, Plate $plate, ServerRequestInterface $request)
+    public function index(ItemDepot $item)
     {
         $data = array('depot' => new Depot('items'));
 
-        // Prepare the pagination --------------------------
-        $pagee = Pagee::fromRequest($request)->asAlpine();
+        // Prepare the pagination -------------
+        $total = $item->getTotal();
 
-        $link = $plate->getLinkHelper()->set('items');
-
-        $pagee->setLink($link)->setTotal($item->getTotal());
+        $pagee = $this->pagee('items', $total);
 
         $data['pagee'] = $pagee;
-        // -------------------------------------------------
+        // ------------------------------------
 
         // Generate the HTML table -----------------------------------------------
         $table = new Table;
@@ -58,6 +51,6 @@ class Items
         $data['table'] = $table;
         // -----------------------------------------------------------------------
 
-        return $plate->render('items.index', $data);
+        return $this->render('items.index', $data);
     }
 }
