@@ -1,6 +1,6 @@
 # Gable
 
-A simple HTML table generator written in PHP.
+A simple HTML table generator in PHP.
 
 ## Installation
 

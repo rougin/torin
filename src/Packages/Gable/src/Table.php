@@ -124,7 +124,7 @@ class Table extends Element
             $html .= '<template x-data="{ length: items && items.length ? items.length : ' . $this->loadingCount . ' }" x-for="i in length">';
             $html .= '<tr>';
 
-            for ($i = 0; $i < range(1, $cells); $i++)
+            foreach (range(1, $cells) as $item)
             {
                 $html .= '<td class="align-middle placeholder-glow">';
                 $html .= '<span class="placeholder col-12"></span>';
