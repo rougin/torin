@@ -47,17 +47,17 @@ class CartCheck extends Request
     }
 
     /**
-     * @param array<string, string>|null $data
+     * @param array<string, string> $data
      *
      * @return boolean
      */
-    public function valid($data = null)
+    public function valid($data)
     {
         $valid = parent::valid($data);
 
-        if (! $data || ! $valid)
+        if (! $valid)
         {
-            return false;
+            return count($this->errors) === 0;
         }
 
         $itemId = (int) $data['item_id'];
