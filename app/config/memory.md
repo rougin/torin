@@ -1,30 +1,47 @@
 # Purpose
+
 * Your purpose is to help me with tasks like writing code, fixing code, and understanding code.
+
 * I will share my goals and projects with you, and you will assist me in crafting the code I need.
+
 * Always follow the prescribed instructions below with context awareness.
+
 * Read the details in `project.md` for more information of the project.
 
 # Technology stack
-* Always consider the following technologies below:
+
+* Always consider the following projects/packages below:
   - Alpine.js (https://alpinejs.dev/)
   - Bootstrap 5 (https://getbootstrap.com/)
   - Bootstrap Icons (https://icons.getbootstrap.com/)
   - CSS (https://css-tricks.com/)
+  - Dexterine (https://github.com/rougin/dexterine)
   - Dexterity (https://github.com/rougin/dexterity)
+  - Fortem (https://github.com/rougin/fortem)
+  - Gable (https://github.com/rougin/gable)
   - HTML (https://html.com/)
   - JavaScript (https://www.javascript.com/)
   - Laravel Eloquent (https://laravel.com/docs/12.x/eloquent)
+  - Onion (https://github.com/rougin/onion)
   - Phinx (https://book.cakephp.org/phinx/0/en/index.html)
   - PHP (https://www.php.net/)
   - Slytherin (https://github.com/rougin/slytherin)
-  - Valitron (https://github.com/vlucas/valitron)
+  - Validia (https://github.com/rougin/validia)
+
+* Check the `README.md` of each project/project to get an insight how they work.
+
 * Never use any third-party packages unless required.
+
 * The stack uses `Slytherin` as the micro-framework.
+
 * Pure PHP must be encouraged in all implementations.
+
 * This project also uses `Front Controller` pattern.
 
 # File structure
+
 * See the file structure below for the project:
+
   ```
   .
   ├── app - hosts the project-specific files (e.g., configuration, templates)
@@ -42,7 +59,9 @@
   │   ├── Routes - hosts the HTTP routes for the API endpoints
   ├── tests - contains unit tests for the project
   ```
+
 * For template files, the following folders are used exclusively:
+
   ```
   .
   ├── app - hosts the project-specific files (e.g., configuration, templates)
@@ -52,34 +71,53 @@
   │   ├── Packages - hosts the third-party packages
   │   ├── Pages - hosts the HTTP routes for the template pages
   ```
+
 * The rest of the other folders are used for RESTful APIs.
 
 # Entry point and execution flow
-1. Each incoming HTTP request goes to `app/public/index.php`.
-2. Once received, `Composer` is autoloaded first.
-3. The `System` class will be loaded to load the packages.
-4. The packages for loading are found in `packages` field of `app/config/app.php`.
-5. One of the packages to be loaded is the `Package` class.
-6. The `Package` class also loads the `Plates` and `Router` classes.
-5. The `System` class will now get the received URI (e.g., `/hello-world`).
-6. The received URI will be checked against `Plates` and `Router`.
-7. If found, the class in `Pages` or `Routes` will be called.
+
+01. Each incoming HTTP request goes to `app/public/index.php`.
+
+02. Once received, `Composer` is autoloaded first.
+
+03. The `System` class will be loaded to load the packages.
+
+04. The packages for loading are found in `packages` field of `app/config/app.php`.
+
+05. One of the packages to be loaded is the `Package` class.
+
+06. The `Package` class also loads the `Plates` and `Router` classes.
+
+05. The `System` class will now get the received URI (e.g., `/hello-world`).
+
+06. The received URI will be checked against `Plates` and `Router`.
+
+07. If found, the class in `Pages` or `Routes` will be called.
 
 # Coding style
-1. Use coding style and design patterns on PHP 5.3 (`array()` instead of `[]`).
-2. Strictly conform to the PSR-12 standard.
-3. Ensure that class names are descriptive and concise, without unnecessary suffixes like `Page`, `Route`, `Depot`, etc. (e.g., use `Users` instead of `UserRoutes` and `Users` instead of `UserPage`). Focus on the core entity or functionality the class represents.
-4. For curly brackets, strictly use the Allman indentation style:
+
+01. Strictly conform to the `PSR-12` standard but with the following exceptions below.
+
+02. Use coding style and design patterns on PHP 5.3 (`array()` instead of `[]`).
+
+03. Ensure that class names are descriptive and concise, without unnecessary suffixes like `Page`, `Route`, `Depot`, etc. (e.g., use `Users` instead of `UserRoutes` and `Users` instead of `UserPage`0). Focus on the core entity or functionality the class represents.
+
+04. For curly brackets, strictly use the Allman indentation style:
   ``` php
   if ($allowed)
   { // Curly brackets always in new line
     // ...
   }
   ```
-5. Use [php-cs-fixer](https://cs.symfony.com/) and read `phpstyle.php` for the its rules.
-6. Use one word for variables (e.g., `$userAddress` to `$address`).
-7. Do not include `<?php` and `php` at the beginning of template files in the `app/plates`.
-8. For class properties that are using arrays, use brackets (`[]`) instead:
+
+05. Use [php-cs-fixer](https://cs.symfony.com/) and read `phpstyle.php` for the its rules.
+
+06. Use one word for variables (e.g., `$userAddress` to `$address`).
+
+07. Do not include `<?php` and `php` at the beginning of template files in the `app/plates`.
+
+08. For class properties that are using arrays, use brackets (`[]`) instead:
+
   ``` php
   class Sample
   {
@@ -92,19 +130,29 @@
       ];
   }
   ```
-9. Use 2 spacing when creating templates in `app/plates`.
+
+09. Use 2 spacing when creating templates in `app/plates`.
+
 10. Always use guarded `if` statements. Avoid using else statements whenever possible. Handle the negative or empty conditions first using an `if` statement with a `return`, `continue`, or a simple output, and then proceed with the main logic outside of that `if` block.
+
 11. Never use the `Plates` template engine for generating views. All template files within the `app/plates` directory must be written using pure PHP.
 
 # Notes and considerations
-1. Always design implementations that conforms to SOLID principles.
-2. Do not hallucinate, always check the source code to get examples.
-3. Scan the `vendor` directory for files and use them as reference for code generation.
-4. Strictly adhere to code structures found in `Code templates`.
-5. Use clear, simple language, assuming a basic level of code understanding.
+
+01. Always design implementations that conforms to `SOLID` principles.
+
+02. Do not hallucinate, always check the source code to get examples.
+
+03. Scan the `vendor` directory for files and use them as reference for code generation.
+
+04. Strictly adhere to code structures found in `Code templates`.
+
+05. Use clear, simple language, assuming a basic level of code understanding.
 
 # Code templates
-* For creating modals in general
+
+* For creating modals in general:
+
 ``` html
 <div class="modal fade" id="[NAME]-modal" data-bs-backdrop="static" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
@@ -128,7 +176,9 @@
 </div>
 </div>
 ```
-* For creating modals for deletion
+
+* For creating modals for deletion:
+
 ``` html
 <div class="modal fade" id="delete-[NAME]-modal" data-bs-backdrop="static" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
@@ -153,7 +203,9 @@
 </div>
 </div>
 ```
-* For input fields
+
+* For input fields:
+
 ``` html
 <div class="mb-3">
   <?= $form->label('[NAME]', 'form-label mb-0')->asRequired() ?>
@@ -161,11 +213,15 @@
   <?= $form->error('error.[NAME]') ?>
 </div>
 ```
-* For form buttons
+
+* For form buttons:
+
 ``` html
 <?= $form->button('[ACTION]')->withClass('btn btn-secondary')->disablesOn('loading') ?>
 ```
-* Sections of an HTTP route
+
+* Sections of an HTTP route:
+
 ``` php
 /**
  * @param \Rougin\Torin\Depots\ItemDepot           $item
@@ -182,7 +238,9 @@ public function index(ItemDepot $item, ServerRequestInterface $request)
     return /* Returning the response */;
 }
 ```
-* Anatomy of a simple class
+
+* Anatomy of a simple class:
+
 ``` php
 namespace /*[NAMESPACE]*/; // Always refer to the file structure (e.g., Rougin\Torin\Routes)
 
@@ -199,7 +257,9 @@ class Sample
     }
 }
 ```
-* Phinx migration file
+
+* Phinx migration file:
+
 ``` php
 use Phinx\Migration\AbstractMigration;
 
@@ -208,7 +268,7 @@ use Phinx\Migration\AbstractMigration;
  *
  * @author [AUTHOR] <[AUTHOR_EMAIL]>
  */
-final class CreateItemsTable extends AbstractMigration
+final class Create[TABLE]Table extends AbstractMigration
 {
     /**
      * @return void
@@ -221,10 +281,9 @@ final class CreateItemsTable extends AbstractMigration
 
         $table
             ->addColumn('id', 'integer', array('limit' => 10, 'identity' => true))
-            ->addColumn('parent_id', 'integer', array('limit' => 10, 'null' => true))
-            ->addColumn('code', 'string', array('limit' => 100, 'null' => true))
-            ->addColumn('name', 'string', array('limit' => 200, 'null' => true))
-            ->addColumn('detail', 'string', array('limit' => 300, 'null' => true))
+            ->addColumn('[FOREIGN_KEY]', 'integer', array('limit' => 10))
+            ->addColumn('[STRING]', 'string', array('limit' => 100))
+            ->addColumn('[INTEGER]', 'integer', array('limit' => 10))
             ->addColumn('created_by', 'integer', array('limit' => 10, 'null' => true))
             ->addColumn('updated_by', 'integer', array('limit' => 10, 'null' => true))
             ->addColumn('deleted_by', 'integer', array('limit' => 10, 'null' => true))
