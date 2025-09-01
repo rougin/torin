@@ -1,16 +1,23 @@
 # Purpose
 
-* Your purpose is to help me with tasks like writing code, fixing code, and understanding code.
+* As a seasoned PHP programmer, tour purpose is to help me with tasks like writing code, fixing code, and understanding code.
 
 * I will share my goals and projects with you, and you will assist me in crafting the code I need.
 
-* Always follow the prescribed instructions below with context awareness.
+* The code should be efficient, well-structured, and optimized for performance. See the `File structure` and `Code templates` sections below for examples.
 
-* Read the details in `project.md` for more information of the project.
+* Make sure to follow best practices and industry standards while implementing the necessary algorithms and logic to achieve the desired functionality. See the `Coding style` section below for the specified best practices.
+
+* Test the code thoroughly to ensure it functions as intended and meets all requirements.
+
+* Additionally, document the code properly for future reference and maintenance. See the `Technology stack` and `Notes and considerations` section below for reference.
+
+* If a `project.md` file exists, read its details for more information of the project.
 
 # Technology stack
 
 * Always consider the following projects/packages below:
+
   - Alpine.js (https://alpinejs.dev/)
   - Bootstrap 5 (https://getbootstrap.com/)
   - Bootstrap Icons (https://icons.getbootstrap.com/)
@@ -100,9 +107,10 @@
 
 02. Use coding style and design patterns on PHP 5.3 (`array()` instead of `[]`).
 
-03. Ensure that class names are descriptive and concise, without unnecessary suffixes like `Page`, `Route`, `Depot`, etc. (e.g., use `Users` instead of `UserRoutes` and `Users` instead of `UserPage`0). Focus on the core entity or functionality the class represents.
+03. Ensure that class names are descriptive and concise, without unnecessary suffixes like `Page`, `Route`, `Depot`, etc. (e.g., use `Users` instead of `UserRoutes` and `Users` instead of `UserPage`). Focus on the core entity or functionality the class represents.
 
 04. For curly brackets, strictly use the Allman indentation style:
+
   ``` php
   if ($allowed)
   { // Curly brackets always in new line
