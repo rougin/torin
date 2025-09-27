@@ -87,6 +87,16 @@ class ClientDepot extends EloquentDepot
     }
 
     /**
+     * Returns all items.
+     *
+     * @return \Rougin\Torin\Models\Client[]
+     */
+    public function all()
+    {
+        return $this->model->all();
+    }
+
+    /**
      * @return string
      */
     protected function getCode()

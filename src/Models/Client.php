@@ -45,6 +45,7 @@ class Client extends Model
         'name',
         'remarks',
         'type',
+        'email',
     ];
 
     /**
