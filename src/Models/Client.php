@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string       $code
  * @property string       $name
  * @property string       $remarks
+ * @property string       $created_at
+ * @property string|null  $updated_at
  *
  * @method \Rougin\Torin\Models\Client[]    all()
  * @method integer                          count()
@@ -48,6 +50,8 @@ class Client extends Model
         'remarks',
         'type',
         'email',
+        'created_at',
+        'updated_at',
     ];
 
     /**

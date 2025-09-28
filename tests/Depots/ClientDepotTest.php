@@ -25,8 +25,8 @@ class ClientDepotTest extends Testcase
     {
         $model = new Client;
 
-        $model->create(['name' => 'Client A', 'email' => 'a@example.com']);
-        $model->create(['name' => 'Client B', 'email' => 'b@example.com']);
+        $model->create(['name' => 'Client A', 'type' => 1]);
+        $model->create(['name' => 'Client B', 'type' => 1]);
 
         $clients = $this->depot->all();
 
@@ -41,12 +41,20 @@ class ClientDepotTest extends Testcase
     {
         $model = new Client;
 
-        $item = $model->create(['name' => 'Client C', 'email' => 'c@example.com']);
+        $current = time();
+
+        $item = $model->create(['name' => 'Client C', 'type' => 1]);
 
         $actual = $this->depot->find($item->id);
 
         $this->assertNotNull($actual);
         $this->assertEquals('Client C', $actual->name);
+
+        // Assert "getCreatedAtAttribute", "getUpdatedAtAttribute" ---
+        $date = date('d M Y h:i A', $current);
+        $this->assertEquals($date, $actual->created_at);
+        $this->assertEquals($date, $actual->updated_at);
+        // -----------------------------------------------------------
     }
 
     /**
@@ -56,16 +64,11 @@ class ClientDepotTest extends Testcase
     {
         parent::doSetUp();
 
-        Capsule::schema('torin')->create('clients', function ($table)
-        {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        $this->runPhinx('CreateClientsTable');
 
-        $this->depot = new ClientDepot(new Client);
+        $depot = new ClientDepot(new Client);
+
+        $this->depot = $depot;
     }
 
     /**

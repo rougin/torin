@@ -68,7 +68,7 @@ return array(
         'default_database' => 'torin',
 
         /**
-         * Configuration for the Torin package.
+         * Configuration for the "Torin" package.
          *
          * @var array<string, string>
          */
@@ -112,13 +112,11 @@ return array(
         ),
 
         /**
-         * Configuration for a SQLite connection.
-         *
-         * @link https://www.sqlite.org
+         * Configuration for the testing environment.
          *
          * @var array<string, string>
          */
-        'sqlite' => array(
+        'test' => array(
 
             /**
              * @var string
@@ -128,14 +126,7 @@ return array(
             /**
              * @var string
              */
-            'name' => getenv('SQLITE_DATABASE'),
-
-            /**
-             * Suffix of the SQLite database file.
-             *
-             * @var string
-             */
-            'suffix' => '',
+            'name' => ':memory:',
 
         ),
 

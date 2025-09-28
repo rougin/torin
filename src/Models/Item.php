@@ -46,6 +46,8 @@ class Item extends Model
         'code',
         'name',
         'detail',
+        'created_at',
+        'updated_at',
     ];
 
     /**

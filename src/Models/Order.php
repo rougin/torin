@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string       $remarks
  * @property integer      $type
  * @property integer      $status
+ * @property string       $created_at
+ * @property string|null  $updated_at
  *
  * @method integer                         count()
  * @method boolean                         delete()
@@ -54,6 +56,8 @@ class Order extends Model
         'remarks',
         'type',
         'status',
+        'created_at',
+        'updated_at',
     ];
 
     /**

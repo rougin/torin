@@ -19,7 +19,7 @@ class ClientTest extends Testcase
     {
         $model = new Client;
 
-        $client = $model->create(['name' => 'John Doe', 'email' => 'john.doe@example.com']);
+        $client = $model->create(['name' => 'John Doe', 'type' => 1]);
 
         $this->assertNotNull($client->id);
         $this->assertEquals('John Doe', $client->name);
@@ -32,9 +32,9 @@ class ClientTest extends Testcase
     {
         $model = new Client;
 
-        $model->create(['name' => 'Jane Doe', 'email' => 'jane.doe@example.com']);
+        $model->create(['name' => 'Jane Doe', 'type' => 1]);
 
-        $client = $model->where('email', 'jane.doe@example.com')->first();
+        $client = $model->where('name', 'Jane Doe')->first();
 
         $this->assertNotNull($client);
         $this->assertEquals('Jane Doe', $client->name);
@@ -47,14 +47,7 @@ class ClientTest extends Testcase
     {
         parent::doSetUp();
 
-        Capsule::schema('torin')->create('clients', function ($table)
-        {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        $this->runPhinx('CreateClientsTable');
     }
 
     /**
