@@ -1,5 +1,5 @@
 .env
-.gemini
+.gemini/commands
 .php-cs-fixer.cache
 .phpunit.result.cache
 build

@@ -14,6 +14,9 @@ use Illuminate\Database\Capsule\Manager as Capsule;
  */
 class Testcase extends Legacy
 {
+    /**
+     * @var \Illuminate\Database\Capsule\Manager
+     */
     protected $capsule;
 
     public function setUp(): void

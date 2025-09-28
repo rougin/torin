@@ -16,6 +16,11 @@ class Hello
      *
      * @return string
      */
+    /**
+     * @param \Rougin\Fortem\Plate $plate
+     *
+     * @return string
+     */
     public function index(Plate $plate)
     {
         return $plate->render('index');

@@ -83,7 +83,7 @@ $rules['statement_indentation'] = false;
 
 $finder = new \PhpCsFixer\Finder;
 
-$finder->in($paths);
+$finder->in($paths)->exclude('app/plates');
 
 $config = new \PhpCsFixer\Config;
 

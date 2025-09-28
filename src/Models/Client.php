@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method \Rougin\Torin\Models\Client      limit(integer $value)
  * @method \Rougin\Torin\Models\Client      offset(integer $value)
  *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ *
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>

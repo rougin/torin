@@ -34,7 +34,9 @@ class ClientDepot extends EloquentDepot
     {
         $data['code'] = $this->getCode();
 
-        return $this->model->create($data);
+        $result = $this->model->create($data);
+
+        return $result instanceof Client ? $result : new Client((array) $result);
     }
 
     /**

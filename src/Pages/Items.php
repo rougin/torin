@@ -18,6 +18,11 @@ class Items extends Page
      *
      * @return string
      */
+    /**
+     * @param \Rougin\Torin\Depots\ItemDepot $item
+     *
+     * @return string
+     */
     public function index(ItemDepot $item)
     {
         $data = array('depot' => new Depot('items'));

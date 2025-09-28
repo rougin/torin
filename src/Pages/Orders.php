@@ -19,6 +19,11 @@ class Orders extends Page
      *
      * @return string
      */
+    /**
+     * @param \Rougin\Torin\Depots\OrderDepot $order
+     *
+     * @return string
+     */
     public function index(OrderDepot $order)
     {
         $data = array('depot' => new Depot('orders'));

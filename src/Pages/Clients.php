@@ -18,6 +18,11 @@ class Clients extends Page
      *
      * @return string
      */
+    /**
+     * @param \Rougin\Torin\Depots\ClientDepot $client
+     *
+     * @return string
+     */
     public function index(ClientDepot $client)
     {
         $data = array('depot' => new Depot('clients'));
