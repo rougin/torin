@@ -6,6 +6,8 @@ use Rougin\Dexterity\Depots\EloquentDepot;
 use Rougin\Torin\Models\Order;
 
 /**
+ * @method \Rougin\Torin\Models\Order find(integer $id)
+ *
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>

@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @property integer      $id
- * @property integer|null $client_id
- * @property string       $code
- * @property string       $remarks
- * @property integer      $type
- * @property integer      $status
- * @property string       $created_at
- * @property string|null  $updated_at
+ * @property integer                     $id
+ * @property integer|null                $client_id
+ * @property string                      $code
+ * @property string                      $remarks
+ * @property integer                     $type
+ * @property integer                     $status
+ * @property string                      $created_at
+ * @property string|null                 $updated_at
+ * @property \Rougin\Torin\Models\Client $client
+ * @property \Rougin\Torin\Models\Item[] $items
  *
  * @method integer                         count()
  * @method boolean                         delete()
