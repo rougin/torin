@@ -46,7 +46,8 @@ class ItemDepotTest extends Testcase
         $this->assertNotNull($item);
         $this->assertEquals('New Item', $item->name);
         $this->assertEquals('New Item Detail', $item->detail);
-        $this->assertNotNull($item->code);
+        $this->assertMatchesRegularExpression('/^00-\d{8}-\d{5}$/', $item->code);
+        $this->assertEquals('00-' . date('Ymd') . '-00001', $item->code);
     }
 
     /**
@@ -106,6 +107,29 @@ class ItemDepotTest extends Testcase
         $this->assertEquals('Item Z', $actual->name);
         $this->assertCount(1, $actual->orders);
         $this->assertEquals(10, $actual->quantity);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_can_generate_item_code_with_correct_format()
+    {
+        $today = date('Ymd');
+
+        // Create first item
+        $item1 = $this->depot->create(['name' => 'Item 1', 'detail' => 'Detail 1']);
+        $this->assertMatchesRegularExpression('/^00-\d{8}-\d{5}$/', $item1->code);
+        $this->assertEquals('00-' . $today . '-00001', $item1->code);
+
+        // Create second item
+        $item2 = $this->depot->create(['name' => 'Item 2', 'detail' => 'Detail 2']);
+        $this->assertMatchesRegularExpression('/^00-\d{8}-\d{5}$/', $item2->code);
+        $this->assertEquals('00-' . $today . '-00002', $item2->code);
+
+        // Create third item
+        $item3 = $this->depot->create(['name' => 'Item 3', 'detail' => 'Detail 3']);
+        $this->assertMatchesRegularExpression('/^00-\d{8}-\d{5}$/', $item3->code);
+        $this->assertEquals('00-' . $today . '-00003', $item3->code);
     }
 
     /**
