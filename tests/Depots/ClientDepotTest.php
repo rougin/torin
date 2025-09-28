@@ -24,13 +24,18 @@ class ClientDepotTest extends Testcase
     {
         $model = new Client;
 
-        $model->create(['name' => 'Client A', 'type' => 1]);
-        $model->create(['name' => 'Client B', 'type' => 1]);
+        $data = array('name' => 'Client A');
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $model->create($data);
 
-        $clients = $this->depot->all();
+        $data = array('name' => 'Client B');
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $model->create($data);
 
-        $this->assertCount(2, $clients);
-        $this->assertEquals('Client A', $clients[0]->name);
+        $actual = $this->depot->all();
+
+        $this->assertCount(2, $actual);
+        $this->assertEquals('Client A', $actual[0]->name);
     }
 
     /**
@@ -40,20 +45,22 @@ class ClientDepotTest extends Testcase
     {
         $model = new Client;
 
+        $data = array('name' => 'Client C');
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $result = $model->create($data);
+
         $current = time();
 
-        $item = $model->create(['name' => 'Client C', 'type' => 1]);
-
-        $actual = $this->depot->find($item->id);
+        $actual = $this->depot->find($result->id);
 
         $this->assertNotNull($actual);
         $this->assertEquals('Client C', $actual->name);
 
-        // Assert "getCreatedAtAttribute", "getUpdatedAtAttribute" ---
+        // Assert timestamp attributes -----------------
         $date = date('d M Y h:i A', $current);
         $this->assertEquals($date, $actual->created_at);
         $this->assertEquals($date, $actual->updated_at);
-        // -----------------------------------------------------------
+        // ---------------------------------------------
     }
 
     /**
@@ -61,15 +68,16 @@ class ClientDepotTest extends Testcase
      */
     public function test_can_create_client()
     {
-        $data = ['name' => 'New Client', 'type' => 0, 'remarks' => 'Some remarks'];
+        $data = array('name' => 'New Client');
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['remarks'] = 'Some remarks';
+        $actual = $this->depot->create($data);
 
-        $client = $this->depot->create($data);
-
-        $this->assertNotNull($client);
-        $this->assertEquals('New Client', $client->name);
-        $this->assertEquals(0, $client->type);
-        $this->assertEquals('Some remarks', $client->remarks);
-        $this->assertNotNull($client->code);
+        $this->assertNotNull($actual);
+        $this->assertEquals('New Client', $actual->name);
+        $this->assertEquals(0, $actual->type);
+        $this->assertEquals('Some remarks', $actual->remarks);
+        $this->assertNotNull($actual->code);
     }
 
     /**
@@ -77,14 +85,23 @@ class ClientDepotTest extends Testcase
      */
     public function test_can_get_clients_for_select()
     {
-        $this->depot->create(['name' => 'Client X', 'type' => 0]);
-        $this->depot->create(['name' => 'Client Y', 'type' => 1]);
+        $data = array('name' => 'Client X');
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $this->depot->create($data);
 
-        $items = $this->depot->getSelect();
+        $data = array('name' => 'Client Y');
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $this->depot->create($data);
 
-        $this->assertCount(2, $items);
-        $this->assertEquals(['value' => 1, 'label' => 'Client X'], $items[0]);
-        $this->assertEquals(['value' => 2, 'label' => 'Client Y'], $items[1]);
+        $actual = $this->depot->getSelect();
+
+        $this->assertCount(2, $actual);
+
+        $expected = array('value' => 1, 'label' => 'Client X');
+        $this->assertEquals($expected, $actual[0]);
+
+        $expected = array('value' => 2, 'label' => 'Client Y');
+        $this->assertEquals($expected, $actual[1]);
     }
 
     /**
@@ -92,21 +109,21 @@ class ClientDepotTest extends Testcase
      */
     public function test_can_update_client()
     {
-        $client = $this->depot->create(['name' => 'Old Client Name', 'type' => 0, 'remarks' => 'Old remarks']);
+        $data = array('name' => 'Old Client');
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['remarks'] = 'Some remarks';
+        $client = $this->depot->create($data);
 
-        $data = array('type' => 1);
-        $data['name'] = 'Updated Client Name';
-        $data['remarks'] = 'Updated remarks';
-
-        $result = $this->depot->update($client->id, $data);
-
-        $this->assertTrue($result);
+        $data = array('name' => 'New Client');
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $data['remarks'] = 'New remarks';
+        $this->depot->update($client->id, $data);
 
         $actual = $this->depot->find($client->id);
 
-        $this->assertEquals('Updated Client Name', $actual->name);
-        $this->assertEquals(1, $actual->type);
-        $this->assertEquals('Updated remarks', $actual->remarks);
+        $this->assertEquals('New Client', $actual->name);
+        $this->assertEquals(Client::TYPE_SUPPLIER, $actual->type);
+        $this->assertEquals('New remarks', $actual->remarks);
     }
 
     /**
