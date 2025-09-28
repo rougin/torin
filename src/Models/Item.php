@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method boolean                        delete()
  * @method \Rougin\Torin\Models\Item      findOrFail(mixed $id)
  * @method \Rougin\Torin\Models\Item|null first()
+ * @method \Rougin\Torin\Models\Item      firstOrFail()
  * @method \Rougin\Torin\Models\Item[]    get()
  * @method \Rougin\Torin\Models\Item|null find(mixed $id)
  * @method \Rougin\Torin\Models\Item      limit(integer $value)
@@ -62,6 +63,19 @@ class Item extends Model
      * @var string
      */
     protected $connection = 'torin';
+
+    /**
+     * @param integer $order
+     * @param integer $quantity
+     *
+     * @return void
+     */
+    public function addOrder($order, $quantity)
+    {
+        $data = array('quantity' => $quantity);
+
+        $this->orders()->attach($order, $data);
+    }
 
     /**
      * @return array<string, mixed>

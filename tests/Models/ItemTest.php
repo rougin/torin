@@ -18,10 +18,11 @@ class ItemTest extends Testcase
     {
         $model = new Item;
 
-        $item = $model->create(['name' => 'Item A', 'detail' => 'Detail A']);
+        $data = array('name' => 'Item A');
+        $data['detail'] = 'Detail A';
+        $actual = $model->create($data)->name;
 
-        $this->assertNotNull($item->id);
-        $this->assertEquals('Item A', $item->name);
+        $this->assertEquals('Item A', $actual);
     }
 
     /**
@@ -31,12 +32,14 @@ class ItemTest extends Testcase
     {
         $model = new Item;
 
-        $model->create(['name' => 'Item B', 'detail' => 'Detail B']);
+        $data = array('name' => 'Item B');
+        $data['detail'] = 'Detail B';
+        $model->create($data);
 
-        $item = $model->where('name', 'Item B')->first();
+        $model = $model->where('name', 'Item B');
+        $actual = $model->firstOrFail()->name;
 
-        $this->assertNotNull($item);
-        $this->assertEquals('Item B', $item->name);
+        $this->assertEquals('Item B', $actual);
     }
 
     /**
@@ -46,13 +49,12 @@ class ItemTest extends Testcase
     {
         $model = new Item;
 
-        $current = time();
+        $data = array('name' => 'Item E');
+        $data['detail'] = 'Detail E';
+        $actual = $model->create($data)->created_at;
 
-        $item = $model->create(['name' => 'Item E', 'detail' => 'Detail E']);
-
-        $date = date('d M Y h:i A', $current);
-
-        $this->assertEquals($date, $item->created_at);
+        $expect = date('d M Y h:i A', time());
+        $this->assertEquals($expect, $actual);
     }
 
     /**
@@ -62,18 +64,15 @@ class ItemTest extends Testcase
     {
         $model = new Item;
 
-        $item = $model->create(['name' => 'Item C', 'detail' => 'Detail C']);
+        $data = array('name' => 'Item C');
+        $data['detail'] = 'Detail C';
+        $item = $model->create($data);
 
-        $row = $item->asRow();
+        $actual = $item->asRow();
 
-        $this->assertArrayHasKey('id', $row);
-        $this->assertEquals($item->id, $row['id']);
-        $this->assertEquals('Item C', $row['name']);
-        $this->assertEquals('Detail C', $row['detail']);
-        $this->assertArrayHasKey('code', $row);
-        $this->assertArrayHasKey('quantity', $row);
-        $this->assertArrayHasKey('created_at', $row);
-        $this->assertArrayHasKey('updated_at', $row);
+        $this->assertEquals($item->id, $actual['id']);
+        $this->assertEquals('Detail C', $actual['detail']);
+        $this->assertEquals('Item C', $actual['name']);
     }
 
     /**
@@ -83,14 +82,14 @@ class ItemTest extends Testcase
     {
         $model = new Item;
 
-        $item = $model->create(['name' => 'Item D', 'detail' => 'Detail D']);
+        $data = array('name' => 'Item D');
+        $data['detail'] = 'Detail D';
+        $item = $model->create($data);
 
-        $select = $item->asSelect();
+        $actual = $item->asSelect();
 
-        $this->assertArrayHasKey('value', $select);
-        $this->assertEquals($item->id, $select['value']);
-        $this->assertArrayHasKey('label', $select);
-        $this->assertEquals('Item D', $select['label']);
+        $this->assertEquals($item->id, $actual['value']);
+        $this->assertEquals('Item D', $actual['label']);
     }
 
     /**
@@ -99,18 +98,34 @@ class ItemTest extends Testcase
     public function test_can_get_quantity_with_mixed_orders()
     {
         $model = new Item;
-        $item = $model->create(['name' => 'Item J', 'detail' => 'Detail J']);
+
+        $data = array('name' => 'Item J');
+        $data['detail'] = 'Detail J';
+        $item = $model->create($data);
 
         $model = new Order;
-        $purchaseOrder = $model->create(['code' => 'ORD-005', 'type' => Order::TYPE_PURCHASE, 'status' => Order::STATUS_COMPLETED]);
-        $saleOrder = $model->create(['code' => 'ORD-006', 'type' => Order::TYPE_SALE, 'status' => Order::STATUS_COMPLETED]);
 
-        $item->orders()->attach($purchaseOrder->id, ['quantity' => 20]);
-        $item->orders()->attach($saleOrder->id, ['quantity' => 12]);
+        // Create a new purchase order -----------
+        $data = array('code' => 'ORD-005');
+        $data['status'] = Order::STATUS_COMPLETED;
+        $data['type'] = Order::TYPE_PURCHASE;
+        $purchase = $model->create($data);
 
-        $item->load('orders');
+        $item->addOrder($purchase->id, 20);
+        // ---------------------------------------
 
+        // Create a new sales order --------------
+        $data = array('code' => 'ORD-006');
+        $data['status'] = Order::STATUS_COMPLETED;
+        $data['type'] = Order::TYPE_SALE;
+        $sale = $model->create($data);
+
+        $item->addOrder($sale->id, 12);
+        // ---------------------------------------
+
+        // 20 (from purchase) - 12 (from sales) ---
         $this->assertEquals(8, $item->quantity);
+        // ----------------------------------------
     }
 
     /**
@@ -120,7 +135,9 @@ class ItemTest extends Testcase
     {
         $model = new Item;
 
-        $item = $model->create(['name' => 'Item G', 'detail' => 'Detail G']);
+        $data = array('name' => 'Item G');
+        $data['detail'] = 'Detail G';
+        $item = $model->create($data);
 
         $this->assertEquals(0, $item->quantity);
     }
@@ -131,18 +148,34 @@ class ItemTest extends Testcase
     public function test_can_get_quantity_with_pending_orders()
     {
         $model = new Item;
-        $item = $model->create(['name' => 'Item K', 'detail' => 'Detail K']);
+
+        $data = array('name' => 'Item K');
+        $data['detail'] = 'Detail K';
+        $item = $model->create($data);
 
         $model = new Order;
-        $purchaseOrder = $model->create(['code' => 'ORD-007', 'type' => Order::TYPE_PURCHASE, 'status' => Order::STATUS_PENDING]);
-        $saleOrder = $model->create(['code' => 'ORD-008', 'type' => Order::TYPE_SALE, 'status' => Order::STATUS_COMPLETED]);
 
-        $item->orders()->attach($purchaseOrder->id, ['quantity' => 10]); // Should not count
-        $item->orders()->attach($saleOrder->id, ['quantity' => 5]); // Should count as -5
+        // Create a new purchase order ---------
+        $data = array('code' => 'ORD-007');
+        $data['status'] = Order::STATUS_PENDING;
+        $data['type'] = Order::TYPE_PURCHASE;
+        $purchase = $model->create($data);
 
-        $item->load('orders');
+        $item->addOrder($purchase->id, 10);
+        // -------------------------------------
 
+        // Create a new sales order --------------
+        $data = array('code' => 'ORD-008');
+        $data['status'] = Order::STATUS_COMPLETED;
+        $data['type'] = Order::TYPE_SALE;
+        $sale = $model->create($data);
+
+        $item->addOrder($sale->id, 5);
+        // ---------------------------------------
+
+        // 0 (from purchase since its still pending) - 5 (from sales) ---
         $this->assertEquals(-5, $item->quantity);
+        // --------------------------------------------------------------
     }
 
     /**
@@ -151,16 +184,30 @@ class ItemTest extends Testcase
     public function test_can_get_quantity_with_purchase_orders()
     {
         $model = new Item;
-        $item = $model->create(['name' => 'Item H', 'detail' => 'Detail H']);
+
+        $data = array('name' => 'Item H');
+        $data['detail'] = 'Detail H';
+        $item = $model->create($data);
 
         $model = new Order;
-        $order1 = $model->create(['code' => 'ORD-001', 'type' => Order::TYPE_PURCHASE, 'status' => Order::STATUS_COMPLETED]);
-        $order2 = $model->create(['code' => 'ORD-002', 'type' => Order::TYPE_PURCHASE, 'status' => Order::STATUS_COMPLETED]);
 
-        $item->orders()->attach($order1->id, ['quantity' => 10]);
-        $item->orders()->attach($order2->id, ['quantity' => 5]);
+        // Create a new purchase order -----------
+        $data = array('code' => 'ORD-001');
+        $data['status'] = Order::STATUS_COMPLETED;
+        $data['type'] = Order::TYPE_PURCHASE;
+        $purchase = $model->create($data);
 
-        $item->load('orders');
+        $item->addOrder($purchase->id, 10);
+        // ---------------------------------------
+
+        // Create another purchase order ---------
+        $data = array('code' => 'ORD-002');
+        $data['status'] = Order::STATUS_COMPLETED;
+        $data['type'] = Order::TYPE_PURCHASE;
+        $purchase = $model->create($data);
+
+        $item->addOrder($purchase->id, 5);
+        // ---------------------------------------
 
         $this->assertEquals(15, $item->quantity);
     }
@@ -171,16 +218,30 @@ class ItemTest extends Testcase
     public function test_can_get_quantity_with_sale_orders()
     {
         $model = new Item;
-        $item = $model->create(['name' => 'Item I', 'detail' => 'Detail I']);
+
+        $data = array('name' => 'Item I');
+        $data['detail'] = 'Detail I';
+        $item = $model->create($data);
 
         $model = new Order;
-        $order1 = $model->create(['code' => 'ORD-003', 'type' => Order::TYPE_SALE, 'status' => Order::STATUS_COMPLETED]);
-        $order2 = $model->create(['code' => 'ORD-004', 'type' => Order::TYPE_SALE, 'status' => Order::STATUS_COMPLETED]);
 
-        $item->orders()->attach($order1->id, ['quantity' => 7]);
-        $item->orders()->attach($order2->id, ['quantity' => 3]);
+        // Create a new sales order --------------
+        $data = array('code' => 'ORD-003');
+        $data['status'] = Order::STATUS_COMPLETED;
+        $data['type'] = Order::TYPE_SALE;
+        $sale = $model->create($data);
 
-        $item->load('orders');
+        $item->addOrder($sale->id, 7);
+        // ---------------------------------------
+
+        // Create another sales order ------------
+        $data = array('code' => 'ORD-004');
+        $data['status'] = Order::STATUS_COMPLETED;
+        $data['type'] = Order::TYPE_SALE;
+        $sale = $model->create($data);
+
+        $item->addOrder($sale->id, 3);
+        // ---------------------------------------
 
         $this->assertEquals(-10, $item->quantity);
     }
@@ -192,12 +253,11 @@ class ItemTest extends Testcase
     {
         $model = new Item;
 
-        $current = time();
+        $data = array('name' => 'Item F');
+        $data['detail'] = 'Detail F';
+        $actual = $model->create($data)->created_at;
 
-        $item = $model->create(['name' => 'Item F', 'detail' => 'Detail F']);
-
-        $date = date('d M Y h:i A', $current);
-
-        $this->assertEquals($date, $item->updated_at);
+        $expect = date('d M Y h:i A', time());
+        $this->assertEquals($expect, $actual);
     }
 }

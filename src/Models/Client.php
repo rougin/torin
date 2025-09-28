@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method \Rougin\Torin\Models\Client      findOrFail(mixed $id)
  * @method \Rougin\Torin\Models\Client|null find(mixed $id)
  * @method \Rougin\Torin\Models\Client|null first()
+ * @method \Rougin\Torin\Models\Client      firstOrFail()
  * @method \Rougin\Torin\Models\Client[]    get()
  * @method \Rougin\Torin\Models\Client      limit(integer $value)
  * @method \Rougin\Torin\Models\Client      offset(integer $value)

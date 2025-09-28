@@ -22,8 +22,9 @@ class Testcase extends Legacy
     protected $capsule;
 
     /**
-     * @param  string $pattern
-     * @param  string $string
+     * @param string $pattern
+     * @param string $string
+     *
      * @return void
      */
     public function assertRegex($pattern, $string)

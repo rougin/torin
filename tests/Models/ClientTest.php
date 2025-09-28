@@ -18,10 +18,11 @@ class ClientTest extends Testcase
     {
         $model = new Client;
 
-        $client = $model->create(['name' => 'John Doe', 'type' => 1]);
+        $data = array('name' => 'John Doe');
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $actual = $model->create($data)->name;
 
-        $this->assertNotNull($client->id);
-        $this->assertEquals('John Doe', $client->name);
+        $this->assertEquals('John Doe', $actual);
     }
 
     /**
@@ -31,11 +32,13 @@ class ClientTest extends Testcase
     {
         $model = new Client;
 
-        $model->create(['name' => 'Jane Doe', 'type' => 1]);
+        $data = array('name' => 'Jane Doe');
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $model->create($data);
 
-        $client = $model->where('name', 'Jane Doe')->first();
+        $model = $model->where('name', 'Jane Doe');
+        $actual = $model->firstOrFail()->name;
 
-        $this->assertNotNull($client);
-        $this->assertEquals('Jane Doe', $client->name);
+        $this->assertEquals('Jane Doe', $actual);
     }
 }

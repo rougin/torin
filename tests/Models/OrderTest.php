@@ -17,18 +17,20 @@ class OrderTest extends Testcase
     public function test_create_order()
     {
         $model = new Client;
-        $client = $model->create(['name' => 'John Doe', 'type' => 1]);
+
+        $data = array('name' => 'John Doe');
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $client = $model->create($data);
+
+        $model = new Order;
 
         $data = array('type' => Order::TYPE_PURCHASE);
         $data['client_id'] = $client->id;
         $data['code'] = '1-20240101-00001';
         $data['status'] = Order::STATUS_PENDING;
+        $actual = $model->create($data)->client_id;
 
-        $model = new Order;
-        $order = $model->create($data);
-
-        $this->assertNotNull($order->id);
-        $this->assertEquals($client->id, $order->client_id);
+        $this->assertEquals($client->id, $actual);
     }
 
     /**
@@ -37,20 +39,21 @@ class OrderTest extends Testcase
     public function test_find_order()
     {
         $model = new Client;
-        $client = $model->create(['name' => 'Jane Doe', 'type' => 1]);
+
+        $data = array('name' => 'Jane Doe');
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $client = $model->create($data);
+
+        $model = new Order;
 
         $data = array('type' => Order::TYPE_PURCHASE);
         $data['client_id'] = $client->id;
         $data['code'] = '1-20240101-00002';
         $data['status'] = Order::STATUS_PENDING;
-
-        $model = new Order;
         $order = $model->create($data);
 
-        $actual = $model->find($order->id);
+        $actual = $model->find($order->id)->client_id;
 
-        $this->assertNotNull($actual);
-        $this->assertEquals($order->id, $actual->id);
-        $this->assertEquals($client->id, $actual->client_id);
+        $this->assertEquals($client->id, $actual);
     }
 }

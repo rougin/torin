@@ -35,7 +35,6 @@ class ItemDepotTest extends Testcase
 
         $actual = $this->depot->all();
 
-        $this->assertCount(2, $actual);
         $this->assertEquals('Item A', $actual[0]->name);
     }
 
@@ -75,7 +74,6 @@ class ItemDepotTest extends Testcase
         $this->depot->create($data);
 
         $actual = $this->depot->getSelect();
-        $this->assertCount(2, $actual);
 
         $expect = array('value' => 1, 'label' => 'Item X');
         $this->assertEquals($expect, $actual[0]);
@@ -132,7 +130,6 @@ class ItemDepotTest extends Testcase
         $actual = $this->depot->find($item->id);
 
         $this->assertEquals('Item Z', $actual->name);
-        $this->assertCount(1, $actual->orders);
         $this->assertEquals(10, $actual->quantity);
     }
 

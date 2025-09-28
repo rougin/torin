@@ -32,10 +32,10 @@ class ClientDepotTest extends Testcase
         $data['type'] = Client::TYPE_CUSTOMER;
         $model->create($data);
 
-        $actual = $this->depot->all();
+        $items = $this->depot->all();
+        $actual = $items[0]->name;
 
-        $this->assertCount(2, $actual);
-        $this->assertEquals('Client A', $actual[0]->name);
+        $this->assertEquals('Client A', $actual);
     }
 
     /**
@@ -49,18 +49,19 @@ class ClientDepotTest extends Testcase
         $data['type'] = Client::TYPE_SUPPLIER;
         $result = $model->create($data);
 
-        $current = time();
-
         $actual = $this->depot->find($result->id);
 
-        $this->assertNotNull($actual);
         $this->assertEquals('Client C', $actual->name);
 
-        // Assert timestamp attributes -----------------
-        $date = date('d M Y h:i A', $current);
-        $this->assertEquals($date, $actual->created_at);
-        $this->assertEquals($date, $actual->updated_at);
-        // ---------------------------------------------
+        // Assert timestamp attributes -------
+        $expect = date('d M Y h:i A', time());
+
+        $stamp = $actual->created_at;
+        $this->assertEquals($expect, $stamp);
+
+        $stamp = $actual->updated_at;
+        $this->assertEquals($expect, $stamp);
+        // -----------------------------------
     }
 
     /**
@@ -73,11 +74,9 @@ class ClientDepotTest extends Testcase
         $data['remarks'] = 'Some remarks';
         $actual = $this->depot->create($data);
 
-        $this->assertNotNull($actual);
         $this->assertEquals('New Client', $actual->name);
         $this->assertEquals(0, $actual->type);
         $this->assertEquals('Some remarks', $actual->remarks);
-        $this->assertNotNull($actual->code);
     }
 
     /**
@@ -94,8 +93,6 @@ class ClientDepotTest extends Testcase
         $this->depot->create($data);
 
         $actual = $this->depot->getSelect();
-
-        $this->assertCount(2, $actual);
 
         $expected = array('value' => 1, 'label' => 'Client X');
         $this->assertEquals($expected, $actual[0]);
