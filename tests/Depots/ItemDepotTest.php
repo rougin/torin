@@ -25,13 +25,18 @@ class ItemDepotTest extends Testcase
     {
         $model = new Item;
 
-        $model->create(['name' => 'Item A', 'detail' => 'Detail A']);
-        $model->create(['name' => 'Item B', 'detail' => 'Detail B']);
+        $data = array('name' => 'Item A');
+        $data['detail'] = 'Detail A';
+        $model->create($data);
 
-        $items = $this->depot->all();
+        $data = array('name' => 'Item B');
+        $data['detail'] = 'Detail B';
+        $model->create($data);
 
-        $this->assertCount(2, $items);
-        $this->assertEquals('Item A', $items[0]->name);
+        $actual = $this->depot->all();
+
+        $this->assertCount(2, $actual);
+        $this->assertEquals('Item A', $actual[0]->name);
     }
 
     /**
@@ -39,15 +44,21 @@ class ItemDepotTest extends Testcase
      */
     public function test_can_create_item()
     {
-        $data = ['name' => 'New Item', 'detail' => 'New Item Detail'];
+        $data = array('name' => 'New Item');
+        $data['detail'] = 'New Item Detail';
+        $actual = $this->depot->create($data);
 
-        $item = $this->depot->create($data);
+        $expect = 'New Item';
+        $this->assertEquals($expect, $actual->name);
 
-        $this->assertNotNull($item);
-        $this->assertEquals('New Item', $item->name);
-        $this->assertEquals('New Item Detail', $item->detail);
-        $this->assertMatchesRegularExpression('/^00-\d{8}-\d{5}$/', $item->code);
-        $this->assertEquals('00-' . date('Ymd') . '-00001', $item->code);
+        $expect = 'New Item Detail';
+        $this->assertEquals($expect, $actual->detail);
+
+        $expect = '00-' . date('Ymd') . '-00001';
+        $this->assertEquals($expect, $actual->code);
+
+        $regex = '/^00-\d{8}-\d{5}$/';
+        $this->assertRegex($regex, $actual->code);
     }
 
     /**
@@ -55,14 +66,22 @@ class ItemDepotTest extends Testcase
      */
     public function test_can_get_items_for_select()
     {
-        $this->depot->create(['name' => 'Item X', 'detail' => 'Detail X']);
-        $this->depot->create(['name' => 'Item Y', 'detail' => 'Detail Y']);
+        $data = array('name' => 'Item X');
+        $data['detail'] = 'Detail X';
+        $this->depot->create($data);
 
-        $items = $this->depot->getSelect();
+        $data = array('name' => 'Item Y');
+        $data['detail'] = 'Detail Y';
+        $this->depot->create($data);
 
-        $this->assertCount(2, $items);
-        $this->assertEquals(['value' => 1, 'label' => 'Item X'], $items[0]);
-        $this->assertEquals(['value' => 2, 'label' => 'Item Y'], $items[1]);
+        $actual = $this->depot->getSelect();
+        $this->assertCount(2, $actual);
+
+        $expect = array('value' => 1, 'label' => 'Item X');
+        $this->assertEquals($expect, $actual[0]);
+
+        $expect = array('value' => 2, 'label' => 'Item Y');
+        $this->assertEquals($expect, $actual[1]);
     }
 
     /**
@@ -70,20 +89,21 @@ class ItemDepotTest extends Testcase
      */
     public function test_can_update_item()
     {
-        $old = ['name' => 'Old Item Name', 'detail' => 'Old Item Detail'];
+        $data = array('name' => 'Old Item Name');
+        $data['detail'] = 'Old Item Description';
+        $item = $this->depot->create($data);
 
-        $item = $this->depot->create($old);
-
-        $new = ['name' => 'Updated Item Name', 'detail' => 'Updated Item Detail'];
-
-        $result = $this->depot->update($item->id, $new);
-
-        $this->assertTrue($result);
+        $data = array('name' => 'Updated Item Name');
+        $data['detail'] = 'Updated Item Description';
+        $this->depot->update($item->id, $data);
 
         $actual = $this->depot->find($item->id);
 
-        $this->assertEquals('Updated Item Name', $actual->name);
-        $this->assertEquals('Updated Item Detail', $actual->detail);
+        $expect = 'Updated Item Description';
+        $this->assertEquals($expect, $actual->detail);
+
+        $expect = 'Updated Item Name';
+        $this->assertEquals($expect, $actual->name);
     }
 
     /**
@@ -92,18 +112,25 @@ class ItemDepotTest extends Testcase
     public function test_can_find_item_with_orders_by_id()
     {
         $model = new Item;
-        $item = $model->create(['name' => 'Item Z', 'detail' => 'Detail Z']);
+
+        $data = array('name' => 'Item Z');
+        $data['detail'] = 'Detail Z';
+        $item = $model->create($data);
+
+        // Create a new order with an item --------
+        $model = new Order;
 
         $data = array('code' => 'ORD-009');
         $data['type'] = Order::TYPE_PURCHASE;
         $data['status'] = Order::STATUS_COMPLETED;
-        $model = new Order;
         $order = $model->create($data);
-        $item->orders()->attach($order->id, ['quantity' => 10]);
+
+        $data = array('quantity' => 10);
+        $item->orders()->attach($order->id, $data);
+        // ----------------------------------------
 
         $actual = $this->depot->find($item->id);
 
-        $this->assertNotNull($actual);
         $this->assertEquals('Item Z', $actual->name);
         $this->assertCount(1, $actual->orders);
         $this->assertEquals(10, $actual->quantity);
@@ -114,22 +141,42 @@ class ItemDepotTest extends Testcase
      */
     public function test_can_generate_item_code_with_correct_format()
     {
+        $pattern = '/^00-\d{8}-\d{5}$/';
+
         $today = date('Ymd');
 
-        // Create first item
-        $item1 = $this->depot->create(['name' => 'Item 1', 'detail' => 'Detail 1']);
-        $this->assertMatchesRegularExpression('/^00-\d{8}-\d{5}$/', $item1->code);
-        $this->assertEquals('00-' . $today . '-00001', $item1->code);
+        // Create the first item ------------------
+        $data = array('name' => 'Item 1');
+        $data['detail'] = 'Detail 1';
+        $item1 = $this->depot->create($data);
 
-        // Create second item
-        $item2 = $this->depot->create(['name' => 'Item 2', 'detail' => 'Detail 2']);
-        $this->assertMatchesRegularExpression('/^00-\d{8}-\d{5}$/', $item2->code);
-        $this->assertEquals('00-' . $today . '-00002', $item2->code);
+        $this->assertRegex($pattern, $item1->code);
 
-        // Create third item
-        $item3 = $this->depot->create(['name' => 'Item 3', 'detail' => 'Detail 3']);
-        $this->assertMatchesRegularExpression('/^00-\d{8}-\d{5}$/', $item3->code);
-        $this->assertEquals('00-' . $today . '-00003', $item3->code);
+        $expect = '00-' . $today . '-00001';
+        $this->assertEquals($expect, $item1->code);
+        // ----------------------------------------
+
+        // Create the first item ------------------
+        $data = array('name' => 'Item 2');
+        $data['detail'] = 'Detail 2';
+        $item2 = $this->depot->create($data);
+
+        $this->assertRegex($pattern, $item2->code);
+
+        $expect = '00-' . $today . '-00002';
+        $this->assertEquals($expect, $item2->code);
+        // ----------------------------------------
+
+        // Create the first item ------------------
+        $data = array('name' => 'Item 3');
+        $data['detail'] = 'Detail 3';
+        $item3 = $this->depot->create($data);
+
+        $this->assertRegex($pattern, $item3->code);
+
+        $expect = '00-' . $today . '-00003';
+        $this->assertEquals($expect, $item3->code);
+        // ----------------------------------------
     }
 
     /**

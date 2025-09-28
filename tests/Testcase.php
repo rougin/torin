@@ -22,6 +22,64 @@ class Testcase extends Legacy
     protected $capsule;
 
     /**
+     * @param  string $pattern
+     * @param  string $string
+     * @return void
+     */
+    public function assertRegex($pattern, $string)
+    {
+        $this->assertMatchesRegularExpression($pattern, $string);
+    }
+
+    /**
+     * @return void
+     */
+    protected function migrate()
+    {
+        $phinx = $this->setPhinx();
+
+        $paths = $phinx->getConfig()->getMigrationPaths();
+
+        // Return the latest version (e.g., '20241213094622') ---
+        $version = $this->getLastVersion($paths);
+        // ------------------------------------------------------
+
+        // Run the migration up to the specified version ---
+        $phinx->migrate('test', $version);
+        // -------------------------------------------------
+    }
+
+    /**
+     * @return void
+     */
+    protected function rollback()
+    {
+        $this->setPhinx()->migrate('test', 0);
+    }
+
+    /**
+     * @return \Phinx\Migration\Manager
+     */
+    protected function setPhinx()
+    {
+        // Prepare the PDO to the configuration file -----------
+        $data = require __DIR__ . '/../app/config/phinx.php';
+
+        $pdo = $this->capsule->getConnection('torin')->getPdo();
+
+        $data['environments']['test']['connection'] = $pdo;
+
+        $config = new Config($data);
+        // -----------------------------------------------------
+
+        $input = new ArrayInput(array());
+
+        $output = new NullOutput;
+
+        return new Manager($config, $input, $output);
+    }
+
+    /**
      * @return void
      */
     protected function doSetUp()
@@ -57,7 +115,7 @@ class Testcase extends Legacy
      *
      * @return integer
      */
-    protected function findLastVersion($paths)
+    protected function getLastVersion($paths)
     {
         $version = 0;
 
@@ -77,53 +135,5 @@ class Testcase extends Legacy
         }
 
         return $version;
-    }
-
-    /**
-     * @return void
-     */
-    protected function migrate()
-    {
-        $phinx = $this->setPhinx();
-
-        $paths = $phinx->getConfig()->getMigrationPaths();
-
-        // Return the latest the migration class (e.g., '20241213094622') ---
-        $version = $this->findLastVersion($paths);
-        // ------------------------------------------------------------------
-
-        // Run the migration up to the specified version ---
-        $phinx->migrate('test', $version);
-        // -------------------------------------------------
-    }
-
-    /**
-     * @return void
-     */
-    protected function rollback()
-    {
-        $this->setPhinx()->migrate('test', 0);
-    }
-
-    /**
-     * @return \Phinx\Migration\Manager
-     */
-    protected function setPhinx()
-    {
-        // Prepare the PDO to the configuration file -----------
-        $data = require __DIR__ . '/../app/config/phinx.php';
-
-        $pdo = $this->capsule->getConnection('torin')->getPdo();
-
-        $data['environments']['test']['connection'] = $pdo;
-
-        $config = new Config($data);
-        // -----------------------------------------------------
-
-        $input = new ArrayInput(array());
-
-        $output = new NullOutput;
-
-        return new Manager($config, $input, $output);
     }
 }
