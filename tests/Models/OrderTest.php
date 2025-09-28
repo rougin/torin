@@ -52,8 +52,10 @@ class OrderTest extends Testcase
         $data['status'] = Order::STATUS_PENDING;
         $order = $model->create($data);
 
-        $actual = $model->find($order->id)->client_id;
+        $actual = $model->find($order->id);
+        $this->assertNotNull($actual);
 
+        $actual = $actual->client_id;
         $this->assertEquals($client->id, $actual);
     }
 }
