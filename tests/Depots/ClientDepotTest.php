@@ -18,9 +18,43 @@ class ClientDepotTest extends Testcase
      */
     protected $depot;
 
-    public function setUp(): void
+    /**
+     * @return void
+     */
+    public function test_can_find_all_clients()
     {
-        parent::setUp();
+        $model = new Client;
+
+        $model->create(['name' => 'Client A', 'email' => 'a@example.com']);
+        $model->create(['name' => 'Client B', 'email' => 'b@example.com']);
+
+        $clients = $this->depot->all();
+
+        $this->assertCount(2, $clients);
+        $this->assertEquals('Client A', $clients[0]->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_can_find_client_by_id()
+    {
+        $model = new Client;
+
+        $item = $model->create(['name' => 'Client C', 'email' => 'c@example.com']);
+
+        $actual = $this->depot->find($item->id);
+
+        $this->assertNotNull($actual);
+        $this->assertEquals('Client C', $actual->name);
+    }
+
+    /**
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        parent::doSetUp();
 
         Capsule::schema('torin')->create('clients', function ($table)
         {
@@ -34,33 +68,13 @@ class ClientDepotTest extends Testcase
         $this->depot = new ClientDepot(new Client);
     }
 
-    public function tearDown(): void
+    /**
+     * @return void
+     */
+    protected function doTearDown()
     {
         Capsule::schema('torin')->drop('clients');
-        parent::tearDown();
-    }
 
-    public function testCanFindAllClients(): void
-    {
-        Client::create(['name' => 'Client A', 'email' => 'a@example.com']);
-        Client::create(['name' => 'Client B', 'email' => 'b@example.com']);
-
-        /** @var \Rougin\Torin\Models\Client[] $clients */
-        $clients = $this->depot->all();
-
-        $this->assertCount(2, $clients);
-        $this->assertEquals('Client A', $clients[0]->name);
-    }
-
-    public function testCanFindClientById(): void
-    {
-        /** @var \Rougin\Torin\Models\Client $createdClient */
-        $createdClient = Client::create(['name' => 'Client C', 'email' => 'c@example.com']);
-
-        /** @var \Rougin\Torin\Models\Client|null $foundClient */
-        $foundClient = $this->depot->find($createdClient->id);
-
-        $this->assertNotNull($foundClient);
-        $this->assertEquals('Client C', $foundClient->name);
+        parent::doTearDown();
     }
 }

@@ -19,10 +19,11 @@ class Testcase extends Legacy
      */
     protected $capsule;
 
-    public function setUp(): void
+    /**
+     * @return void
+     */
+    protected function doSetUp()
     {
-        parent::setUp();
-
         $this->capsule = new Capsule;
         $this->capsule->addConnection([
             'driver'   => 'sqlite',
@@ -34,9 +35,11 @@ class Testcase extends Legacy
         $this->capsule->bootEloquent();
     }
 
-    public function tearDown(): void
+    /**
+     * @return void
+     */
+    protected function doTearDown()
     {
         $this->capsule->getConnection('torin')->disconnect();
-        parent::tearDown();
     }
 }

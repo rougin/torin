@@ -12,11 +12,41 @@ use Illuminate\Database\Capsule\Manager as Capsule;
  */
 class ClientTest extends Testcase
 {
-    public function setUp(): void
+    /**
+     * @return void
+     */
+    public function test_can_create_a_client()
     {
-        parent::setUp();
+        $model = new Client;
 
-        // Define schema directly for testing
+        $client = $model->create(['name' => 'John Doe', 'email' => 'john.doe@example.com']);
+
+        $this->assertNotNull($client->id);
+        $this->assertEquals('John Doe', $client->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_can_find_a_client()
+    {
+        $model = new Client;
+
+        $model->create(['name' => 'Jane Doe', 'email' => 'jane.doe@example.com']);
+
+        $client = $model->where('email', 'jane.doe@example.com')->first();
+
+        $this->assertNotNull($client);
+        $this->assertEquals('Jane Doe', $client->name);
+    }
+
+    /**
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        parent::doSetUp();
+
         Capsule::schema('torin')->create('clients', function ($table)
         {
             $table->increments('id');
@@ -27,35 +57,13 @@ class ClientTest extends Testcase
         });
     }
 
-    public function tearDown(): void
+    /**
+     * @return void
+     */
+    protected function doTearDown()
     {
         Capsule::schema('torin')->drop('clients');
-        parent::tearDown();
-    }
 
-    public function testCanCreateClient(): void
-    {
-        /** @var \Rougin\Torin\Models\Client $client */
-        $client = Client::create([
-            'name' => 'John Doe',
-            'email' => 'john.doe@example.com'
-        ]);
-
-        $this->assertNotNull($client->id);
-        $this->assertEquals('John Doe', $client->name);
-    }
-
-    public function testCanFindClient(): void
-    {
-        Client::create([
-            'name' => 'Jane Doe',
-            'email' => 'jane.doe@example.com'
-        ]);
-
-        /** @var \Rougin\Torin\Models\Client|null $client */
-        $client = Client::where('email', 'jane.doe@example.com')->first();
-
-        $this->assertNotNull($client);
-        $this->assertEquals('Jane Doe', $client->name);
+        parent::doTearDown();
     }
 }

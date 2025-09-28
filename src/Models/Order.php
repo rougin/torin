@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method \Rougin\Torin\Models\Order[]    get()
  * @method \Rougin\Torin\Models\Order      limit(integer $value)
  * @method \Rougin\Torin\Models\Order      offset(integer $value)
+ * @method \Rougin\Torin\Models\Order      where(mixed $field, mixed ...$args)
  * @method \Rougin\Torin\Models\Order      with(string|string[] $relations)
  *
  * @package Torin

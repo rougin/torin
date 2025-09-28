@@ -19,11 +19,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method \Rougin\Torin\Models\Client      create(array<string, mixed> $data)
  * @method \Rougin\Torin\Models\Client      findOrFail(mixed $id)
  * @method \Rougin\Torin\Models\Client|null find(mixed $id)
+ * @method \Rougin\Torin\Models\Client|null first()
  * @method \Rougin\Torin\Models\Client[]    get()
  * @method \Rougin\Torin\Models\Client      limit(integer $value)
  * @method \Rougin\Torin\Models\Client      offset(integer $value)
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
+ * @method \Rougin\Torin\Models\Client      where(mixed $field, mixed ...$args)
  *
  * @package Torin
  *

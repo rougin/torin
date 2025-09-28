@@ -6,6 +6,8 @@ use Rougin\Dexterity\Depots\EloquentDepot;
 use Rougin\Torin\Models\Client;
 
 /**
+ * @method \Rougin\Torin\Models\Client find(integer $id)
+ *
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -34,9 +36,7 @@ class ClientDepot extends EloquentDepot
     {
         $data['code'] = $this->getCode();
 
-        $result = $this->model->create($data);
-
-        return $result instanceof Client ? $result : new Client((array) $result);
+        return $this->model->create($data);
     }
 
     /**

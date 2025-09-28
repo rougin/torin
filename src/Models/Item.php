@@ -21,10 +21,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method integer                        count()
  * @method boolean                        delete()
  * @method \Rougin\Torin\Models\Item      findOrFail(mixed $id)
+ * @method \Rougin\Torin\Models\Item|null first()
  * @method \Rougin\Torin\Models\Item[]    get()
  * @method \Rougin\Torin\Models\Item|null find(mixed $id)
  * @method \Rougin\Torin\Models\Item      limit(integer $value)
  * @method \Rougin\Torin\Models\Item      offset(integer $value)
+ * @method \Rougin\Torin\Models\Item      where(mixed $field, mixed ...$args)
  * @method \Rougin\Torin\Models\Item      with(string|string[] $relations)
  *
  * @package Torin
