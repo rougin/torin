@@ -200,24 +200,4 @@ class ItemTest extends Testcase
 
         $this->assertEquals($date, $item->updated_at);
     }
-
-    /**
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        parent::doSetUp();
-
-        $this->migrate();
-    }
-
-    /**
-     * @return void
-     */
-    protected function doTearDown()
-    {
-        $this->rollback();
-
-        parent::doTearDown();
-    }
 }

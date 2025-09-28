@@ -38,24 +38,4 @@ class ClientTest extends Testcase
         $this->assertNotNull($client);
         $this->assertEquals('Jane Doe', $client->name);
     }
-
-    /**
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        parent::doSetUp();
-
-        $this->migrate();
-    }
-
-    /**
-     * @return void
-     */
-    protected function doTearDown()
-    {
-        $this->rollback();
-
-        parent::doTearDown();
-    }
 }

@@ -38,6 +38,8 @@ class Testcase extends Legacy
         $capsule->bootEloquent();
 
         $this->capsule = $capsule;
+
+        $this->migrate();
     }
 
     /**
@@ -45,6 +47,8 @@ class Testcase extends Legacy
      */
     protected function doTearDown()
     {
+        $this->rollback();
+
         $this->capsule->getConnection('torin')->disconnect();
     }
 
