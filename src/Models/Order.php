@@ -47,6 +47,16 @@ class Order extends Model
     const TYPE_TRANSFER = 2;
 
     /**
+     * @var array<string, string>
+     */
+    protected $casts =
+    [
+        'client_id' => 'integer',
+        'type' => 'integer',
+        'status' => 'integer',
+    ];
+
+    /**
      * @var array<integer, string>
      */
     protected $fillable =

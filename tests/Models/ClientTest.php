@@ -3,7 +3,6 @@
 namespace Rougin\Torin\Models;
 
 use Rougin\Torin\Testcase;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 /**
  * @package Torin
@@ -47,7 +46,7 @@ class ClientTest extends Testcase
     {
         parent::doSetUp();
 
-        $this->runPhinx('CreateClientsTable');
+        $this->migrate();
     }
 
     /**
@@ -55,7 +54,7 @@ class ClientTest extends Testcase
      */
     protected function doTearDown()
     {
-        Capsule::schema('torin')->drop('clients');
+        $this->rollback();
 
         parent::doTearDown();
     }

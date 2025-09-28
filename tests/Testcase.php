@@ -22,26 +22,6 @@ class Testcase extends Legacy
     protected $capsule;
 
     /**
-     * @param string $file
-     * @param string $name
-     *
-     * @return boolean
-     */
-    protected function isPhinxFileExists($file, $name)
-    {
-        // Convert text casing to "snake_case" -------------
-        /** @var string */
-        $text = preg_replace('/(?<!^)[A-Z]/', '_$0', $name);
-
-        $temp = strtolower($text);
-        // -------------------------------------------------
-
-        $file = basename($file, '.php');
-
-        return strpos(strtolower($file), $temp) !== false;
-    }
-
-    /**
      * @return void
      */
     protected function doSetUp()
@@ -70,12 +50,13 @@ class Testcase extends Legacy
 
     /**
      * @param string[] $paths
-     * @param string   $name
      *
      * @return integer
      */
-    protected function findPhinxVersion($paths, $name)
+    protected function findLastVersion($paths)
     {
+        $version = 0;
+
         foreach ($paths as $path)
         {
             /** @var string[] */
@@ -83,26 +64,47 @@ class Testcase extends Legacy
 
             foreach ($files as $file)
             {
-                if ($this->isPhinxFileExists($file, $name))
-                {
-                    $temp = basename($file, '.php');
+                $temp = basename($file, '.php');
 
-                    return (int) substr($temp, 0, 14);
-                }
+                $version = substr($temp, 0, 14);
+
+                $version = (int) $version;
             }
         }
 
-        $error = 'Migration "' . $name . '" not found';
-
-        throw new \Exception($error);
+        return $version;
     }
 
     /**
-     * @param string $name
-     *
      * @return void
      */
-    protected function runPhinx($name)
+    protected function migrate()
+    {
+        $phinx = $this->setPhinx();
+
+        $paths = $phinx->getConfig()->getMigrationPaths();
+
+        // Return the latest the migration class (e.g., '20241213094622') ---
+        $version = $this->findLastVersion($paths);
+        // ------------------------------------------------------------------
+
+        // Run the migration up to the specified version ---
+        $phinx->migrate('test', $version);
+        // -------------------------------------------------
+    }
+
+    /**
+     * @return void
+     */
+    protected function rollback()
+    {
+        $this->setPhinx()->migrate('test', 0);
+    }
+
+    /**
+     * @return \Phinx\Migration\Manager
+     */
+    protected function setPhinx()
     {
         // Prepare the PDO to the configuration file -----------
         $data = require __DIR__ . '/../app/config/phinx.php';
@@ -114,22 +116,10 @@ class Testcase extends Legacy
         $config = new Config($data);
         // -----------------------------------------------------
 
-        // Initialize the Manager with the created Config ---
         $input = new ArrayInput(array());
 
         $output = new NullOutput;
 
-        $manager = new Manager($config, $input, $output);
-        // --------------------------------------------------
-
-        $paths = $config->getMigrationPaths();
-
-        // Return the version from the migration class (e.g., '20241213094622') ---
-        $version = $this->findPhinxVersion($paths, $name);
-        // ------------------------------------------------------------------------
-
-        // Run the migration up to the specified version ---
-        $manager->migrate('test', $version);
-        // -------------------------------------------------
+        return new Manager($config, $input, $output);
     }
 }

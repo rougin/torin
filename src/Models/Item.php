@@ -38,6 +38,14 @@ class Item extends Model
     use SoftDeletes;
 
     /**
+     * @var array<string, string>
+     */
+    protected $casts =
+    [
+        'parent_id' => 'integer',
+    ];
+
+    /**
      * @var array<integer, string>
      */
     protected $fillable =

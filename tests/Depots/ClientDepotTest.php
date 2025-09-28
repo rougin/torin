@@ -4,7 +4,6 @@ namespace Rougin\Torin\Depots;
 
 use Rougin\Torin\Testcase;
 use Rougin\Torin\Models\Client;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 /**
  * @package Torin
@@ -117,7 +116,7 @@ class ClientDepotTest extends Testcase
     {
         parent::doSetUp();
 
-        $this->runPhinx('CreateClientsTable');
+        $this->migrate();
 
         $depot = new ClientDepot(new Client);
 
@@ -129,7 +128,7 @@ class ClientDepotTest extends Testcase
      */
     protected function doTearDown()
     {
-        Capsule::schema('torin')->drop('clients');
+        $this->rollback();
 
         parent::doTearDown();
     }

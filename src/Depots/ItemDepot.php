@@ -6,6 +6,8 @@ use Rougin\Dexterity\Depots\EloquentDepot;
 use Rougin\Torin\Models\Item;
 
 /**
+ * @method \Rougin\Torin\Models\Item find(integer $id)
+ *
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
@@ -26,6 +28,14 @@ class ItemDepot extends EloquentDepot
     }
 
     /**
+     * @return \Rougin\Torin\Models\Item[]
+     */
+    public function all()
+    {
+        return $this->model->all();
+    }
+
+    /**
      * @param array<string, mixed> $data
      *
      * @return \Rougin\Torin\Models\Item
@@ -36,16 +46,6 @@ class ItemDepot extends EloquentDepot
 
         /** @var \Rougin\Torin\Models\Item */
         return parent::create($data);
-    }
-
-    /**
-     * @param integer $id
-     *
-     * @return \Rougin\Torin\Models\Item|null
-     */
-    public function find($id)
-    {
-        return $this->model->with('orders')->find($id);
     }
 
     /**
@@ -85,6 +85,16 @@ class ItemDepot extends EloquentDepot
         $row->detail = $detail;
 
         return $row->save();
+    }
+
+    /**
+     * @param integer $id
+     *
+     * @return \Rougin\Torin\Models\Item
+     */
+    protected function findRow($id)
+    {
+        return $this->model->with('orders')->findOrFail($id);
     }
 
     /**

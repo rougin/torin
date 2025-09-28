@@ -40,6 +40,15 @@ class Client extends Model
     const TYPE_SUPPLIER = 1;
 
     /**
+     * @var array<string, string>
+     */
+    protected $casts =
+    [
+        'parent_id' => 'integer',
+        'type' => 'integer',
+    ];
+
+    /**
      * @var array<integer, string>
      */
     protected $fillable =

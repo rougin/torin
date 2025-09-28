@@ -47,7 +47,7 @@ class CartCheck extends Request
     }
 
     /**
-     * @param array<string, string> $data
+     * @param array<string, mixed> $data
      *
      * @return boolean
      */
@@ -60,20 +60,23 @@ class CartCheck extends Request
             return count($this->errors) === 0;
         }
 
-        $itemId = (int) $data['item_id'];
+        /** @var integer */
+        $itemId = $data['item_id'];
 
-        $item = $this->item->find($itemId);
-
-        if (! $item)
+        if (! $this->item->rowExists($itemId))
         {
             $this->setError('item_id', 'Item not found');
 
             return count($this->errors) === 0;
         }
 
-        $quantity = (int) $data['quantity'];
+        $item = $this->item->find($itemId);
 
-        $type = (int) $data['type'];
+        /** @var integer */
+        $type = $data['type'];
+
+        /** @var integer */
+        $quantity = $data['quantity'];
 
         if ($type === Order::TYPE_SALE && $item->quantity < $quantity)
         {
