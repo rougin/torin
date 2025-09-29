@@ -22,7 +22,8 @@ class ClientTest extends Testcase
         $data['type'] = Client::TYPE_SUPPLIER;
         $actual = $model->create($data)->name;
 
-        $this->assertEquals('John Doe', $actual);
+        $expect = 'John Doe';
+        $this->assertEquals($expect, $actual);
     }
 
     /**
@@ -39,6 +40,27 @@ class ClientTest extends Testcase
         $model = $model->where('name', 'Jane Doe');
         $actual = $model->firstOrFail()->name;
 
-        $this->assertEquals('Jane Doe', $actual);
+        $expect = 'Jane Doe';
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->startUp();
+
+        $this->migrate();
+    }
+
+    /**
+     * @return void
+     */
+    protected function doTearDown()
+    {
+        $this->rollback();
+
+        $this->shutdown();
     }
 }

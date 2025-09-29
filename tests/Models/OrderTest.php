@@ -58,4 +58,24 @@ class OrderTest extends Testcase
         $actual = $actual->client_id;
         $this->assertEquals($client->id, $actual);
     }
+
+    /**
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->startUp();
+
+        $this->migrate();
+    }
+
+    /**
+     * @return void
+     */
+    protected function doTearDown()
+    {
+        $this->rollback();
+
+        $this->shutdown();
+    }
 }

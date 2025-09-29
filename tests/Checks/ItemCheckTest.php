@@ -12,24 +12,19 @@ use Rougin\Torin\Testcase;
 class ItemCheckTest extends Testcase
 {
     /**
-     * @var \Rougin\Torin\Checks\ItemCheck
-     */
-    protected $check;
-
-    /**
      * @return mixed[][]
      */
     public function for_errors_provider()
     {
         $items = array();
 
-        $item = array();
-        $item[] = array('detail' => 'Test Detail');
+        $data = array('detail' => 'Descrip');
+        $item = array($data);
         $item[] = 'Name is required';
         $items[] = $item;
 
-        $item = array();
-        $item[] = array('name' => 'Test Item');
+        $data = array('name' => 'Test Item');
+        $item = array($data);
         $item[] = 'Description is required';
         $items[] = $item;
 
@@ -46,11 +41,11 @@ class ItemCheckTest extends Testcase
      */
     public function test_for_errors($data, $text)
     {
-        $actual = $this->check->valid($data);
+        $check = new ItemCheck;
 
-        $this->assertFalse($actual);
+        $this->assertFalse($check->valid($data));
 
-        $actual = $this->check->firstError();
+        $actual = $check->firstError();
 
         $this->assertEquals($text, $actual);
     }
@@ -58,23 +53,15 @@ class ItemCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_for_passed_check()
+    public function test_for_passed()
     {
         $data = array('name' => 'Test Item');
         $data['detail'] = 'Test Detail';
 
-        $actual = $this->check->valid($data);
+        $check = new ItemCheck;
+
+        $actual = $check->valid($data);
 
         $this->assertTrue($actual);
-    }
-
-    /**
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        parent::doSetUp();
-
-        $this->check = new ItemCheck;
     }
 }

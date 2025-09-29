@@ -13,24 +13,19 @@ use Rougin\Torin\Testcase;
 class ClientCheckTest extends Testcase
 {
     /**
-     * @var \Rougin\Torin\Checks\ClientCheck
-     */
-    protected $check;
-
-    /**
      * @return mixed[][]
      */
     public function for_errors_provider()
     {
         $items = array();
 
-        $item = array();
-        $item[] = array('type' => Client::TYPE_CUSTOMER);
+        $data = array('type' => Client::TYPE_CUSTOMER);
+        $item = array($data);
         $item[] = 'Client Name is required';
         $items[] = $item;
 
-        $item = array();
-        $item[] = array('name' => 'John Doe');
+        $data = array('name' => 'John Doe');
+        $item = array($data);
         $item[] = 'Client Type is required';
         $items[] = $item;
 
@@ -47,11 +42,11 @@ class ClientCheckTest extends Testcase
      */
     public function test_for_errors($data, $text)
     {
-        $actual = $this->check->valid($data);
+        $check = new ClientCheck;
 
-        $this->assertFalse($actual);
+        $this->assertFalse($check->valid($data));
 
-        $actual = $this->check->firstError();
+        $actual = $check->firstError();
 
         $this->assertEquals($text, $actual);
     }
@@ -59,23 +54,15 @@ class ClientCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_for_passed_check()
+    public function test_for_passed()
     {
         $data = array('name' => 'John Doe');
         $data['type'] = Client::TYPE_CUSTOMER;
 
-        $actual = $this->check->valid($data);
+        $check = new ClientCheck;
+
+        $actual = $check->valid($data);
 
         $this->assertTrue($actual);
-    }
-
-    /**
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        parent::doSetUp();
-
-        $this->check = new ClientCheck;
     }
 }

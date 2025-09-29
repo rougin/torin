@@ -109,8 +109,20 @@ class OrderDepotTest extends Testcase
      */
     protected function doSetUp()
     {
-        parent::doSetUp();
+        $this->startUp();
+
+        $this->migrate();
 
         $this->depot = new OrderDepot(new Order);
+    }
+
+    /**
+     * @return void
+     */
+    protected function doTearDown()
+    {
+        $this->rollback();
+
+        $this->shutdown();
     }
 }

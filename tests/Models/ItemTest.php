@@ -260,4 +260,24 @@ class ItemTest extends Testcase
         $expect = date('d M Y h:i A', time());
         $this->assertEquals($expect, $actual);
     }
+
+    /**
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->startUp();
+
+        $this->migrate();
+    }
+
+    /**
+     * @return void
+     */
+    protected function doTearDown()
+    {
+        $this->rollback();
+
+        $this->shutdown();
+    }
 }

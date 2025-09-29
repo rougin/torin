@@ -24,18 +24,19 @@ class OrderCheckTest extends Testcase
     {
         $items = array();
 
-        $item = array();
-        $item[] = array('client_id' => 1, 'type' => Order::TYPE_SALE);
+        $data = array('client_id' => 1);
+        $data['type'] = Order::TYPE_SALE;
+        $item = array($data);
         $item[] = 'Cart is required';
         $items[] = $item;
 
-        $item = array();
-        $item[] = array('cart' => array(), 'type' => Order::TYPE_SALE);
+        $data = array('cart' => array());
+        $data['type'] = Order::TYPE_SALE;
         $item[] = 'Client Name is required';
         $items[] = $item;
 
-        $item = array();
-        $item[] = array('cart' => array(), 'client_id' => 1);
+        $data = array('cart' => array());
+        $data['client_id'] = 100;
         $item[] = 'Order Type is required';
         $items[] = $item;
 
@@ -52,11 +53,11 @@ class OrderCheckTest extends Testcase
      */
     public function test_for_errors($data, $text)
     {
-        $actual = $this->check->valid($data);
+        $check = new OrderCheck;
 
-        $this->assertFalse($actual);
+        $this->assertFalse($check->valid($data));
 
-        $actual = $this->check->firstError();
+        $actual = $check->firstError();
 
         $this->assertEquals($text, $actual);
     }
@@ -64,7 +65,7 @@ class OrderCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_for_passed_check()
+    public function test_for_passed()
     {
         $data = array('client_id' => 1);
         $data['type'] = Order::TYPE_SALE;
@@ -73,18 +74,10 @@ class OrderCheckTest extends Testcase
         $cart['quantity'] = 20;
         $data['cart'] = array($cart);
 
-        $actual = $this->check->valid($data);
+        $check = new OrderCheck;
+
+        $actual = $check->valid($data);
 
         $this->assertTrue($actual);
-    }
-
-    /**
-     * @return void
-     */
-    protected function doSetUp()
-    {
-        parent::doSetUp();
-
-        $this->check = new OrderCheck;
     }
 }

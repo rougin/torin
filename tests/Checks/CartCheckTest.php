@@ -44,18 +44,21 @@ class CartCheckTest extends Testcase
     {
         $items = array();
 
-        $item = array();
-        $item[] = array('quantity' => 10, 'type' => Order::TYPE_SALE);
+        $data = array('quantity' => 10);
+        $data['type'] = Order::TYPE_SALE;
+        $item = array($data);
         $item[] = 'An item is required';
         $items[] = $item;
 
-        $item = array();
-        $item[] = array('item_id' => 1, 'type' => Order::TYPE_SALE);
+        $data = array('item_id' => 10);
+        $data['type'] = Order::TYPE_SALE;
+        $item = array($data);
         $item[] = 'Quantity is required';
         $items[] = $item;
 
-        $item = array();
-        $item[] = array('item_id' => 1, 'quantity' => 10);
+        $data = array('item_id' => 10);
+        $data['quantity'] = 10;
+        $item = array($data);
         $item[] = 'Order Type is required';
         $items[] = $item;
 
@@ -150,7 +153,7 @@ class CartCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_for_passed_check()
+    public function test_for_passed()
     {
         // Create a new item --------------
         $data = array('name' => 'Test');
@@ -192,7 +195,9 @@ class CartCheckTest extends Testcase
      */
     protected function doSetUp()
     {
-        parent::doSetUp();
+        $this->startUp();
+
+        $this->migrate();
 
         $this->client = new ClientDepot(new Client);
 
@@ -201,5 +206,15 @@ class CartCheckTest extends Testcase
         $this->order = new OrderDepot(new Order);
 
         $this->check = new CartCheck($this->item);
+    }
+
+    /**
+     * @return void
+     */
+    protected function doTearDown()
+    {
+        $this->rollback();
+
+        $this->shutdown();
     }
 }

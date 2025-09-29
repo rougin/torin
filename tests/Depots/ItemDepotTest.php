@@ -181,8 +181,20 @@ class ItemDepotTest extends Testcase
      */
     protected function doSetUp()
     {
-        parent::doSetUp();
+        $this->startUp();
+
+        $this->migrate();
 
         $this->depot = new ItemDepot(new Item);
+    }
+
+    /**
+     * @return void
+     */
+    protected function doTearDown()
+    {
+        $this->rollback();
+
+        $this->shutdown();
     }
 }

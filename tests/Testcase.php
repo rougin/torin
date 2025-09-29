@@ -22,6 +22,14 @@ class Testcase extends Legacy
     protected $capsule;
 
     /**
+     * @return void
+     */
+    protected function shutdown()
+    {
+        $this->capsule->getConnection('torin')->disconnect();
+    }
+
+    /**
      * @param string $pattern
      * @param string $string
      *
@@ -30,6 +38,33 @@ class Testcase extends Legacy
     public function assertRegex($pattern, $string)
     {
         $this->assertMatchesRegularExpression($pattern, $string);
+    }
+
+    /**
+     * @param string[] $paths
+     *
+     * @return integer
+     */
+    protected function getLastVersion($paths)
+    {
+        $version = 0;
+
+        foreach ($paths as $path)
+        {
+            /** @var string[] */
+            $files = glob($path . '/*.php');
+
+            foreach ($files as $file)
+            {
+                $temp = basename($file, '.php');
+
+                $version = substr($temp, 0, 14);
+
+                $version = (int) $version;
+            }
+        }
+
+        return $version;
     }
 
     /**
@@ -83,7 +118,7 @@ class Testcase extends Legacy
     /**
      * @return void
      */
-    protected function doSetUp()
+    protected function startUp()
     {
         $capsule = new Capsule;
 
@@ -97,44 +132,5 @@ class Testcase extends Legacy
         $capsule->bootEloquent();
 
         $this->capsule = $capsule;
-
-        $this->migrate();
-    }
-
-    /**
-     * @return void
-     */
-    protected function doTearDown()
-    {
-        $this->rollback();
-
-        $this->capsule->getConnection('torin')->disconnect();
-    }
-
-    /**
-     * @param string[] $paths
-     *
-     * @return integer
-     */
-    protected function getLastVersion($paths)
-    {
-        $version = 0;
-
-        foreach ($paths as $path)
-        {
-            /** @var string[] */
-            $files = glob($path . '/*.php');
-
-            foreach ($files as $file)
-            {
-                $temp = basename($file, '.php');
-
-                $version = substr($temp, 0, 14);
-
-                $version = (int) $version;
-            }
-        }
-
-        return $version;
     }
 }

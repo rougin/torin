@@ -128,8 +128,20 @@ class ClientDepotTest extends Testcase
      */
     protected function doSetUp()
     {
-        parent::doSetUp();
+        $this->startUp();
+
+        $this->migrate();
 
         $this->depot = new ClientDepot(new Client);
+    }
+
+    /**
+     * @return void
+     */
+    protected function doTearDown()
+    {
+        $this->rollback();
+
+        $this->shutdown();
     }
 }
