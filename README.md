@@ -32,30 +32,6 @@ Then open http://localhost in a web browser.
 
 See [CHANGELOG](CHANGELOG.md) for more recent changes.
 
-## Development
+## Contributing
 
-Includes tools for code quality, coding style, and unit tests.
-
-### Code quality
-
-Analyze code quality using [phpstan](https://phpstan.org/):
-
-``` bash
-$ phpstan
-```
-
-### Coding style
-
-Enforce coding style using [php-cs-fixer](https://cs.symfony.com/):
-
-``` bash
-$ php-cs-fixer fix --config=phpstyle.php
-```
-
-### Unit tests
-
-Execute unit tests using [phpunit](https://phpunit.de/index.html):
-
-``` bash
-$ composer test
-```
+See [CONTRIBUTING](CONTRIBUTING.md) on how to contribute.
