@@ -20,14 +20,21 @@ Error when running the route
 
 Development may proceed once the issue has been discussed and approved by a maintainer.
 
-* **Reference the issue** - when creating the pull request, the related issue number must always be referenced in the title and description of the Pull Request (PR).
-* **Keep it focused** - the PR should ideally address only one issue.
+### Reference the issue
+
+When creating the pull request, the related issue number must always be referenced in the title and description of the Pull Request (PR).
+
+### Keep it focused
+
+The PR should ideally address only one issue.
 
 ### Example pull request title
 
 ```
 #1 - Fix for running the route
 ```
+
+Wherein the `#1` came from the sample issue (e.g., `Error when running the route`).
 
 ## Coding standards
 
@@ -61,5 +68,10 @@ $ composer test
 
 It is strongly encouraged to create automated tests when creating new features or fixing bugs.
 
-* **New features** - new features should be accompanied by appropriate unit or functional tests using `phpunit` to cover the new functionality.
-* **Bug fixes** - bug fixes should include a new failing test that demonstrates the bug and then passes once the fix is implemented. This helps prevent regressions.
+### New features
+
+New features should be accompanied by appropriate unit or functional tests using `phpunit` to cover the new functionality.
+
+### Bug fixes
+
+Bug fixes should include a new failing test that demonstrates the bug and then passes once the fix is implemented. This helps prevent regressions.
