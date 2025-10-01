@@ -19,22 +19,17 @@ class Orders extends Page
      *
      * @return string
      */
-    /**
-     * @param \Rougin\Torin\Depots\OrderDepot $order
-     *
-     * @return string
-     */
     public function index(OrderDepot $order)
     {
         $data = array('depot' => new Depot('orders'));
 
-        // Prepare the pagination --------------
+        // Prepare the pagination -----------------
         $total = $order->getTotal();
 
-        $pagee = $this->pagee('orders', $total);
+        $pagee = $this->setPagee('orders', $total);
 
         $data['pagee'] = $pagee;
-        // -------------------------------------
+        // ----------------------------------------
 
         // Generate the HTML table ----------------------------------------------------------
         $table = new Table;
@@ -72,6 +67,6 @@ class Orders extends Page
         $data['table'] = $table;
         // ----------------------------------------------------------------------------------
 
-        return $this->render('orders.index', $data);
+        return $this->render('orders/index', $data);
     }
 }

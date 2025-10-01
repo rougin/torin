@@ -18,22 +18,17 @@ class Clients extends Page
      *
      * @return string
      */
-    /**
-     * @param \Rougin\Torin\Depots\ClientDepot $client
-     *
-     * @return string
-     */
     public function index(ClientDepot $client)
     {
         $data = array('depot' => new Depot('clients'));
 
-        // Prepare the pagination ---------------
+        // Prepare the pagination ------------------
         $total = $client->getTotal();
 
-        $pagee = $this->pagee('clients', $total);
+        $pagee = $this->setPagee('clients', $total);
 
         $data['pagee'] = $pagee;
-        // --------------------------------------
+        // -----------------------------------------
 
         // Generate the HTML table ----------------------------------------------
         $table = new Table;
@@ -65,6 +60,6 @@ class Clients extends Page
         $data['table'] = $table;
         // ----------------------------------------------------------------------
 
-        return $this->render('clients.index', $data);
+        return $this->render('clients/index', $data);
     }
 }

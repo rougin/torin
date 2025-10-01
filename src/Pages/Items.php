@@ -18,22 +18,17 @@ class Items extends Page
      *
      * @return string
      */
-    /**
-     * @param \Rougin\Torin\Depots\ItemDepot $item
-     *
-     * @return string
-     */
     public function index(ItemDepot $item)
     {
         $data = array('depot' => new Depot('items'));
 
-        // Prepare the pagination -------------
+        // Prepare the pagination ----------------
         $total = $item->getTotal();
 
-        $pagee = $this->pagee('items', $total);
+        $pagee = $this->setPagee('items', $total);
 
         $data['pagee'] = $pagee;
-        // ------------------------------------
+        // ---------------------------------------
 
         // Generate the HTML table -----------------------------------------------
         $table = new Table;
@@ -56,6 +51,6 @@ class Items extends Page
         $data['table'] = $table;
         // -----------------------------------------------------------------------
 
-        return $this->render('items.index', $data);
+        return $this->render('items/index', $data);
     }
 }

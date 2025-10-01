@@ -38,13 +38,13 @@
       </div>
     </div>
 
-    <?= $plate->add('orders.delete', compact('form')) ?>
-    <?= $plate->add('orders.detail', compact('form')) ?>
-    <?= $plate->add('orders.status', compact('form')) ?>
+    <?= $plate->add('orders/delete', compact('form')) ?>
+    <?= $plate->add('orders/detail', compact('form')) ?>
+    <?= $plate->add('orders/status', compact('form')) ?>
   </div>
 <?= $block->end() ?>
 
 <?= $block->set('scripts') ?>
   <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.complete.min.js"></script>
-  <?= $plate->add('orders.depot', compact('depot', 'form', 'pagee', 'url')) ?>
+  <?= $plate->add('orders/depot', compact('depot', 'form', 'pagee', 'url')) ?>
 <?= $block->end() ?>

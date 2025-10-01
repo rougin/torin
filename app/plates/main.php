@@ -18,8 +18,8 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-  <?= $plate->add('scripts.modal') ?>
-  <?= $plate->add('scripts.alert') ?>
+  <?= $plate->add('scripts/modal') ?>
+  <?= $plate->add('scripts/alert') ?>
 
   <?= $block->add('scripts') ?>
 </body>

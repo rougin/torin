@@ -33,11 +33,11 @@
       </div>
     </div>
 
-    <?= $plate->add('clients.delete', compact('form')) ?>
-    <?= $plate->add('clients.detail', compact('form')) ?>
+    <?= $plate->add('clients/delete', compact('form')) ?>
+    <?= $plate->add('clients/detail', compact('form')) ?>
   </div>
 <?= $block->end() ?>
 
 <?= $block->set('scripts') ?>
-  <?= $plate->add('clients.depot', compact('depot', 'form', 'pagee', 'url')) ?>
+  <?= $plate->add('clients/depot', compact('depot', 'form', 'pagee', 'url')) ?>
 <?= $block->end() ?>

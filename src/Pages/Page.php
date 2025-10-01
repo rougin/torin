@@ -3,18 +3,24 @@
 namespace Rougin\Torin\Pages;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Rougin\Fortem\Plate;
+use Rougin\Fortem\Helpers\FormHelper;
+use Rougin\Fortem\Helpers\LinkHelper;
 use Rougin\Gable\Pagee;
+use Staticka\Filter\LayoutFilter;
+use Staticka\Helper\BlockHelper;
+use Staticka\Helper\LayoutHelper;
+use Staticka\Helper\PlateHelper;
+use Staticka\Render\RenderInterface;
 
 /**
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-abstract class Page
+class Page
 {
     /**
-     * @var \Rougin\Fortem\Plate
+     * @var \Staticka\Render\RenderInterface
      */
     protected $plate;
 
@@ -24,10 +30,10 @@ abstract class Page
     protected $request;
 
     /**
-     * @param \Rougin\Fortem\Plate                     $plate
+     * @param \Staticka\Render\RenderInterface $plate
      * @param \Psr\Http\Message\ServerRequestInterface $request
      */
-    public function __construct(Plate $plate, ServerRequestInterface $request)
+    public function __construct(RenderInterface $plate, ServerRequestInterface $request)
     {
         $this->plate = $plate;
 
@@ -40,15 +46,30 @@ abstract class Page
      *
      * @return \Rougin\Gable\Pagee
      */
-    protected function pagee($name, $total)
+    protected function setPagee($name, $total)
     {
         $pagee = Pagee::fromRequest($this->request);
 
-        $link = $this->plate->getLinkHelper();
+        $link = $this->getLinkHelper();
 
         $pagee->asAlpine()->setTotal($total);
 
         return $pagee->setLink($link->set($name));
+    }
+
+    /**
+     * TODO: Remove usage of "APP_URL".
+     *
+     * @return \Rougin\Fortem\Helpers\LinkHelper
+     */
+    protected function getLinkHelper()
+    {
+        $server = $this->request->getServerParams();
+
+        /** @var string */
+        $link = getenv('APP_URL');
+
+        return new LinkHelper($link, $server);
     }
 
     /**
@@ -60,6 +81,36 @@ abstract class Page
      */
     protected function render($name, $data = array())
     {
-        return $this->plate->render($name, $data);
+        // Initialize the list of helpers ----------
+        $helpers = array($this->getLinkHelper());
+
+        $form = new FormHelper;
+
+        $helpers[] = $form->withAlpine();
+
+        $helpers[] = new PlateHelper($this->plate);
+
+        $helpers[] = new BlockHelper;
+
+        $helpers[] = new LayoutHelper($this->plate);
+        // -----------------------------------------
+
+        foreach ($helpers as $helper)
+        {
+            $data[$helper->name()] = $helper;
+        }
+
+        $html = $this->plate->render($name, $data);
+
+        // Initialize the list of filters ---
+        $filters = array(new LayoutFilter);
+        // ----------------------------------
+
+        foreach ($filters as $filter)
+        {
+            $html = $filter->filter($html);
+        }
+
+        return $html;
     }
 }

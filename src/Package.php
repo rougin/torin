@@ -5,6 +5,7 @@ namespace Rougin\Torin;
 use Rougin\Slytherin\Container\ContainerInterface;
 use Rougin\Slytherin\Integration\Configuration;
 use Rougin\Slytherin\Integration\IntegrationInterface;
+use Staticka\Render;
 
 /**
  * @package Torin
@@ -21,19 +22,34 @@ abstract class Package implements IntegrationInterface
      */
     public function define(ContainerInterface $container, Configuration $config)
     {
-        $current = $this->setRouter();
+        // Initialize the "RouterInterface" ---------------------
+        $self = $this->setRouter();
 
-        $interface = 'Rougin\Slytherin\Routing\RouterInterface';
+        $name = 'Rougin\Slytherin\Routing\RouterInterface';
 
-        if ($container->has($interface))
+        if ($container->has($name))
         {
             /** @var \Rougin\Slytherin\Routing\RouterInterface */
-            $router = $container->get($interface);
+            $temp = $container->get($name);
 
-            $current = $router->merge($current->routes());
+            $self = $temp->merge($self->routes());
         }
 
-        return $container->set($interface, $current);
+        $container = $container->set($name, $self);
+        // ------------------------------------------------------
+
+        // Initialize the "RenderInterface" -------
+        /** @var string|string[] */
+        $path = $config->get('app.views', '');
+
+        $self = new Render($path);
+
+        $name = 'Staticka\Render\RenderInterface';
+
+        $container = $container->set($name, $self);
+        // ----------------------------------------
+
+        return $container;
     }
 
     /**
