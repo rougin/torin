@@ -1,15 +1,16 @@
 <?php
 
-namespace Rougin\Torin\Fixture\Fakes;
+namespace Rougin\Torin\Fixture\Stubs;
 
 use Rougin\Fortem\Plate;
+use Staticka\Render\RenderInterface;
 
 /**
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class FakePlate extends Plate
+class StubRender extends Plate implements RenderInterface
 {
     /**
      * @var string|null
@@ -19,12 +20,11 @@ class FakePlate extends Plate
     /**
      * @var array<string, mixed>
      */
-    protected $data = array();
+    protected $data = [];
 
-    // Override constructor to avoid calling parent's constructor
     public function __construct()
     {
-        // Do nothing, or initialize properties specific to the fake
+        // Override constructor to avoid calling parent's constructor
     }
 
     /**
@@ -33,19 +33,11 @@ class FakePlate extends Plate
      *
      * @return string
      */
-    public function render($template, $data = array())
+    public function render($template, $data = [])
     {
         $this->template = $template;
         $this->data = $data;
-        return 'rendered_html_from_fake_plate'; // Return a dummy string
-    }
-
-    /**
-     * @return \Rougin\Torin\Fixture\Fakes\FakeLinkHelper
-     */
-    public function getLinkHelper()
-    {
-        return new FakeLinkHelper;
+        return 'rendered_html_from_stub_render';
     }
 
     /**
