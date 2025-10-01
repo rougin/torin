@@ -15,7 +15,7 @@ class StubRender extends Plate implements RenderInterface
     /**
      * @var string|null
      */
-    protected $template;
+    protected $name;
 
     /**
      * @var array<string, mixed>
@@ -28,15 +28,17 @@ class StubRender extends Plate implements RenderInterface
     }
 
     /**
-     * @param string               $template
+     * @param string               $name
      * @param array<string, mixed> $data
      *
      * @return string
      */
-    public function render($template, $data = [])
+    public function render($name, $data = [])
     {
-        $this->template = $template;
+        $this->name = $name;
+
         $this->data = $data;
+
         return 'rendered_html_from_stub_render';
     }
 
@@ -45,7 +47,7 @@ class StubRender extends Plate implements RenderInterface
      */
     public function getTemplate()
     {
-        return $this->template;
+        return $this->name;
     }
 
     /**
