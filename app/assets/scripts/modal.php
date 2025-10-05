@@ -13,29 +13,4 @@
   </div>
 </div>
 
-<script type="text/javascript">
-const Modal =
-{
-  get(id)
-  {
-    const el = document.getElementById(id)
-
-    return bootstrap.Modal.getOrCreateInstance(el)
-  },
-
-  hide(id)
-  {
-    return this.get(id).hide()
-  },
-
-  show(id)
-  {
-    return this.get(id).show()
-  },
-
-  toggle(id)
-  {
-    return this.get(id).toggle()
-  },
-}
-</script>
+<script type="text/javascript">const Modal={get(t){const e=document.getElementById(t);return bootstrap.Modal.getOrCreateInstance(e)},hide(t){return this.get(t).hide()},show(t){return this.get(t).show()},toggle(t){return this.get(t).toggle()}};</script>

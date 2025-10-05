@@ -130,82 +130,8 @@
   </div>
 </div>
 
-<script type="text/javascript">
-const Modal =
-{
-  get(id)
-  {
-    const el = document.getElementById(id)
-
-    return bootstrap.Modal.getOrCreateInstance(el)
-  },
-
-  hide(id)
-  {
-    return this.get(id).hide()
-  },
-
-  show(id)
-  {
-    return this.get(id).show()
-  },
-
-  toggle(id)
-  {
-    return this.get(id).toggle()
-  },
-}
-</script>
-  <script type="text/javascript">
-const Alert =
-{
-  danger(title, text)
-  {
-    return this.show(title, text, 'bg-danger text-white')
-  },
-
-  info(title, text)
-  {
-    return this.show(title, text, 'bg-info text-white')
-  },
-
-  primary(title, text)
-  {
-    return this.show(title, text, 'bg-primary text-white')
-  },
-
-  secondary(title, text)
-  {
-    return this.show(title, text, 'bg-secondary text-white')
-  },
-
-  show(title, text, style)
-  {
-    const prefix = 'cuel-alert-modal'
-
-    const header = document.getElementById(prefix + '-header')
-    header.className = 'modal-header border-bottom-0 ' + style
-
-    const name = document.getElementById(prefix + '-title')
-    name.innerHTML = title
-
-    const body = document.getElementById(prefix + '-body')
-    body.innerHTML = text
-
-    Modal.show('cuel-alert-modal')
-  },
-
-  success(title, text)
-  {
-    return this.show(title, text, 'bg-success text-white')
-  },
-
-  warning(title, text)
-  {
-    return this.show(title, text, 'bg-warning')
-  },
-}
-</script>
+<script type="text/javascript">const Modal={get(t){const e=document.getElementById(t);return bootstrap.Modal.getOrCreateInstance(e)},hide(t){return this.get(t).hide()},show(t){return this.get(t).show()},toggle(t){return this.get(t).toggle()}};</script>
+  <script type="text/javascript">const Alert={danger(e,t){return this.show(e,t,"bg-danger text-white")},info(e,t){return this.show(e,t,"bg-info text-white")},primary(e,t){return this.show(e,t,"bg-primary text-white")},secondary(e,t){return this.show(e,t,"bg-secondary text-white")},show(e,t,r){const n="cuel-alert-modal";document.getElementById(n+"-header").className="modal-header border-bottom-0 "+r;document.getElementById(n+"-title").innerHTML=e;document.getElementById(n+"-body").innerHTML=t,Modal.show("cuel-alert-modal")},success(e,t){return this.show(e,t,"bg-success text-white")},warning(e,t){return this.show(e,t,"bg-warning")}};</script>
 
     <script type="text/javascript">
 let items = {"name":null,"detail":null,"items":[],"empty":false,"loadError":false,"id":null,"delete":false,"error":{},"loading":false};
