@@ -2,9 +2,8 @@
 
 namespace Rougin\Torin\Pages;
 
-use Rougin\Torin\Fixture\Fakes\FakeClientDepot;
-use Rougin\Torin\Fixture\Fakes\FakeServerRequest;
-use Rougin\Torin\Fixture\Stubs\StubRender;
+use Rougin\Torin\Depots\ClientDepot;
+use Rougin\Torin\Models\Client;
 use Rougin\Torin\Testcase;
 
 /**
@@ -15,37 +14,19 @@ use Rougin\Torin\Testcase;
 class ClientsTest extends Testcase
 {
     /**
-     * @var \Rougin\Torin\Pages\Clients
-     */
-    protected $page;
-
-    /**
-     * @var \Rougin\Torin\Fixture\Stubs\StubRender
-     */
-    protected $plate;
-
-    /**
-     * @var \Rougin\Torin\Fixture\Fakes\FakeServerRequest
-     */
-    protected $request;
-
-    /**
      * @return void
      */
-    public function test_can_render_clients_index_page()
+    public function test_page_output()
     {
-        $depot = new FakeClientDepot(10); // Set a total for pagination
+        $depot = new ClientDepot(new Client);
 
-        $this->request = $this->request->withQueryParams(array()); // Simulate no query parameters
+        $page = new Clients($this->plate, $this->request);
 
-        $result = $this->page->index($depot);
+        $expect = $this->getPlate('Clients');
 
-        $this->assertEquals('rendered_html_from_stub_render', $result);
-        $this->assertEquals('clients/index', $this->plate->getTemplate());
-        $this->assertArrayHasKey('depot', $this->plate->getData());
-        $this->assertArrayHasKey('pagee', $this->plate->getData());
-        $this->assertArrayHasKey('table', $this->plate->getData());
-        // Further assertions on the structure of 'pagee' and 'table' if needed
+        $actual = $page->index($depot);
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
@@ -53,9 +34,19 @@ class ClientsTest extends Testcase
      */
     protected function doSetUp()
     {
-        $this->plate = new StubRender;
-        $this->request = new FakeServerRequest;
+        $this->startUp();
+        $this->migrate();
 
-        $this->page = new Clients($this->plate, $this->request);
+        $this->withPlate();
+        $this->withHttp();
+    }
+
+    /**
+     * @return void
+     */
+    protected function doTearDown()
+    {
+        $this->rollback();
+        $this->shutdown();
     }
 }

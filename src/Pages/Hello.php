@@ -2,27 +2,18 @@
 
 namespace Rougin\Torin\Pages;
 
-use Rougin\Fortem\Plate;
-
 /**
  * @package Torin
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Hello
+class Hello extends Page
 {
     /**
-     * @param \Rougin\Fortem\Plate $plate
-     *
      * @return string
      */
-    /**
-     * @param \Rougin\Fortem\Plate $plate
-     *
-     * @return string
-     */
-    public function index(Plate $plate)
+    public function index()
     {
-        return $plate->render('index');
+        return $this->render('index');
     }
 }

@@ -30,7 +30,7 @@ class Page
     protected $request;
 
     /**
-     * @param \Staticka\Render\RenderInterface $plate
+     * @param \Staticka\Render\RenderInterface         $plate
      * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public function __construct(RenderInterface $plate, ServerRequestInterface $request)

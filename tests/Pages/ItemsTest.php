@@ -2,9 +2,8 @@
 
 namespace Rougin\Torin\Pages;
 
-use Rougin\Torin\Fixture\Fakes\FakeItemDepot;
-use Rougin\Torin\Fixture\Fakes\FakeServerRequest;
-use Rougin\Torin\Fixture\Stubs\StubRender;
+use Rougin\Torin\Depots\ItemDepot;
+use Rougin\Torin\Models\Item;
 use Rougin\Torin\Testcase;
 
 /**
@@ -15,36 +14,19 @@ use Rougin\Torin\Testcase;
 class ItemsTest extends Testcase
 {
     /**
-     * @var \Rougin\Torin\Pages\Items
-     */
-    protected $page;
-
-    /**
-     * @var \Rougin\Torin\Fixture\Stubs\StubRender
-     */
-    protected $plate;
-
-    /**
-     * @var \Rougin\Torin\Fixture\Fakes\FakeServerRequest
-     */
-    protected $request;
-
-    /**
      * @return void
      */
-    public function test_can_render_items_index_page()
+    public function test_page_output()
     {
-        $depot = new FakeItemDepot(10); // Set a total for pagination
+        $depot = new ItemDepot(new Item);
 
-        $this->request = $this->request->withQueryParams(array()); // Simulate no query parameters
+        $page = new Items($this->plate, $this->request);
 
-        $result = $this->page->index($depot);
+        $expect = $this->getPlate('Items');
 
-        $this->assertEquals('rendered_html_from_stub_render', $result);
-        $this->assertEquals('items/index', $this->plate->getTemplate());
-        $this->assertArrayHasKey('depot', $this->plate->getData());
-        $this->assertArrayHasKey('pagee', $this->plate->getData());
-        $this->assertArrayHasKey('table', $this->plate->getData());
+        $actual = $page->index($depot);
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
@@ -52,9 +34,19 @@ class ItemsTest extends Testcase
      */
     protected function doSetUp()
     {
-        $this->plate = new StubRender;
-        $this->request = new FakeServerRequest;
+        $this->startUp();
+        $this->migrate();
 
-        $this->page = new Items($this->plate, $this->request);
+        $this->withPlate();
+        $this->withHttp();
+    }
+
+    /**
+     * @return void
+     */
+    protected function doTearDown()
+    {
+        $this->rollback();
+        $this->shutdown();
     }
 }

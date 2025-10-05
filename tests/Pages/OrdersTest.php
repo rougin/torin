@@ -2,9 +2,8 @@
 
 namespace Rougin\Torin\Pages;
 
-use Rougin\Torin\Fixture\Fakes\FakeOrderDepot;
-use Rougin\Torin\Fixture\Fakes\FakeServerRequest;
-use Rougin\Torin\Fixture\Stubs\StubRender;
+use Rougin\Torin\Depots\OrderDepot;
+use Rougin\Torin\Models\Order;
 use Rougin\Torin\Testcase;
 
 /**
@@ -15,36 +14,19 @@ use Rougin\Torin\Testcase;
 class OrdersTest extends Testcase
 {
     /**
-     * @var \Rougin\Torin\Pages\Orders
-     */
-    protected $page;
-
-    /**
-     * @var \Rougin\Torin\Fixture\Stubs\StubRender
-     */
-    protected $plate;
-
-    /**
-     * @var \Rougin\Torin\Fixture\Fakes\FakeServerRequest
-     */
-    protected $request;
-
-    /**
      * @return void
      */
-    public function test_can_render_orders_index_page()
+    public function test_page_output()
     {
-        $depot = new FakeOrderDepot(10); // Set a total for pagination
+        $depot = new OrderDepot(new Order);
 
-        $this->request = $this->request->withQueryParams(array()); // Simulate no query parameters
+        $page = new Orders($this->plate, $this->request);
 
-        $result = $this->page->index($depot);
+        $expect = $this->getPlate('Orders');
 
-        $this->assertEquals('rendered_html_from_stub_render', $result);
-        $this->assertEquals('orders/index', $this->plate->getTemplate());
-        $this->assertArrayHasKey('depot', $this->plate->getData());
-        $this->assertArrayHasKey('pagee', $this->plate->getData());
-        $this->assertArrayHasKey('table', $this->plate->getData());
+        $actual = $page->index($depot);
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
@@ -52,9 +34,19 @@ class OrdersTest extends Testcase
      */
     protected function doSetUp()
     {
-        $this->plate = new StubRender;
-        $this->request = new FakeServerRequest;
+        $this->startUp();
+        $this->migrate();
 
-        $this->page = new Orders($this->plate, $this->request);
+        $this->withPlate();
+        $this->withHttp();
+    }
+
+    /**
+     * @return void
+     */
+    protected function doTearDown()
+    {
+        $this->rollback();
+        $this->shutdown();
     }
 }

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Torin - Simple inventory management.</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto">
+    <style type="text/css">
+    html, body { font-family: 'Roboto'; }
+    .ex-pointer { cursor: pointer; }
+  </style>
+</head>
+<body style="background: #ebebeb;">
+    <div x-data="clients" @clients.window="load($event.detail)">
+    <div class="mb-3">
+      <div class="navbar py-0 navbar-expand-lg bg-black shadow-lg" data-bs-theme="dark">
+  <div class="container py-3">
+    <span class="navbar-brand mb-1 h1">Torin</span>
+    <div class="collapse navbar-collapse d-flex" id="navbarNav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+                      <a class="nav-link" href="http://localhost/">Home</a>
+                  </li>
+        <li class="nav-item">
+                      <a class="nav-link" href="http://localhost/orders">Orders</a>
+                  </li>
+        <li class="nav-item">
+                      <a class="nav-link" href="http://localhost/clients">Clients</a>
+                  </li>
+        <li class="nav-item">
+                      <a class="nav-link" href="http://localhost/items">Items</a>
+                  </li>
+      </ul>
+    </div>
+  </div>
+</div>
+    </div>
+
+    <div class="container mb-3">
+      <div class="d-flex justify-content-between align-items-end">
+        <div>
+          <span class="fs-2 lh-1 fw-bold">Clients</span>
+        </div>
+        <div>
+          <button type="button" class="btn btn-secondary shadow-lg" data-bs-toggle="modal" data-bs-target="#client-detail-modal" :disabled="loading">Create New</button>        </div>
+      </div>
+      <div class="text-secondary">
+        <hr>
+      </div>
+    </div>
+
+    <div class="container mb-3">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <div><table class="table mb-0" :class="{ 'opacity-50': items.length > 0 && loading}"><thead><tr><th align="left" width="5%">Type</th><th align="left" width="22%">Client Name</th><th align="left" width="15%">Remarks</th><th align="left" width="13%">Created At</th><th align="left" width="13%">Updated At</th><th align="left" width="5%"></th></tr></thead><tbody><template x-if="items.length === 0 && loading"><template x-data="{ length: items && items.length ? items.length : 10 }" x-for="i in length"><tr><td class="align-middle placeholder-glow"><span class="placeholder col-12"></span></td><td class="align-middle placeholder-glow"><span class="placeholder col-12"></span></td><td class="align-middle placeholder-glow"><span class="placeholder col-12"></span></td><td class="align-middle placeholder-glow"><span class="placeholder col-12"></span></td><td class="align-middle placeholder-glow"><span class="placeholder col-12"></span></td><td class="align-middle placeholder-glow"><span class="placeholder col-12"></span></td></tr></template></template><template x-if="items.length === 0 && empty"><tr><td colspan="6" class="align-middle text-center"><span>No clients found.</span></td></tr></template><template x-if="! loading && loadError"><tr><td colspan="6" class="align-middle text-center"><span>An error occured in getting the clients.</span></td></tr></template><template x-if="items && items.length > 0"><template x-for="item in items"><tr><td><template x-if="item.type === 0"><span class="badge rounded-pill text-uppercase text-bg-success">Customer</span></template><template x-if="item.type === 1"><span class="badge rounded-pill text-uppercase text-bg-primary">Supplier</span></template></td><td><p class="mb-0" x-text="item.name"></p><p class="mb-0 small text-muted" x-text="item.code"></p></td><td><p class="mb-0 fst-italic" x-text="item.remarks"></p></td><td x-text="item.created_at"></td><td x-text="item.updated_at"></td><td><div class="dropdown"><button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">Actions</button><div class="dropdown-menu dropdown-menu-end"><div><a class="dropdown-item" href="javascript:void(0)" @click="edit(item)">Update</a></div><div><hr class="dropdown-divider"></div><div><a class="dropdown-item text-danger" href="javascript:void(0)" @click="trash(item)">Delete</a></div></div></div></td></tr></template></template></tbody></table></div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="d-inline-block"><ul class="pagination"><li class="page-item" :class="{ 'disabled': pagee.page === 1 }"><a class="page-link" :href="pagee.url(1)" :page="1" @click.prevent="pagee.view($dispatch, $el)">First</a></li><li class="page-item" :class="{ 'disabled': pagee.page <= 1 }"><a class="page-link" :href="pagee.url(pagee.page - 1)" :page="pagee.page - 1" @click.prevent="pagee.view($dispatch, $el)">Prev</a></li><template x-for="(page, index) in pagee.items()" :key="index"><li class="page-item" :class="{ 'active': (index + 1) === pagee.page }"><a class="page-link" :href="pagee.url(index + 1)" :page="index + 1" @click.prevent="pagee.view($dispatch, $el)" x-text="index + 1"></a></li></template><li class="page-item" :class="{ 'disabled': pagee.page >= pagee.pages }"><a class="page-link" :href="pagee.url(pagee.page + 1)" :page="pagee.page + 1" @click.prevent="pagee.view($dispatch, $el)">Next</a></li><li class="page-item" :class="{ 'disabled': pagee.page === pagee.pages }"><a class="page-link" :href="pagee.url(pagee.pages)" :page="pagee.pages" @click.prevent="pagee.view($dispatch, $el)">Last</a></li></ul></div>      </div>
+    </div>
+
+    <div class="modal fade" id="delete-client-modal" data-bs-backdrop="static" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header text-white bg-danger border-bottom-0">
+      <div class="modal-title fs-5 fw-bold" id="client-detail-modal-label">Delete client?</div>
+    </div>
+    <div class="modal-body">
+      <p class="mb-0">Are you sure that you want to delete the client <span class="fw-bold" x-text="name"></span>?</p>
+      <template x-if="error.delete"><p class="text-danger small mb-0" x-text="error.delete[0]"></p></template>    </div>
+    <div class="modal-footer border-top-0 bg-light">
+      <div class="me-auto">
+        <div class="spinner-border align-middle text-danger" role="status" x-show="loading">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <button type="button" class="btn btn-link text-secondary text-decoration-none" @click="close" :disabled="loading">Cancel</button>      <button type="button" class="btn btn-danger" @click="remove(id)" :disabled="loading">Delete</button>    </div>
+  </div>
+</div>
+</div>
+    <div class="modal fade" id="client-detail-modal" data-bs-backdrop="static" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header text-white border-bottom-0" :class="{ 'bg-primary': id, 'bg-secondary': !id }">
+      <template x-if="id">
+        <div class="modal-title fs-5 fw-bold" id="client-detail-modal-label">Update Client</div>
+      </template>
+      <template x-if="! id">
+        <div class="modal-title fs-5 fw-bold" id="client-detail-modal-label">Create New Client</div>
+      </template>
+    </div>
+    <div class="modal-body">
+      <div class="mb-3">
+        <div class="row">
+          <div class="col-sm-6">
+            <label class="form-label mb-0">Client Name <span class="text-danger">*</span></label>            <input type="text" name="name" class="form-control" x-model="name" :disabled="loading">            <template x-if="error.name"><p class="text-danger small mb-0" x-text="error.name[0]"></p></template>          </div>
+          <div class="col-sm-6">
+            <label class="form-label mb-0">Client Type <span class="text-danger">*</span></label>            <select name="type" class="form-select" x-model="type" :disabled="loading"><option value="">Please select</option><option value="0">Customer</option><option value="1">Supplier</option></select>            <template x-if="error.type"><p class="text-danger small mb-0" x-text="error.type[0]"></p></template>          </div>
+        </div>
+      </div>
+      <div>
+        <label class="form-label mb-0">Remarks</label>        <input type="text" name="remarks" class="form-control" x-model="remarks" :disabled="loading">        <template x-if="error.remarks"><p class="text-danger small mb-0" x-text="error.remarks[0]"></p></template>      </div>
+    </div>
+    <div class="modal-footer border-top-0 bg-light">
+      <div class="me-auto">
+        <div class="spinner-border align-middle" :class="{ 'text-primary': id, 'text-secondary': !id }" role="status" x-show="loading">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <button type="button" class="btn btn-link text-secondary text-decoration-none" @click="close" :disabled="loading">Cancel</button>      <template x-if="id">
+        <button type="button" class="btn btn-primary" @click="update(id)" :disabled="loading">Update</button>      </template>
+      <template x-if="! id">
+        <button type="button" class="btn btn-secondary" @click="store" :disabled="loading">Create New</button>      </template>
+    </div>
+  </div>
+</div>
+</div>
+  </div>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.6/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  <div class="modal fade" id="cuel-alert-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div id="cuel-alert-modal-header">
+        <span class="modal-title fs-5 fw-bold" id="cuel-alert-modal-title"></span>
+      </div>
+      <div class="modal-body" id="cuel-alert-modal-body"></div>
+      <div class="modal-footer border-top-0 bg-light">
+        <div class="me-auto"></div>
+        <button type="button" class="btn btn-link text-secondary text-decoration-none" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+const Modal =
+{
+  get(id)
+  {
+    const el = document.getElementById(id)
+
+    return bootstrap.Modal.getOrCreateInstance(el)
+  },
+
+  hide(id)
+  {
+    return this.get(id).hide()
+  },
+
+  show(id)
+  {
+    return this.get(id).show()
+  },
+
+  toggle(id)
+  {
+    return this.get(id).toggle()
+  },
+}
+</script>
+  <script type="text/javascript">
+const Alert =
+{
+  danger(title, text)
+  {
+    return this.show(title, text, 'bg-danger text-white')
+  },
+
+  info(title, text)
+  {
+    return this.show(title, text, 'bg-info text-white')
+  },
+
+  primary(title, text)
+  {
+    return this.show(title, text, 'bg-primary text-white')
+  },
+
+  secondary(title, text)
+  {
+    return this.show(title, text, 'bg-secondary text-white')
+  },
+
+  show(title, text, style)
+  {
+    const prefix = 'cuel-alert-modal'
+
+    const header = document.getElementById(prefix + '-header')
+    header.className = 'modal-header border-bottom-0 ' + style
+
+    const name = document.getElementById(prefix + '-title')
+    name.innerHTML = title
+
+    const body = document.getElementById(prefix + '-body')
+    body.innerHTML = text
+
+    Modal.show('cuel-alert-modal')
+  },
+
+  success(title, text)
+  {
+    return this.show(title, text, 'bg-success text-white')
+  },
+
+  warning(title, text)
+  {
+    return this.show(title, text, 'bg-warning')
+  },
+}
+</script>
+
+    <script type="text/javascript">
+let clients = {"name":null,"remarks":null,"type":null,"items":[],"empty":false,"loadError":false,"id":null,"delete":false,"error":{},"loading":false};
+clients.pagee={limit:10,limitKey:"l",link:"http://localhost/clients",dispatchKey:"clients",page:"1",pageKey:"p",pages:0,total:0,items:function(){if(0===this.pages){const t=this.total/this.limit;this.pages=Math.ceil(t)}return Array.from({length:this.pages})},url:function(t){return this.link+"?"+this.pageKey+"="+t+"&"+this.limitKey+"="+this.limit},view:function(t,i){const e=parseInt(i.getAttribute("page"));e!==this.page&&(history.pushState({},"",i.href),t(this.dispatchKey,e))}}
+clients.init=function(){this.load(1);};
+clients.close=function(){const self=this;Modal.hide('delete-client-modal');Modal.hide('client-detail-modal');setTimeout(()=>{self.remarks=null;self.error={};self.id=null;self.name=null;self.loadError=false;},1000)};
+clients.edit=function(item){const self=this;self.name=item.name;self.remarks=item.remarks;self.type=item.type;self.id=item.id;Modal.show('client-detail-modal');};
+clients.load=function(page){const self=this;self.loading=true;let data={p:page};self.pagee.page=page;data.l=10;const search=new URLSearchParams(data);axios.get('http://localhost/v1/clients'+'?'+search.toString()).then(function(response){const result=response.data;if(result.items.length===0){self.empty=true;}self.pagee.limit=result.limit;self.pagee.pages=result.pages;self.pagee.total=result.total;self.items=result.items;}).catch(function(error){self.loadError=true;}).finally(function(){self.loading=false;})};
+clients.remove=function(id){const input=new FormData;const self=this;self.loading=true;self.error={};axios.delete('http://localhost/v1/clients'+'/'+id,input).then(function(response){self.close();Alert.success('Item deleted!','Item successfully deleted.');self.load(self.pagee.page);}).catch(function(error){self.error=error.response.data;}).finally(function(){self.loading=false;});};
+clients.store=function(){const input=new FormData;const self=this;input.append('name',self.name);input.append('remarks',self.remarks);input.append('type',self.type);self.loading=true;self.error={};axios.post('http://localhost/v1/clients',input).then(function(response){self.close();Alert.success('Client created!','Client successfully created.');self.load(self.pagee.page);}).catch(function(error){self.error=error.response.data;}).finally(function(){self.loading=false;});};
+clients.trash=function(item){const self=this;self.name=item.name;self.id=item.id;Modal.show('delete-client-modal');};
+clients.update=function(id){const input=new FormData;const self=this;input.append('name',self.name);input.append('remarks',self.remarks);input.append('type',self.type);self.loading=true;self.error={};axios.put('http://localhost/v1/clients'+'/'+id,input).then(function(response){self.close();Alert.success('Client updated!','Client successfully updated.');self.load(self.pagee.page);}).catch(function(error){self.error=error.response.data;}).finally(function(){self.loading=false;});};</script>
+</body>
+</html>
+
+

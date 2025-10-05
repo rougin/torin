@@ -2,7 +2,6 @@
 
 namespace Rougin\Torin\Pages;
 
-use Rougin\Torin\Fixture\Stubs\StubRender;
 use Rougin\Torin\Testcase;
 
 /**
@@ -13,21 +12,19 @@ use Rougin\Torin\Testcase;
 class HelloTest extends Testcase
 {
     /**
-     * @var \Rougin\Torin\Fixture\Stubs\StubRender
-     */
-    protected $plate;
-
-    /**
      * @return void
      */
-    public function test_can_render_hello_index_page()
+    public function test_page_output()
     {
-        $this->plate = new StubRender;
+        $this->withPlate();
+        $this->withHttp();
 
-        $page = new Hello;
-        $result = $page->index($this->plate);
+        $page = new Hello($this->plate, $this->request);
 
-        $this->assertEquals('rendered_html_from_stub_render', $result);
-        $this->assertEquals('index', $this->plate->getTemplate());
+        $expect = $this->getPlate('Hello');
+
+        $actual = $page->index();
+
+        $this->assertEquals($expect, $actual);
     }
 }

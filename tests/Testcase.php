@@ -6,6 +6,8 @@ use LegacyPHPUnit\TestCase as Legacy;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Phinx\Config\Config;
 use Phinx\Migration\Manager;
+use Rougin\Slytherin\Http\ServerRequest;
+use Staticka\Render;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
@@ -22,12 +24,14 @@ class Testcase extends Legacy
     protected $capsule;
 
     /**
-     * @return void
+     * @var \Staticka\Render
      */
-    protected function shutdown()
-    {
-        $this->capsule->getConnection('torin')->disconnect();
-    }
+    protected $plate;
+
+    /**
+     * @var \Rougin\Slytherin\Http\ServerRequest
+     */
+    protected $request;
 
     /**
      * @param string $pattern
@@ -35,7 +39,7 @@ class Testcase extends Legacy
      *
      * @return void
      */
-    public function assertRegex($pattern, $string)
+    protected function assertRegex($pattern, $string)
     {
         $this->assertMatchesRegularExpression($pattern, $string);
     }
@@ -65,6 +69,21 @@ class Testcase extends Legacy
         }
 
         return $version;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getPlate($name)
+    {
+        $path = __DIR__ . '/Fixture/Plates';
+
+        $file = $path . '/' . $name . '.html';
+
+        /** @var string */
+        return file_get_contents($file);
     }
 
     /**
@@ -118,6 +137,14 @@ class Testcase extends Legacy
     /**
      * @return void
      */
+    protected function shutdown()
+    {
+        $this->capsule->getConnection('torin')->disconnect();
+    }
+
+    /**
+     * @return void
+     */
     protected function startUp()
     {
         $capsule = new Capsule;
@@ -132,5 +159,34 @@ class Testcase extends Legacy
         $capsule->bootEloquent();
 
         $this->capsule = $capsule;
+    }
+
+    /**
+     * @return void
+     */
+    protected function withHttp()
+    {
+        $server = array('REQUEST_METHOD' => 'GET');
+
+        $server['REQUEST_URI'] = '/';
+        $server['SERVER_NAME'] = 'localhost';
+        $server['SERVER_PORT'] = '80';
+
+        $this->request = new ServerRequest($server);
+    }
+
+    /**
+     * @return void
+     */
+    protected function withPlate()
+    {
+        $paths = array();
+
+        $paths[] = __DIR__ . '/../app/assets';
+        $paths[] = __DIR__ . '/../app/plates';
+
+        $plate = new Render($paths);
+
+        $this->plate = $plate;
     }
 }
