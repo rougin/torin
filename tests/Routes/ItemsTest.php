@@ -206,13 +206,13 @@ class ItemsTest extends Testcase
         $this->assertEquals(204, $actual->getStatusCode());
         // ---------------------------------------------------
 
-        // Verify item was updated in the database -------------
+        // Verify item was updated in the database -----------
         $actual = $this->depot->find($item->id);
 
         $this->assertEquals($data['detail'], $actual->detail);
 
         $this->assertEquals($data['name'], $actual->name);
-        // -----------------------------------------------------
+        // ---------------------------------------------------
     }
 
     /**
@@ -280,9 +280,9 @@ class ItemsTest extends Testcase
         // ----------------------------------
 
         // Simulate an HTTP request ------------
-        $data = array('detail' => 'Details');
+        $data = array('name' => 'Updated Item');
 
-        $http = $this->withParsed('PUT', $data);
+        $http = $this->withParsed($data, 'PUT');
         // -------------------------------------
 
         // Call the route method ------------------------
@@ -300,9 +300,6 @@ class ItemsTest extends Testcase
 
         /** @var array<string, string[]> */
         $data = json_decode($actual, true);
-
-        $expect = 'Name is required';
-        $this->assertEquals($expect, $data['name'][0]);
 
         $expect = 'Description is required';
         $this->assertEquals($expect, $data['detail'][0]);
