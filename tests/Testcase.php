@@ -153,7 +153,7 @@ class Testcase extends Legacy
 
     /**
      * @param array<string, mixed> $items
-     * @param string $method
+     * @param string               $method
      *
      * @return \Psr\Http\Message\ServerRequestInterface
      */

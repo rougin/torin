@@ -28,6 +28,14 @@ class OrderDepot extends EloquentDepot
     }
 
     /**
+     * @return \Rougin\Torin\Models\Order[]
+     */
+    public function all()
+    {
+        return $this->model->all();
+    }
+
+    /**
      * @param integer $id
      * @param integer $status
      *

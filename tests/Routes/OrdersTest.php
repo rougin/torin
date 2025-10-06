@@ -4,7 +4,11 @@ namespace Rougin\Torin\Routes;
 
 use Rougin\Dexterity\Message\JsonResponse;
 use Rougin\Torin\Checks\OrderCheck;
+use Rougin\Torin\Depots\ClientDepot;
+use Rougin\Torin\Depots\ItemDepot;
 use Rougin\Torin\Depots\OrderDepot;
+use Rougin\Torin\Models\Client;
+use Rougin\Torin\Models\Item;
 use Rougin\Torin\Models\Order;
 use Rougin\Torin\Testcase;
 
@@ -16,9 +20,19 @@ use Rougin\Torin\Testcase;
 class OrdersTest extends Testcase
 {
     /**
+     * @var \Rougin\Torin\Depots\ClientDepot
+     */
+    protected $client;
+
+    /**
      * @var \Rougin\Torin\Depots\OrderDepot
      */
-    protected $orderDepot;
+    protected $depot;
+
+    /**
+     * @var \Rougin\Torin\Depots\ItemDepot
+     */
+    protected $item;
 
     /**
      * @var \Rougin\Torin\Routes\Orders
@@ -30,48 +44,53 @@ class OrdersTest extends Testcase
      */
     public function test_can_change_order_status()
     {
-        // Create a client and an item first for a valid order
-        $clientDepot = new \Rougin\Torin\Depots\ClientDepot(new \Rougin\Torin\Models\Client);
-        $client = $clientDepot->create([
-            'name' => 'Test Client for Status Change',
-            'remarks' => 'Test Remarks',
-            'type' => 1,
-        ]);
+        // Create a new client and item -------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client';
+        $data['remarks'] = 'Test Remarks';
 
-        $itemDepot = new \Rougin\Torin\Depots\ItemDepot(new \Rougin\Torin\Models\Item);
-        $item = $itemDepot->create([
-            'name' => 'Test Item for Status Change',
-            'detail' => 'Test Detail',
-        ]);
+        $client = $this->client->create($data);
 
-        $orderData = [
-            'client_id' => $client->id,
-            'type' => 1,
-            'remarks' => 'Order for Status Change',
-            'cart' => [
-                ['id' => $item->id, 'quantity' => 1],
-            ],
-        ];
-        $this->orderDepot->create($orderData);
-        $orders = $this->orderDepot->get(1, 10)->items();
-        $order = $orders[0]; // Get the created order
+        $data = array('name' => 'Test Item');
+        $data['detail'] = 'Test Details';
 
-        $newStatus = \Rougin\Torin\Models\Order::STATUS_COMPLETED;
+        $item = $this->item->create($data);
+        // ------------------------------------
 
-        // Simulate a PUT request
-        $this->request = $this->request->withMethod('PUT');
-        $this->request = $this->request->withParsedBody(['status' => $newStatus]);
+        // Create a new purchase order -------------------
+        $data = array('client_id' => $client->id);
+        $data['type'] = Order::TYPE_PURCHASE;
+        $data['remarks'] = 'Order Remarks';
+        $item = array('id' => $item->id, 'quantity' => 1);
+        $data['cart'] = array($item);
 
-        // Call the status method
-        $response = $this->route->status($order->id, $this->request);
+        $order = $this->depot->create($data);
+        // -----------------------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(204, $response->getStatusCode()); // No Content
+        // Simulate an HTTP request ------------
+        $expect = Order::STATUS_COMPLETED;
 
-        // Verify order status was updated in the database
-        $updatedOrder = $this->orderDepot->find($order->id);
-        $this->assertEquals($newStatus, $updatedOrder->status);
+        $data = array('status' => $expect);
+
+        $http = $this->withParsed($data, 'PUT');
+        // -------------------------------------
+
+        // Call the route method -------------------------
+        $actual = $this->route->status($order->id, $http);
+        // -----------------------------------------------
+
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(204, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify status was updated in the database ---
+        $actual = $this->depot->find($order->id);
+
+        $this->assertEquals($expect, $actual->status);
+        // ---------------------------------------------
     }
 
     /**
@@ -79,54 +98,53 @@ class OrdersTest extends Testcase
      */
     public function test_can_check_cart_with_valid_data()
     {
-        // Create an item first
-        $itemDepot = new \Rougin\Torin\Depots\ItemDepot(new \Rougin\Torin\Models\Item);
-        $item = $itemDepot->create([
-            'name' => 'Checkable Item',
-            'detail' => 'Detail for check',
-        ]);
+        // Create a new client and item -------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client';
+        $data['remarks'] = 'Test Remarks';
 
-        // Create a client for the purchase order
-        $clientDepot = new \Rougin\Torin\Depots\ClientDepot(new \Rougin\Torin\Models\Client);
-        $client = $clientDepot->create([
-            'name' => 'Client for Purchase',
-            'remarks' => 'Remarks',
-            'type' => 1,
-        ]);
+        $client = $this->client->create($data);
 
-        // Create a purchase order to increase item quantity
-        $orderDepot = new \Rougin\Torin\Depots\OrderDepot(new \Rougin\Torin\Models\Order);
-        $orderDepot->create([
-            'client_id' => $client->id,
-            'type' => \Rougin\Torin\Models\Order::TYPE_PURCHASE,
-            'remarks' => 'Purchase Order',
-            'cart' => [
-                ['id' => $item->id, 'quantity' => 10],
-            ],
-        ]);
-        $purchaseOrder = $orderDepot->get(1, 10)->items()[0];
-        $orderDepot->changeStatus($purchaseOrder->id, \Rougin\Torin\Models\Order::STATUS_COMPLETED);
+        $data = array('name' => 'Test Item');
+        $data['detail'] = 'Test Details';
 
-        $cartData = [
-            'item_id' => $item->id,
-            'quantity' => 1,
-            'type' => \Rougin\Torin\Models\Order::TYPE_SALE,
-        ];
+        $item = $this->item->create($data);
+        // ------------------------------------
 
-        // Simulate a POST request
-        $this->request = $this->request->withMethod('POST');
-        $this->request = $this->request->withParsedBody($cartData);
+        // Create a new purchase order --------------------
+        $data = array('client_id' => $client->id);
+        $data['type'] = Order::TYPE_PURCHASE;
+        $data['remarks'] = 'Order Remarks';
+        $cart = array('id' => $item->id, 'quantity' => 10);
+        $data['cart'] = array($cart);
 
-        // Call the check method
-        $response = $this->route->check($itemDepot, $this->request);
+        $order = $this->depot->create($data);
+        // ------------------------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        // Mark the purchase order as completed --------
+        $status = Order::STATUS_COMPLETED;
 
-        $data = json_decode((string) $response->getBody(), true);
+        $this->depot->changeStatus($order->id, $status);
+        // ---------------------------------------------
 
-        $this->assertTrue($data);
+        // Simulate an HTTP request ----------
+        $data = array('item_id' => $item->id);
+        $data['quantity'] = 10;
+        $data['type'] = Order::TYPE_SALE;
+
+        $http = $this->withParsed($data);
+        // -----------------------------------
+
+        // Call the route method -------------------------
+        $actual = $this->route->check($this->item, $http);
+        // -----------------------------------------------
+
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(200, $actual->getStatusCode());
+        // ---------------------------------------------------
     }
 
     /**
@@ -134,47 +152,53 @@ class OrdersTest extends Testcase
      */
     public function test_can_create_order_with_store_method()
     {
-        // Create a client and an item first for a valid order
-        $clientDepot = new \Rougin\Torin\Depots\ClientDepot(new \Rougin\Torin\Models\Client);
-        $client = $clientDepot->create([
-            'name' => 'Test Client for Order',
-            'remarks' => 'Test Remarks',
-            'type' => 1,
-        ]);
+        // Create a new client and item -------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client';
+        $data['remarks'] = 'Test Remarks';
 
-        $itemDepot = new \Rougin\Torin\Depots\ItemDepot(new \Rougin\Torin\Models\Item);
-        $item = $itemDepot->create([
-            'name' => 'Test Item for Order',
-            'detail' => 'Test Detail',
-        ]);
+        $client = $this->client->create($data);
 
-        $orderData = [
-            'client_id' => $client->id,
-            'type' => 1,
-            'remarks' => 'New Order Remarks',
-            'cart' => [
-                ['id' => $item->id, 'quantity' => 5],
-            ],
-        ];
+        $data = array('name' => 'Test Item');
+        $data['detail'] = 'Test Details';
 
-        // Simulate a POST request
-        $this->request = $this->request->withMethod('POST');
-        $this->request = $this->request->withParsedBody($orderData);
+        $item = $this->item->create($data);
+        // ------------------------------------
 
-        // Call the store method
-        $response = $this->route->store($this->request);
+        // Simulate an HTTP request ----------------------
+        $data = array('client_id' => $client->id);
+        $data['type'] = Order::TYPE_PURCHASE;
+        $data['remarks'] = 'Order Remarks';
+        $cart = array('id' => $item->id, 'quantity' => 5);
+        $data['cart'] = array($cart);
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(201, $response->getStatusCode());
+        $http = $this->withParsed($data);
+        // -----------------------------------------------
 
-        // Verify order was created in the database
-        $result = $this->orderDepot->get(1, 10);
-        $orders = $result->items();
-        $this->assertCount(1, $orders);
-        $this->assertEquals('New Order Remarks', $orders[0]->remarks);
-        $this->assertEquals($client->id, $orders[0]->client_id);
-        $this->assertEquals(1, $orders[0]->type);
+        // Call the route method ------------
+        $actual = $this->route->store($http);
+        // ----------------------------------
+
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(201, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify order was created in the database ------------
+        $actual = $this->depot->all();
+
+        $this->assertCount(1, $actual);
+
+        $expect = 'Order Remarks';
+        $this->assertEquals($expect, $actual[0]->remarks);
+
+        $this->assertEquals($client->id, $actual[0]->client_id);
+
+        $expect = Order::TYPE_PURCHASE;
+        $this->assertEquals($expect, $actual[0]->type);
+        // -----------------------------------------------------
     }
 
     /**
@@ -182,44 +206,49 @@ class OrdersTest extends Testcase
      */
     public function test_can_delete_order_with_delete_method()
     {
-        // Create a client and an item first for a valid order
-        $clientDepot = new \Rougin\Torin\Depots\ClientDepot(new \Rougin\Torin\Models\Client);
-        $client = $clientDepot->create([
-            'name' => 'Test Client for Delete Order',
-            'remarks' => 'Test Remarks',
-            'type' => 1,
-        ]);
+        // Create a new client and item -------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client';
+        $data['remarks'] = 'Test Remarks';
 
-        $itemDepot = new \Rougin\Torin\Depots\ItemDepot(new \Rougin\Torin\Models\Item);
-        $item = $itemDepot->create([
-            'name' => 'Test Item for Delete Order',
-            'detail' => 'Test Detail',
-        ]);
+        $client = $this->client->create($data);
 
-        $orderData = [
-            'client_id' => $client->id,
-            'type' => 1,
-            'remarks' => 'Order to Delete Remarks',
-            'cart' => [
-                ['id' => $item->id, 'quantity' => 1],
-            ],
-        ];
-        $this->orderDepot->create($orderData);
-        $orders = $this->orderDepot->get(1, 10)->items();
-        $order = $orders[0]; // Get the created order
+        $data = array('name' => 'Test Item');
+        $data['detail'] = 'Test Details';
 
-        // Simulate a DELETE request
-        $this->request = $this->request->withMethod('DELETE');
+        $item = $this->item->create($data);
+        // ------------------------------------
 
-        // Call the delete method
-        $response = $this->route->delete($order->id, $this->request);
+        // Create a new purchase order --------------------
+        $data = array('client_id' => $client->id);
+        $data['type'] = Order::TYPE_PURCHASE;
+        $data['remarks'] = 'Order Remarks';
+        $cart = array('id' => $item->id, 'quantity' => 10);
+        $data['cart'] = array($cart);
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(204, $response->getStatusCode()); // No Content
+        $order = $this->depot->create($data);
+        // ------------------------------------------------
 
-        // Verify order was deleted from the database
-        $this->assertFalse($this->orderDepot->rowExists($order->id));
+        // Simulate an HTTP request ------
+        $http = $this->withHttp('DELETE');
+        // -------------------------------
+
+        // Call the route method -------------------------
+        $actual = $this->route->delete($order->id, $http);
+        // -----------------------------------------------
+
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(204, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify order was deleted from the database ---
+        $exists = $this->depot->rowExists($order->id);
+
+        $this->assertFalse($exists);
+        // ----------------------------------------------
     }
 
     /**
@@ -227,52 +256,68 @@ class OrdersTest extends Testcase
      */
     public function test_can_get_all_orders_with_index_method()
     {
-        // Create some order data using the depot directly
-        // Note: OrderDepot::create requires client_id, type, and cart
-        // We need to create a client and an item first for a valid order
-        $clientDepot = new \Rougin\Torin\Depots\ClientDepot(new \Rougin\Torin\Models\Client);
-        $client = $clientDepot->create([
-            'name' => 'Test Client',
-            'remarks' => 'Test Remarks',
-            'type' => 1,
-        ]);
+        // Create a new client and item -------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client';
+        $data['remarks'] = 'Test Remarks';
 
-        $itemDepot = new \Rougin\Torin\Depots\ItemDepot(new \Rougin\Torin\Models\Item);
-        $item = $itemDepot->create([
-            'name' => 'Test Item',
-            'detail' => 'Test Detail',
-        ]);
+        $client = $this->client->create($data);
 
-        $this->orderDepot->create([
-            'client_id' => $client->id,
-            'type' => 1,
-            'remarks' => 'Order 1 Remarks',
-            'cart' => [
-                ['id' => $item->id, 'quantity' => 1],
-            ],
-        ]);
+        $data = array('name' => 'Test Item');
+        $data['detail'] = 'Test Details';
 
-        $this->orderDepot->create([
-            'client_id' => $client->id,
-            'type' => 2,
-            'remarks' => 'Order 2 Remarks',
-            'cart' => [
-                ['id' => $item->id, 'quantity' => 2],
-            ],
-        ]);
+        $item = $this->item->create($data);
+        // ------------------------------------
 
-        // Simulate a GET request and call the index method
-        $response = $this->route->index($this->request);
+        // Create a new purchase order -------------------
+        $data = array('client_id' => $client->id);
+        $data['type'] = Order::TYPE_PURCHASE;
+        $data['remarks'] = 'Purchase Remarks';
+        $cart = array('id' => $item->id, 'quantity' => 1);
+        $data['cart'] = array($cart);
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->depot->create($data);
+        // -----------------------------------------------
 
-        $data = json_decode((string) $response->getBody(), true);
+        // Create a new sales order ----------------------
+        $data = array('client_id' => $client->id);
+        $data['type'] = Order::TYPE_SALE;
+        $data['remarks'] = 'Sales Remarks';
+        $cart = array('id' => $item->id, 'quantity' => 2);
+        $data['cart'] = array($cart);
+
+        $this->depot->create($data);
+        // -----------------------------------------------
+
+        // Simulate an HTTP request ---
+        $http = $this->withHttp();
+        // ----------------------------
+
+        // Call the route method ------------
+        $actual = $this->route->index($http);
+        // ----------------------------------
+
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(200, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify if items returned from HTTP response ----
+        $actual = $actual->getBody()->__toString();
+
+        /** @var array<string, array<string, string>[]> */
+        $data = json_decode($actual, true);
 
         $this->assertCount(2, $data['items']);
-        $this->assertEquals('Order 1 Remarks', $data['items'][0]['remarks']);
-        $this->assertEquals('Order 2 Remarks', $data['items'][1]['remarks']);
+
+        $remarks1 = $data['items'][0]['remarks'];
+        $this->assertEquals('Purchase Remarks', $remarks1);
+
+        $remarks2 = $data['items'][1]['remarks'];
+        $this->assertEquals('Sales Remarks', $remarks2);
+        // ------------------------------------------------
     }
 
     /**
@@ -280,65 +325,89 @@ class OrdersTest extends Testcase
      */
     public function test_cannot_check_cart_with_invalid_data()
     {
-        // Create an item first
-        $itemDepot = new \Rougin\Torin\Depots\ItemDepot(new \Rougin\Torin\Models\Item);
-        $item = $itemDepot->create([
-            'name' => 'Checkable Item',
-            'detail' => 'Detail for check',
-        ]);
+        // Simulate an HTTP request -----
+        $data = array('item_id' => 9999);
+        $data['quantity'] = 10;
+        $data['type'] = Order::TYPE_SALE;
 
-        // Scenario 1: Non-existent item ID
-        $cartData1 = [
-            'item_id' => 999, // Non-existent item
-            'quantity' => 1,
-            'type' => \Rougin\Torin\Models\Order::TYPE_SALE,
-        ];
+        $http = $this->withParsed($data);
+        // ------------------------------
 
-        $this->request = $this->request->withMethod('POST');
-        $this->request = $this->request->withParsedBody($cartData1);
-        $response = $this->route->check($itemDepot, $this->request);
+        // Call the route method -------------------------
+        $actual = $this->route->check($this->item, $http);
+        // -----------------------------------------------
 
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(422, $response->getStatusCode());
-        $data = json_decode((string) $response->getBody(), true);
-        $this->assertEquals('Item not found', $data);
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-        // Scenario 2: Insufficient quantity for sale
-        // Create a client for the purchase order
-        $clientDepot = new \Rougin\Torin\Depots\ClientDepot(new \Rougin\Torin\Models\Client);
-        $client = $clientDepot->create([
-            'name' => 'Client for Purchase',
-            'remarks' => 'Remarks',
-            'type' => 1,
-        ]);
+        $this->assertEquals(422, $actual->getStatusCode());
+        // ---------------------------------------------------
 
-        // Create a purchase order with quantity 1
-        $orderDepot = new \Rougin\Torin\Depots\OrderDepot(new \Rougin\Torin\Models\Order);
-        $orderDepot->create([
-            'client_id' => $client->id,
-            'type' => \Rougin\Torin\Models\Order::TYPE_PURCHASE,
-            'remarks' => 'Purchase Order',
-            'cart' => [
-                ['id' => $item->id, 'quantity' => 1],
-            ],
-        ]);
-        $purchaseOrder = $orderDepot->get(1, 10)->items()[0];
-        $orderDepot->changeStatus($purchaseOrder->id, \Rougin\Torin\Models\Order::STATUS_COMPLETED);
+        // Verify if items returned from HTTP response ---
+        $actual = $actual->getBody()->__toString();
 
-        $cartData2 = [
-            'item_id' => $item->id,
-            'quantity' => 10, // Insufficient quantity (only 1 available from purchase)
-            'type' => \Rougin\Torin\Models\Order::TYPE_SALE,
-        ];
+        $this->assertEquals('"Item not found"', $actual);
+        // -----------------------------------------------
+    }
 
-        $this->request = $this->request->withMethod('POST');
-        $this->request = $this->request->withParsedBody($cartData2);
-        $response = $this->route->check($itemDepot, $this->request);
+    /**
+     * @return void
+     */
+    public function test_cannot_check_cart_with_invalid_quantity()
+    {
+        // Create a new client and item -------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client';
+        $data['remarks'] = 'Test Remarks';
 
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(422, $response->getStatusCode());
-        $data = json_decode((string) $response->getBody(), true);
-        $this->assertEquals('Not enough quantity', $data);
+        $client = $this->client->create($data);
+
+        $data = array('name' => 'Test Item');
+        $data['detail'] = 'Test Details';
+
+        $item = $this->item->create($data);
+        // ------------------------------------
+
+        // Create a new purchase order -------------------
+        $data = array('client_id' => $client->id);
+        $data['type'] = Order::TYPE_PURCHASE;
+        $data['remarks'] = 'Purchase Remarks';
+        $cart = array('id' => $item->id, 'quantity' => 1);
+        $data['cart'] = array($cart);
+
+        $order = $this->depot->create($data);
+        // -----------------------------------------------
+
+        // Mark the purchase order as completed --------
+        $status = Order::STATUS_COMPLETED;
+
+        $this->depot->changeStatus($order->id, $status);
+        // ---------------------------------------------
+
+        // Simulate an HTTP request ----------
+        $data = array('item_id' => $item->id);
+        $data['quantity'] = 100;
+        $data['type'] = Order::TYPE_SALE;
+
+        $http = $this->withParsed($data);
+        // -----------------------------------
+
+        // Call the route method -------------------------
+        $actual = $this->route->check($this->item, $http);
+        // -----------------------------------------------
+
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(422, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify if items returned from HTTP response -------
+        $actual = $actual->getBody()->__toString();
+
+        $this->assertEquals('"Not enough quantity"', $actual);
+        // ---------------------------------------------------
     }
 
     /**
@@ -346,35 +415,37 @@ class OrdersTest extends Testcase
      */
     public function test_cannot_create_order_with_invalid_data()
     {
-        $invalidOrderData = [
-            // Missing 'cart', 'client_id', and 'type'
-            'remarks' => 'Invalid Order Remarks',
-        ];
+        // Simulate an HTTP request ----------
+        $data = array('remarks' => 'Remarks');
 
-        // Simulate a POST request with invalid data
-        $this->request = $this->request->withMethod('POST');
-        $this->request = $this->request->withParsedBody($invalidOrderData);
+        $http = $this->withParsed($data);
+        // -----------------------------------
 
-        // Call the store method
-        $response = $this->route->store($this->request);
+        // Call the route method ------------
+        $actual = $this->route->store($http);
+        // ----------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(422, $response->getStatusCode()); // Unprocessable Entity
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(422, $actual->getStatusCode());
+        // ---------------------------------------------------
 
-        $this->assertArrayHasKey('cart', $data);
-        $this->assertArrayHasKey('client_id', $data);
-        $this->assertArrayHasKey('type', $data);
-        $this->assertEquals('Cart is required', $data['cart'][0]);
-        $this->assertEquals('Client Name is required', $data['client_id'][0]);
-        $this->assertEquals('Order Type is required', $data['type'][0]);
+        // Verify if errors returned properly --------------
+        $actual = $actual->getBody()->__toString();
 
-        // Verify no order was created in the database
-        $result = $this->orderDepot->get(1, 10);
-        $orders = $result->items();
-        $this->assertCount(0, $orders);
+        /** @var array<string, string[]> */
+        $data = json_decode($actual, true);
+
+        $expect = 'Cart is required';
+        $this->assertEquals($expect, $data['cart'][0]);
+
+        $expect = 'Client Name is required';
+        $this->assertEquals($expect, $data['client_id'][0]);
+
+        $expect = 'Order Type is required';
+        $this->assertEquals($expect, $data['type'][0]);
+        // -------------------------------------------------
     }
 
     /**
@@ -386,13 +457,21 @@ class OrdersTest extends Testcase
 
         $this->migrate();
 
-        $this->withHttp();
+        $depot = new OrderDepot(new Order);
 
         $check = new OrderCheck;
 
-        $this->orderDepot = new OrderDepot(new Order);
+        $this->route = new Orders($check, $depot);
 
-        $this->route = new Orders($check, $this->orderDepot);
+        $this->depot = $depot;
+
+        // Initialize the other related depots ---
+        $depot = new ClientDepot(new Client);
+
+        $this->client = $depot;
+
+        $this->item = new ItemDepot(new Item);
+        // ---------------------------------------
     }
 
     /**
