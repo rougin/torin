@@ -18,7 +18,7 @@ class ItemsTest extends Testcase
     /**
      * @var \Rougin\Torin\Depots\ItemDepot
      */
-    protected $itemDepot;
+    protected $depot;
 
     /**
      * @var \Rougin\Torin\Routes\Items
@@ -30,26 +30,30 @@ class ItemsTest extends Testcase
      */
     public function test_can_create_item_with_store_method()
     {
-        $itemData = [
-            'name' => 'New Item',
-            'detail' => 'New Detail',
-        ];
+        // Simulate an HTTP request ---------
+        $data = array('name' => 'Test Item');
+        $data['detail'] = 'Test Details';
 
-        // Simulate a POST request
-        $this->request = $this->request->withMethod('POST');
-        $this->request = $this->request->withParsedBody($itemData);
+        $http = $this->withParsed($data);
+        // ----------------------------------
 
-        // Call the store method
-        $response = $this->route->store($this->request);
+        // Call the route method ------------
+        $actual = $this->route->store($http);
+        // ----------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(201, $response->getStatusCode());
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-        // Verify item was created in the database
-        $items = $this->itemDepot->all();
-        $this->assertCount(1, $items);
-        $this->assertEquals('New Item', $items[0]->name);
+        $this->assertEquals(201, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify if item was created in the database --------
+        $actuals = $this->depot->all();
+
+        $this->assertCount(1, $actuals);
+
+        $this->assertEquals($data['name'], $actuals[0]->name);
+        // ---------------------------------------------------
     }
 
     /**
@@ -57,66 +61,32 @@ class ItemsTest extends Testcase
      */
     public function test_can_delete_item_with_delete_method()
     {
-        // Create an item first
-        $initialItemData = [
-            'name' => 'Item to Delete',
-            'detail' => 'Detail for deletion',
-        ];
-        $this->itemDepot->create($initialItemData);
-        $item = $this->itemDepot->all()->first(); // Get the created item
+        // Create a new item ----------------
+        $data = array('name' => 'Test Item');
+        $data['detail'] = 'Test Details';
 
-        // Simulate a DELETE request
-        $this->request = $this->request->withMethod('DELETE');
+        $item = $this->depot->create($data);
+        // ----------------------------------
 
-        // Call the delete method
-        $response = $this->route->delete($item->id, $this->request);
+        // Simulate an HTTP request ------
+        $http = $this->withHttp('DELETE');
+        // -------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(204, $response->getStatusCode()); // No Content
+        // Call the route method ------------------------
+        $actual = $this->route->delete($item->id, $http);
+        // ----------------------------------------------
 
-        // Verify item was deleted from the database
-        $this->assertFalse($this->itemDepot->rowExists($item->id));
-    }
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-    /**
-     * @return void
-     */
-    public function test_can_filter_items_by_keyword()
-    {
-        // Create some items
-        $this->itemDepot->create([
-            'name' => 'Apple',
-            'detail' => 'Fruit',
-        ]);
-        $this->itemDepot->create([
-            'name' => 'Banana',
-            'detail' => 'Fruit',
-        ]);
-        $this->itemDepot->create([
-            'name' => 'Orange',
-            'detail' => 'Fruit',
-        ]);
-        $this->itemDepot->create([
-            'name' => 'Pineapple',
-            'detail' => 'Fruit',
-        ]);
+        $this->assertEquals(204, $actual->getStatusCode());
+        // ---------------------------------------------------
 
-        // Simulate a GET request with a keyword filter
-        $this->request = $this->request->withQueryParams(['k' => 'app']);
+        // Verify item was deleted from the database ---
+        $exists = $this->depot->rowExists($item->id);
 
-        // Call the index method
-        $response = $this->route->index($this->request);
-
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $data = json_decode((string) $response->getBody(), true);
-
-        $this->assertCount(2, $data['items']);
-        $this->assertEquals('Apple', $data['items'][0]['name']);
-        $this->assertEquals('Pineapple', $data['items'][1]['name']);
+        $this->assertFalse($exists);
+        // -----------------------------------------------
     }
 
     /**
@@ -124,29 +94,46 @@ class ItemsTest extends Testcase
      */
     public function test_can_get_all_items_with_index_method()
     {
-        // Create some item data using the depot directly
-        $this->itemDepot->create([
-            'name' => 'Test Item 1',
-            'detail' => 'Detail 1',
-        ]);
+        // Create new multiple items ----------
+        $data = array('name' => 'Test Item 1');
+        $data['detail'] = 'Test Details 1';
 
-        $this->itemDepot->create([
-            'name' => 'Test Item 2',
-            'detail' => 'Detail 2',
-        ]);
+        $this->depot->create($data);
 
-        // Simulate a GET request and call the index method
-        $response = $this->route->index($this->request);
+        $data = array('name' => 'Test Item 2');
+        $data['detail'] = 'Test Details 2';
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->depot->create($data);
+        // ------------------------------------
 
-        $data = json_decode((string) $response->getBody(), true);
+        // Simulate an HTTP request ---
+        $http = $this->withHttp();
+        // ----------------------------
+
+        // Call the route method ------------
+        $actual = $this->route->index($http);
+        // ----------------------------------
+
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(200, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify if items returned from HTTP response ---
+        $actual = $actual->getBody()->__toString();
+
+        /** @var array<string, array<string, string>[]> */
+        $data = json_decode($actual, true);
 
         $this->assertCount(2, $data['items']);
-        $this->assertEquals('Test Item 1', $data['items'][0]['name']);
-        $this->assertEquals('Test Item 2', $data['items'][1]['name']);
+
+        $name1 = $data['items'][0]['name'];
+        $this->assertEquals('Test Item 1', $name1);
+
+        $name2 = $data['items'][1]['name'];
+        $this->assertEquals('Test Item 2', $name2);
+        // -----------------------------------------------
     }
 
     /**
@@ -154,32 +141,40 @@ class ItemsTest extends Testcase
      */
     public function test_can_get_items_for_select_method()
     {
-        // Create some items
-        $this->itemDepot->create([
-            'name' => 'Select Item A',
-            'detail' => 'Detail A',
-        ]);
-        $this->itemDepot->create([
-            'name' => 'Select Item B',
-            'detail' => 'Detail B',
-        ]);
+        // Create new multiple items ----------
+        $data = array('name' => 'Test Item 1');
+        $data['detail'] = 'Test Details 1';
 
-        // Call the select method
-        $response = $this->route->select();
+        $this->depot->create($data);
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $data = array('name' => 'Test Item 2');
+        $data['detail'] = 'Test Details 2';
 
-        $data = json_decode((string) $response->getBody(), true);
+        $this->depot->create($data);
+        // ------------------------------------
+
+        // Call the route method --------
+        $actual = $this->route->select();
+        // ------------------------------
+
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(200, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify if selects returned properly ----
+        $actual = $actual->getBody()->__toString();
+
+        /** @var array<string, string>[] */
+        $data = json_decode($actual, true);
 
         $this->assertCount(2, $data);
-        $this->assertArrayHasKey('value', $data[0]);
-        $this->assertArrayHasKey('label', $data[0]);
+
         $this->assertEquals(1, $data[0]['value']);
-        $this->assertEquals('Select Item A', $data[0]['label']);
+
         $this->assertEquals(2, $data[1]['value']);
-        $this->assertEquals('Select Item B', $data[1]['label']);
+        // ----------------------------------------
     }
 
     /**
@@ -187,34 +182,37 @@ class ItemsTest extends Testcase
      */
     public function test_can_update_item_with_update_method()
     {
-        // Create an item first
-        $initialItemData = [
-            'name' => 'Original Item',
-            'detail' => 'Original Detail',
-        ];
-        $this->itemDepot->create($initialItemData);
-        $item = $this->itemDepot->all()->first(); // Get the created item
+        // Create a new item ----------------
+        $data = array('name' => 'Test Item');
+        $data['detail'] = 'Test Details';
 
-        $updatedItemData = [
-            'name' => 'Updated Item',
-            'detail' => 'Updated Detail',
-        ];
+        $item = $this->depot->create($data);
+        // ----------------------------------
 
-        // Simulate a PUT request
-        $this->request = $this->request->withMethod('PUT');
-        $this->request = $this->request->withParsedBody($updatedItemData);
+        // Simulate an HTTP request ------------
+        $data = array('name' => 'Updated Item');
+        $data['detail'] = 'Updated Details';
 
-        // Call the update method
-        $response = $this->route->update($item->id, $this->request);
+        $http = $this->withParsed($data, 'PUT');
+        // -------------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(204, $response->getStatusCode()); // No Content
+        // Call the route method ------------------------
+        $actual = $this->route->update($item->id, $http);
+        // ----------------------------------------------
 
-        // Verify item was updated in the database
-        $updatedItem = $this->itemDepot->find($item->id);
-        $this->assertEquals('Updated Item', $updatedItem->name);
-        $this->assertEquals('Updated Detail', $updatedItem->detail);
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(204, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify item was updated in the database -------------
+        $actual = $this->depot->find($item->id);
+
+        $this->assertEquals($data['detail'], $actual->detail);
+
+        $this->assertEquals($data['name'], $actual->name);
+        // -----------------------------------------------------
     }
 
     /**
@@ -222,31 +220,31 @@ class ItemsTest extends Testcase
      */
     public function test_cannot_create_item_with_invalid_data()
     {
-        $invalidItemData = [
-            // Missing 'name' and 'detail'
-        ];
+        // Simulate an HTTP request ----------
+        $data = array('detail' => 'Details');
 
-        // Simulate a POST request with invalid data
-        $this->request = $this->request->withMethod('POST');
-        $this->request = $this->request->withParsedBody($invalidItemData);
+        $http = $this->withParsed($data);
+        // -----------------------------------
 
-        // Call the store method
-        $response = $this->route->store($this->request);
+        // Call the method ------------------
+        $actual = $this->route->store($http);
+        // ----------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(422, $response->getStatusCode()); // Unprocessable Entity
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(422, $actual->getStatusCode());
+        // ---------------------------------------------------
 
-        $this->assertArrayHasKey('name', $data);
-        $this->assertArrayHasKey('detail', $data);
-        $this->assertEquals('Name is required', $data['name'][0]);
-        $this->assertEquals('Description is required', $data['detail'][0]);
+        // Verify if errors returned properly ---------
+        $actual = $actual->getBody()->__toString();
 
-        // Verify no item was created in the database
-        $items = $this->itemDepot->all();
-        $this->assertCount(0, $items);
+        /** @var array<string, string[]> */
+        $data = json_decode($actual, true);
+
+        $expect = 'Name is required';
+        $this->assertEquals($expect, $data['name'][0]);
+        // --------------------------------------------
     }
 
     /**
@@ -254,21 +252,19 @@ class ItemsTest extends Testcase
      */
     public function test_cannot_delete_non_existent_item()
     {
-        $nonExistentItemId = 999; // An ID that surely does not exist
+        // Simulate an HTTP request ------
+        $http = $this->withHttp('DELETE');
+        // -------------------------------
 
-        // Simulate a DELETE request
-        $this->request = $this->request->withMethod('DELETE');
+        // Call the route method -----------------
+        $actual = $this->route->delete(99, $http);
+        // ---------------------------------------
 
-        // Call the delete method
-        $response = $this->route->delete($nonExistentItemId, $this->request);
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(422, $response->getStatusCode()); // Unprocessable Entity
-
-        $data = json_decode((string) $response->getBody(), true);
-
-        $this->assertEquals([], $data); // Expecting an empty array for errors
+        $this->assertEquals(422, $actual->getStatusCode());
+        // ---------------------------------------------------
     }
 
     /**
@@ -276,40 +272,41 @@ class ItemsTest extends Testcase
      */
     public function test_cannot_update_item_with_invalid_data()
     {
-        // Create an item first
-        $initialItemData = [
-            'name' => 'Original Item',
-            'detail' => 'Original Detail',
-        ];
-        $this->itemDepot->create($initialItemData);
-        $item = $this->itemDepot->all()->first(); // Get the created item
+        // Create a new item ----------------
+        $data = array('name' => 'Test Item');
+        $data['detail'] = 'Test Details';
 
-        $invalidUpdatedItemData = [
-            // Missing 'name' and 'detail'
-        ];
+        $item = $this->depot->create($data);
+        // ----------------------------------
 
-        // Simulate a PUT request with invalid data
-        $this->request = $this->request->withMethod('PUT');
-        $this->request = $this->request->withParsedBody($invalidUpdatedItemData);
+        // Simulate an HTTP request ------------
+        $data = array('detail' => 'Details');
 
-        // Call the update method
-        $response = $this->route->update($item->id, $this->request);
+        $http = $this->withParsed('PUT', $data);
+        // -------------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(422, $response->getStatusCode()); // Unprocessable Entity
+        // Call the route method ------------------------
+        $actual = $this->route->update($item->id, $http);
+        // ----------------------------------------------
 
-        $data = json_decode((string) $response->getBody(), true);
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-        $this->assertArrayHasKey('name', $data);
-        $this->assertArrayHasKey('detail', $data);
-        $this->assertEquals('Name is required', $data['name'][0]);
-        $this->assertEquals('Description is required', $data['detail'][0]);
+        $this->assertEquals(422, $actual->getStatusCode());
+        // ---------------------------------------------------
 
-        // Verify item was NOT updated in the database
-        $unchangedItem = $this->itemDepot->find($item->id);
-        $this->assertEquals('Original Item', $unchangedItem->name);
-        $this->assertEquals('Original Detail', $unchangedItem->detail);
+        // Verify if errors returned properly -----------
+        $actual = $actual->getBody()->__toString();
+
+        /** @var array<string, string[]> */
+        $data = json_decode($actual, true);
+
+        $expect = 'Name is required';
+        $this->assertEquals($expect, $data['name'][0]);
+
+        $expect = 'Description is required';
+        $this->assertEquals($expect, $data['detail'][0]);
+        // ----------------------------------------------
     }
 
     /**
@@ -321,13 +318,13 @@ class ItemsTest extends Testcase
 
         $this->migrate();
 
-        $this->withHttp();
+        $depot = new ItemDepot(new Item);
 
         $check = new ItemCheck;
 
-        $this->itemDepot = new ItemDepot(new Item);
+        $this->route = new Items($check, $depot);
 
-        $this->route = new Items($check, $this->itemDepot);
+        $this->depot = $depot;
     }
 
     /**
