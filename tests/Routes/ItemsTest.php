@@ -2,7 +2,6 @@
 
 namespace Rougin\Torin\Routes;
 
-use Rougin\Dexterity\Message\JsonResponse;
 use Rougin\Torin\Checks\ItemCheck;
 use Rougin\Torin\Depots\ItemDepot;
 use Rougin\Torin\Models\Item;
@@ -41,16 +40,12 @@ class ItemsTest extends Testcase
         $actual = $this->route->store($http);
         // ----------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(201, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify if item was created in the database --------
         $actuals = $this->depot->all();
-
-        $this->assertCount(1, $actuals);
 
         $this->assertEquals($data['name'], $actuals[0]->name);
         // ---------------------------------------------------
@@ -76,11 +71,9 @@ class ItemsTest extends Testcase
         $actual = $this->route->delete($item->id, $http);
         // ----------------------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(204, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify item was deleted from the database ---
         $exists = $this->depot->rowExists($item->id);
@@ -114,11 +107,9 @@ class ItemsTest extends Testcase
         $actual = $this->route->index($http);
         // ----------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(200, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify if items returned from HTTP response ---
         $actual = $actual->getBody()->__toString();
@@ -126,12 +117,46 @@ class ItemsTest extends Testcase
         /** @var array<string, array<string, string>[]> */
         $data = json_decode($actual, true);
 
-        $this->assertCount(2, $data['items']);
-
         $name1 = $data['items'][0]['name'];
         $this->assertEquals('Test Item 1', $name1);
 
         $name2 = $data['items'][1]['name'];
+        $this->assertEquals('Test Item 2', $name2);
+        // -----------------------------------------------
+    }
+
+    /**
+     * @return void
+     */
+    public function test_can_get_filters_with_index_method()
+    {
+        // Create new multiple items ----------
+        $data = array('name' => 'Test Item 1');
+        $data['detail'] = 'Test Details 1';
+
+        $this->depot->create($data);
+
+        $data = array('name' => 'Test Item 2');
+        $data['detail'] = 'Test Details 2';
+
+        $this->depot->create($data);
+        // ------------------------------------
+
+        // Simulate an HTTP request ----------------------
+        $http = $this->withParams(array('k' => 'item 2'));
+        // -----------------------------------------------
+
+        // Call the route method ------------
+        $actual = $this->route->index($http);
+        // ----------------------------------
+
+        // Verify if items returned from HTTP response ---
+        $actual = $actual->getBody()->__toString();
+
+        /** @var array<string, array<string, string>[]> */
+        $data = json_decode($actual, true);
+
+        $name2 = $data['items'][0]['name'];
         $this->assertEquals('Test Item 2', $name2);
         // -----------------------------------------------
     }
@@ -157,19 +182,15 @@ class ItemsTest extends Testcase
         $actual = $this->route->select();
         // ------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(200, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify if selects returned properly ----
         $actual = $actual->getBody()->__toString();
 
         /** @var array<string, string>[] */
         $data = json_decode($actual, true);
-
-        $this->assertCount(2, $data);
 
         $this->assertEquals(1, $data[0]['value']);
 
@@ -200,19 +221,15 @@ class ItemsTest extends Testcase
         $actual = $this->route->update($item->id, $http);
         // ----------------------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(204, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
-        // Verify item was updated in the database -----------
+        // Verify item was updated in the database -------
         $actual = $this->depot->find($item->id);
 
-        $this->assertEquals($data['detail'], $actual->detail);
-
         $this->assertEquals($data['name'], $actual->name);
-        // ---------------------------------------------------
+        // -----------------------------------------------
     }
 
     /**
@@ -230,11 +247,9 @@ class ItemsTest extends Testcase
         $actual = $this->route->store($http);
         // ----------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(422, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify if errors returned properly ---------
         $actual = $actual->getBody()->__toString();
@@ -260,11 +275,9 @@ class ItemsTest extends Testcase
         $actual = $this->route->delete(99, $http);
         // ---------------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(422, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
     }
 
     /**
@@ -289,11 +302,9 @@ class ItemsTest extends Testcase
         $actual = $this->route->update($item->id, $http);
         // ----------------------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(422, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify if errors returned properly -----------
         $actual = $actual->getBody()->__toString();

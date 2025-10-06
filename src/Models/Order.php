@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property integer                     $status
  * @property string                      $created_at
  * @property string|null                 $updated_at
- * @property \Rougin\Torin\Models\Client $client
  * @property \Rougin\Torin\Models\Item[] $items
  *
  * @method \Rougin\Torin\Models\Order[]    all()
@@ -77,14 +76,6 @@ class Order extends Model
      * @var string
      */
     protected $connection = 'torin';
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function client()
-    {
-        return $this->belongsTo(Client::class);
-    }
 
     /**
      * @param string $value

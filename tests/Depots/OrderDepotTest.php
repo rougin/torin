@@ -84,6 +84,7 @@ class OrderDepotTest extends Testcase
 
         // Add a new item to cart -----------------
         $data = array('remarks' => 'Test remarks');
+        $data['created_by'] = 1; // Sample user
         $data['client_id'] = $client->id;
         $data['type'] = Order::TYPE_PURCHASE;
 
@@ -91,7 +92,7 @@ class OrderDepotTest extends Testcase
         $cart['quantity'] = 10;
         $data['cart'] = array($cart);
 
-        $order = $this->depot->create($data);
+        $order = $this->depot->create($data, 1);
         // ----------------------------------------
 
         $status = Order::STATUS_COMPLETED;

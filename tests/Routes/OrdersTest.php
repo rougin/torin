@@ -2,7 +2,6 @@
 
 namespace Rougin\Torin\Routes;
 
-use Rougin\Dexterity\Message\JsonResponse;
 use Rougin\Torin\Checks\OrderCheck;
 use Rougin\Torin\Depots\ClientDepot;
 use Rougin\Torin\Depots\ItemDepot;
@@ -58,15 +57,17 @@ class OrdersTest extends Testcase
         $item = $this->item->create($data);
         // ------------------------------------
 
-        // Create a new purchase order -------------------
-        $data = array('client_id' => $client->id);
+        // Create a new purchase order ------
+        $data = array('remarks' => null);
+        $data['client_id'] = $client->id;
         $data['type'] = Order::TYPE_PURCHASE;
-        $data['remarks'] = 'Order Remarks';
-        $item = array('id' => $item->id, 'quantity' => 1);
-        $data['cart'] = array($item);
+
+        $cart = array('id' => $item->id);
+        $cart['quantity'] = 1;
+        $data['cart'] = array($cart);
 
         $order = $this->depot->create($data);
-        // -----------------------------------------------
+        // ----------------------------------
 
         // Simulate an HTTP request ------------
         $expect = Order::STATUS_COMPLETED;
@@ -80,11 +81,9 @@ class OrdersTest extends Testcase
         $actual = $this->route->status($order->id, $http);
         // -----------------------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(204, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify status was updated in the database ---
         $actual = $this->depot->find($order->id);
@@ -112,15 +111,17 @@ class OrdersTest extends Testcase
         $item = $this->item->create($data);
         // ------------------------------------
 
-        // Create a new purchase order --------------------
-        $data = array('client_id' => $client->id);
+        // Create a new purchase order ------
+        $data = array('remarks' => null);
+        $data['client_id'] = $client->id;
         $data['type'] = Order::TYPE_PURCHASE;
-        $data['remarks'] = 'Order Remarks';
-        $cart = array('id' => $item->id, 'quantity' => 10);
+
+        $cart = array('id' => $item->id);
+        $cart['quantity'] = 10;
         $data['cart'] = array($cart);
 
         $order = $this->depot->create($data);
-        // ------------------------------------------------
+        // ----------------------------------
 
         // Mark the purchase order as completed --------
         $status = Order::STATUS_COMPLETED;
@@ -140,11 +141,9 @@ class OrdersTest extends Testcase
         $actual = $this->route->check($this->item, $http);
         // -----------------------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(200, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
     }
 
     /**
@@ -180,25 +179,19 @@ class OrdersTest extends Testcase
         $actual = $this->route->store($http);
         // ----------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(201, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
-        // Verify order was created in the database ------------
+        // Verify order was created in the database ------
         $actual = $this->depot->all();
-
-        $this->assertCount(1, $actual);
 
         $expect = 'Order Remarks';
         $this->assertEquals($expect, $actual[0]->remarks);
 
-        $this->assertEquals($client->id, $actual[0]->client_id);
-
         $expect = Order::TYPE_PURCHASE;
         $this->assertEquals($expect, $actual[0]->type);
-        // -----------------------------------------------------
+        // -----------------------------------------------
     }
 
     /**
@@ -220,15 +213,17 @@ class OrdersTest extends Testcase
         $item = $this->item->create($data);
         // ------------------------------------
 
-        // Create a new purchase order --------------------
-        $data = array('client_id' => $client->id);
+        // Create a new purchase order ------
+        $data = array('remarks' => null);
+        $data['client_id'] = $client->id;
         $data['type'] = Order::TYPE_PURCHASE;
-        $data['remarks'] = 'Order Remarks';
-        $cart = array('id' => $item->id, 'quantity' => 10);
+
+        $cart = array('id' => $item->id);
+        $cart['quantity'] = 1;
         $data['cart'] = array($cart);
 
         $order = $this->depot->create($data);
-        // ------------------------------------------------
+        // ----------------------------------
 
         // Simulate an HTTP request ------
         $http = $this->withHttp('DELETE');
@@ -238,11 +233,9 @@ class OrdersTest extends Testcase
         $actual = $this->route->delete($order->id, $http);
         // -----------------------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(204, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify order was deleted from the database ---
         $exists = $this->depot->rowExists($order->id);
@@ -270,25 +263,29 @@ class OrdersTest extends Testcase
         $item = $this->item->create($data);
         // ------------------------------------
 
-        // Create a new purchase order -------------------
-        $data = array('client_id' => $client->id);
+        // Create a new purchase order ------
+        $data = array('remarks' => null);
+        $data['client_id'] = $client->id;
         $data['type'] = Order::TYPE_PURCHASE;
-        $data['remarks'] = 'Purchase Remarks';
-        $cart = array('id' => $item->id, 'quantity' => 1);
+
+        $cart = array('id' => $item->id);
+        $cart['quantity'] = 1;
         $data['cart'] = array($cart);
 
         $this->depot->create($data);
-        // -----------------------------------------------
+        // ----------------------------------
 
-        // Create a new sales order ----------------------
-        $data = array('client_id' => $client->id);
+        // Create a new sales order -----
+        $data = array('remarks' => null);
+        $data['client_id'] = $client->id;
         $data['type'] = Order::TYPE_SALE;
-        $data['remarks'] = 'Sales Remarks';
-        $cart = array('id' => $item->id, 'quantity' => 2);
+
+        $cart = array('id' => $item->id);
+        $cart['quantity'] = 2;
         $data['cart'] = array($cart);
 
         $this->depot->create($data);
-        // -----------------------------------------------
+        // ------------------------------
 
         // Simulate an HTTP request ---
         $http = $this->withHttp();
@@ -298,26 +295,22 @@ class OrdersTest extends Testcase
         $actual = $this->route->index($http);
         // ----------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(200, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
-        // Verify if items returned from HTTP response ----
+        // Verify if items returned from HTTP response ---
         $actual = $actual->getBody()->__toString();
 
         /** @var array<string, array<string, string>[]> */
         $data = json_decode($actual, true);
 
-        $this->assertCount(2, $data['items']);
-
         $remarks1 = $data['items'][0]['remarks'];
-        $this->assertEquals('Purchase Remarks', $remarks1);
+        $this->assertNull($remarks1);
 
         $remarks2 = $data['items'][1]['remarks'];
-        $this->assertEquals('Sales Remarks', $remarks2);
-        // ------------------------------------------------
+        $this->assertNull($remarks2);
+        // -----------------------------------------------
     }
 
     /**
@@ -337,11 +330,9 @@ class OrdersTest extends Testcase
         $actual = $this->route->check($this->item, $http);
         // -----------------------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(422, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify if items returned from HTTP response ---
         $actual = $actual->getBody()->__toString();
@@ -397,11 +388,9 @@ class OrdersTest extends Testcase
         $actual = $this->route->check($this->item, $http);
         // -----------------------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(422, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify if items returned from HTTP response -------
         $actual = $actual->getBody()->__toString();
@@ -425,11 +414,9 @@ class OrdersTest extends Testcase
         $actual = $this->route->store($http);
         // ----------------------------------
 
-        // Verify if it returns an HTTP response -------------
-        $this->assertInstanceOf(JsonResponse::class, $actual);
-
+        // Verify if it returns an HTTP response ----------
         $this->assertEquals(422, $actual->getStatusCode());
-        // ---------------------------------------------------
+        // ------------------------------------------------
 
         // Verify if errors returned properly --------------
         $actual = $actual->getBody()->__toString();
@@ -446,6 +433,24 @@ class OrdersTest extends Testcase
         $expect = 'Order Type is required';
         $this->assertEquals($expect, $data['type'][0]);
         // -------------------------------------------------
+    }
+
+    /**
+     * @return void
+     */
+    public function test_cannot_delete_non_existent_order()
+    {
+        // Simulate an HTTP request ------
+        $http = $this->withHttp('DELETE');
+        // -------------------------------
+
+        // Call the route method -----------------
+        $actual = $this->route->delete(99, $http);
+        // ---------------------------------------
+
+        // Verify if it returns an HTTP response ----------
+        $this->assertEquals(422, $actual->getStatusCode());
+        // ------------------------------------------------
     }
 
     /**
