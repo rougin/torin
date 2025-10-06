@@ -12,19 +12,31 @@ use Rougin\Torin\Testcase;
 class HelloTest extends Testcase
 {
     /**
+     * @var \Rougin\Torin\Pages\Hello
+     */
+    protected $page;
+
+    /**
      * @return void
      */
     public function test_page_output()
     {
-        $this->withPlate();
-        $this->withHttp();
-
-        $page = new Hello($this->plate, $this->request);
-
         $expect = $this->getPlate('Hello');
 
-        $actual = $page->index();
+        $actual = $this->page->index();
 
         $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $plate = $this->withPlate();
+
+        $http = $this->withHttp();
+
+        $this->page = new Hello($plate, $http);
     }
 }

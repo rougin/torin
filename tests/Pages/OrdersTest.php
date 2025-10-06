@@ -14,17 +14,20 @@ use Rougin\Torin\Testcase;
 class OrdersTest extends Testcase
 {
     /**
+     * @var \Rougin\Torin\Pages\Orders
+     */
+    protected $page;
+
+    /**
      * @return void
      */
     public function test_page_output()
     {
-        $depot = new OrderDepot(new Order);
-
-        $page = new Orders($this->plate, $this->request);
-
         $expect = $this->getPlate('Orders');
 
-        $actual = $page->index($depot);
+        $depot = new OrderDepot(new Order);
+
+        $actual = $this->page->index($depot);
 
         $this->assertEquals($expect, $actual);
     }
@@ -35,10 +38,14 @@ class OrdersTest extends Testcase
     protected function doSetUp()
     {
         $this->startUp();
+
         $this->migrate();
 
-        $this->withPlate();
-        $this->withHttp();
+        $plate = $this->withPlate();
+
+        $http = $this->withHttp();
+
+        $this->page = new Orders($plate, $http);
     }
 
     /**
@@ -47,6 +54,7 @@ class OrdersTest extends Testcase
     protected function doTearDown()
     {
         $this->rollback();
+
         $this->shutdown();
     }
 }
