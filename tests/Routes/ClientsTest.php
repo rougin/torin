@@ -303,7 +303,7 @@ class ClientsTest extends Testcase
         // Simulate an HTTP request ------------
         $data = array('remarks' => 'Remarks');
 
-        $http = $this->withParsed('PUT', $data);
+        $http = $this->withParsed($data, 'PUT');
         // -------------------------------------
 
         // Call the route method ------------------------
