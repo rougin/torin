@@ -34,44 +34,6 @@ class Testcase extends Legacy
     protected $request;
 
     /**
-     * @param string $pattern
-     * @param string $string
-     *
-     * @return void
-     */
-    protected function assertRegex($pattern, $string)
-    {
-        $this->assertMatchesRegularExpression($pattern, $string);
-    }
-
-    /**
-     * @param string[] $paths
-     *
-     * @return integer
-     */
-    protected function getLastVersion($paths)
-    {
-        $version = 0;
-
-        foreach ($paths as $path)
-        {
-            /** @var string[] */
-            $files = glob($path . '/*.php');
-
-            foreach ($files as $file)
-            {
-                $temp = basename($file, '.php');
-
-                $version = substr($temp, 0, 14);
-
-                $version = (int) $version;
-            }
-        }
-
-        return $version;
-    }
-
-    /**
      * @param string $name
      *
      * @return string
@@ -162,21 +124,48 @@ class Testcase extends Legacy
     }
 
     /**
-     * @return void
+     * @param string $method
+     *
+     * @return \Psr\Http\Message\ServerRequestInterface
      */
-    protected function withHttp()
+    protected function withHttp($method = 'GET')
     {
-        $server = array('REQUEST_METHOD' => 'GET');
+        $server = array('REQUEST_METHOD' => $method);
 
         $server['REQUEST_URI'] = '/';
         $server['SERVER_NAME'] = 'localhost';
         $server['SERVER_PORT'] = '80';
 
-        $this->request = new ServerRequest($server);
+        return new ServerRequest($server);
     }
 
     /**
-     * @return void
+     * @param array<string, mixed> $items
+     *
+     * @return \Psr\Http\Message\ServerRequestInterface
+     */
+    protected function withParams($items)
+    {
+        $http = $this->withHttp();
+
+        return $http->withQueryParams($items);
+    }
+
+    /**
+     * @param array<string, mixed> $items
+     * @param string $method
+     *
+     * @return \Psr\Http\Message\ServerRequestInterface
+     */
+    protected function withParsed($items, $method = 'POST')
+    {
+        $http = $this->withHttp($method);
+
+        return $http->withParsedBody($items);
+    }
+
+    /**
+     * @return \Staticka\Render
      */
     protected function withPlate()
     {
@@ -185,8 +174,44 @@ class Testcase extends Legacy
         $paths[] = __DIR__ . '/../app/assets';
         $paths[] = __DIR__ . '/../app/plates';
 
-        $plate = new Render($paths);
+        return new Render($paths);
+    }
 
-        $this->plate = $plate;
+    /**
+     * @param string $pattern
+     * @param string $string
+     *
+     * @return void
+     */
+    protected function assertRegex($pattern, $string)
+    {
+        $this->assertMatchesRegularExpression($pattern, $string);
+    }
+
+    /**
+     * @param string[] $paths
+     *
+     * @return integer
+     */
+    protected function getLastVersion($paths)
+    {
+        $version = 0;
+
+        foreach ($paths as $path)
+        {
+            /** @var string[] */
+            $files = glob($path . '/*.php');
+
+            foreach ($files as $file)
+            {
+                $temp = basename($file, '.php');
+
+                $version = substr($temp, 0, 14);
+
+                $version = (int) $version;
+            }
+        }
+
+        return $version;
     }
 }

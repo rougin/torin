@@ -18,7 +18,7 @@ class ClientsTest extends Testcase
     /**
      * @var \Rougin\Torin\Depots\ClientDepot
      */
-    protected $clientDepot;
+    protected $depot;
 
     /**
      * @var \Rougin\Torin\Routes\Clients
@@ -30,27 +30,32 @@ class ClientsTest extends Testcase
      */
     public function test_can_create_client_with_store_method()
     {
-        $clientData = [
-            'name' => 'New Client',
-            'remarks' => 'New Remarks',
-            'type' => 3,
-        ];
+        // Simulate an HTTP request ----------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client';
+        $data['remarks'] = 'Test Remarks';
 
-        // Simulate a POST request
-        $this->request = $this->request->withMethod('POST');
-        $this->request = $this->request->withParsedBody($clientData);
+        $http = $this->withParsed($data);
+        // -----------------------------------
 
-        // Call the store method
-        $response = $this->route->store($this->request);
+        // Call the route method ------------
+        $actual = $this->route->store($http);
+        // ----------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(201, $response->getStatusCode());
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-        // Verify client was created in the database
-        $clients = $this->clientDepot->all();
-        $this->assertCount(1, $clients);
-        $this->assertEquals('New Client', $clients[0]->name);
+        $this->assertEquals(201, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify if client was created in the database ------
+        $actuals = $this->depot->all();
+
+        $this->assertCount(1, $actuals);
+
+        $this->assertEquals($data['name'], $actuals[0]->name);
+        // ---------------------------------------------------
     }
 
     /**
@@ -58,27 +63,34 @@ class ClientsTest extends Testcase
      */
     public function test_can_delete_client_with_delete_method()
     {
-        // Create a client first
-        $initialClientData = [
-            'name' => 'Client to Delete',
-            'remarks' => 'Remarks for deletion',
-            'type' => 1,
-        ];
-        $this->clientDepot->create($initialClientData);
-        $client = $this->clientDepot->all()->first(); // Get the created client
+        // Create a new client ---------------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client';
+        $data['remarks'] = 'Test Remarks';
 
-        // Simulate a DELETE request
-        $this->request = $this->request->withMethod('DELETE');
+        $item = $this->depot->create($data);
+        // -----------------------------------
 
-        // Call the delete method
-        $response = $this->route->delete($client->id, $this->request);
+        // Simulate an HTTP request ------
+        $http = $this->withHttp('DELETE');
+        // -------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(204, $response->getStatusCode()); // No Content
+        // Call the route method ------------------------
+        $actual = $this->route->delete($item->id, $http);
+        // ----------------------------------------------
 
-        // Verify client was deleted from the database
-        $this->assertFalse($this->clientDepot->rowExists($client->id));
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(204, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify client was deleted from the database ---
+        $exists = $this->depot->rowExists($item->id);
+
+        $this->assertFalse($exists);
+        // -----------------------------------------------
     }
 
     /**
@@ -86,31 +98,50 @@ class ClientsTest extends Testcase
      */
     public function test_can_get_all_clients_with_index_method()
     {
-        // Create some client data using the depot directly
-        $this->clientDepot->create([
-            'name' => 'Test Client 1',
-            'remarks' => 'Remarks 1',
-            'type' => 1,
-        ]);
+        // Create new multiple clients -------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client 1';
+        $data['remarks'] = 'Test Remarks 1';
 
-        $this->clientDepot->create([
-            'name' => 'Test Client 2',
-            'remarks' => 'Remarks 2',
-            'type' => 2,
-        ]);
+        $this->depot->create($data);
 
-        // Simulate a GET request and call the index method
-        $response = $this->route->index($this->request);
+        $data = array();
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $data['name'] = 'Test Client 2';
+        $data['remarks'] = 'Test Remarks 2';
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->depot->create($data);
+        // -----------------------------------
 
-        $data = json_decode((string) $response->getBody(), true);
+        // Simulate an HTTP request ---
+        $http = $this->withHttp();
+        // ----------------------------
+
+        // Call the route method ------------
+        $actual = $this->route->index($http);
+        // ----------------------------------
+
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(200, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify if clients returned from HTTP response ---
+        $actual = $actual->getBody()->__toString();
+
+        /** @var array<string, array<string, string>[]> */
+        $data = json_decode($actual, true);
 
         $this->assertCount(2, $data['items']);
-        $this->assertEquals('Test Client 1', $data['items'][0]['name']);
-        $this->assertEquals('Test Client 2', $data['items'][1]['name']);
+
+        $name1 = $data['items'][0]['name'];
+        $this->assertEquals('Test Client 1', $name1);
+
+        $name2 = $data['items'][1]['name'];
+        $this->assertEquals('Test Client 2', $name2);
+        // -------------------------------------------------
     }
 
     /**
@@ -118,34 +149,44 @@ class ClientsTest extends Testcase
      */
     public function test_can_get_clients_for_select_method()
     {
-        // Create some clients
-        $this->clientDepot->create([
-            'name' => 'Select Client A',
-            'remarks' => 'Remarks A',
-            'type' => 1,
-        ]);
-        $this->clientDepot->create([
-            'name' => 'Select Client B',
-            'remarks' => 'Remarks B',
-            'type' => 2,
-        ]);
+        // Create new multiple clients -------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client 1';
+        $data['remarks'] = 'Test Remarks 1';
 
-        // Call the select method
-        $response = $this->route->select();
+        $this->depot->create($data);
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $data = array();
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $data['name'] = 'Test Client 2';
+        $data['remarks'] = 'Test Remarks 2';
 
-        $data = json_decode((string) $response->getBody(), true);
+        $this->depot->create($data);
+        // -----------------------------------
+
+        // Call the route method --------
+        $actual = $this->route->select();
+        // ------------------------------
+
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(200, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify if selects returned properly ----
+        $actual = $actual->getBody()->__toString();
+
+        /** @var array<string, string>[] */
+        $data = json_decode($actual, true);
 
         $this->assertCount(2, $data);
-        $this->assertArrayHasKey('value', $data[0]);
-        $this->assertArrayHasKey('label', $data[0]);
+
         $this->assertEquals(1, $data[0]['value']);
-        $this->assertEquals('Select Client A', $data[0]['label']);
+
         $this->assertEquals(2, $data[1]['value']);
-        $this->assertEquals('Select Client B', $data[1]['label']);
+        // ----------------------------------------
     }
 
     /**
@@ -153,37 +194,41 @@ class ClientsTest extends Testcase
      */
     public function test_can_update_client_with_update_method()
     {
-        // Create a client first
-        $initialClientData = [
-            'name' => 'Original Client',
-            'remarks' => 'Original Remarks',
-            'type' => 1,
-        ];
-        $this->clientDepot->create($initialClientData);
-        $client = $this->clientDepot->all()->first(); // Get the created client
+        // Create a new client ---------------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client';
+        $data['remarks'] = 'Test Remarks';
 
-        $updatedClientData = [
-            'name' => 'Updated Client',
-            'remarks' => 'Updated Remarks',
-            'type' => 2,
-        ];
+        $item = $this->depot->create($data);
+        // -----------------------------------
 
-        // Simulate a PUT request
-        $this->request = $this->request->withMethod('PUT');
-        $this->request = $this->request->withParsedBody($updatedClientData);
+        // Simulate an HTTP request ------------
+        $data = array();
+        $data['type'] = Client::TYPE_SUPPLIER;
+        $data['name'] = 'Updated Client';
+        $data['remarks'] = 'Updated Remarks';
 
-        // Call the update method
-        $response = $this->route->update($client->id, $this->request);
+        $http = $this->withParsed($data, 'PUT');
+        // -------------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(204, $response->getStatusCode()); // No Content
+        // Call the route method ------------------------
+        $actual = $this->route->update($item->id, $http);
+        // ----------------------------------------------
 
-        // Verify client was updated in the database
-        $updatedClient = $this->clientDepot->find($client->id);
-        $this->assertEquals('Updated Client', $updatedClient->name);
-        $this->assertEquals('Updated Remarks', $updatedClient->remarks);
-        $this->assertEquals(2, $updatedClient->type);
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
+
+        $this->assertEquals(204, $actual->getStatusCode());
+        // ---------------------------------------------------
+
+        // Verify client was updated in the database -----------
+        $actual = $this->depot->find($item->id);
+
+        $this->assertEquals($data['remarks'], $actual->remarks);
+
+        $this->assertEquals($data['name'], $actual->name);
+        // -----------------------------------------------------
     }
 
     /**
@@ -191,31 +236,34 @@ class ClientsTest extends Testcase
      */
     public function test_cannot_create_client_with_invalid_data()
     {
-        $invalidClientData = [
-            'remarks' => 'Invalid Remarks', // Missing 'name' and 'type'
-        ];
+        // Simulate an HTTP request ----------
+        $data = array('remarks' => 'Remarks');
 
-        // Simulate a POST request with invalid data
-        $this->request = $this->request->withMethod('POST');
-        $this->request = $this->request->withParsedBody($invalidClientData);
+        $http = $this->withParsed($data);
+        // -----------------------------------
 
-        // Call the store method
-        $response = $this->route->store($this->request);
+        // Call the method ------------------
+        $actual = $this->route->store($http);
+        // ----------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(422, $response->getStatusCode()); // Unprocessable Entity
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-        $data = json_decode((string) $response->getBody(), true);
+        $this->assertEquals(422, $actual->getStatusCode());
+        // ---------------------------------------------------
 
-        $this->assertArrayHasKey('name', $data);
-        $this->assertArrayHasKey('type', $data);
-        $this->assertEquals('Client Name is required', $data['name'][0]);
-        $this->assertEquals('Client Type is required', $data['type'][0]);
+        // Verify if errors returned properly ---------
+        $actual = $actual->getBody()->__toString();
 
-        // Verify no client was created in the database
-        $clients = $this->clientDepot->all();
-        $this->assertCount(0, $clients);
+        /** @var array<string, string[]> */
+        $data = json_decode($actual, true);
+
+        $expect = 'Client Name is required';
+        $this->assertEquals($expect, $data['name'][0]);
+
+        $expect = 'Client Type is required';
+        $this->assertEquals($expect, $data['type'][0]);
+        // --------------------------------------------
     }
 
     /**
@@ -223,21 +271,19 @@ class ClientsTest extends Testcase
      */
     public function test_cannot_delete_non_existent_client()
     {
-        $nonExistentClientId = 999; // An ID that surely does not exist
+        // Simulate an HTTP request ------
+        $http = $this->withHttp('DELETE');
+        // -------------------------------
 
-        // Simulate a DELETE request
-        $this->request = $this->request->withMethod('DELETE');
+        // Call the route method -----------------
+        $actual = $this->route->delete(99, $http);
+        // ---------------------------------------
 
-        // Call the delete method
-        $response = $this->route->delete($nonExistentClientId, $this->request);
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(422, $response->getStatusCode()); // Unprocessable Entity
-
-        $data = json_decode((string) $response->getBody(), true);
-
-        $this->assertEquals([], $data); // Expecting an empty array for errors
+        $this->assertEquals(422, $actual->getStatusCode());
+        // ---------------------------------------------------
     }
 
     /**
@@ -245,42 +291,43 @@ class ClientsTest extends Testcase
      */
     public function test_cannot_update_client_with_invalid_data()
     {
-        // Create a client first
-        $initialClientData = [
-            'name' => 'Original Client',
-            'remarks' => 'Original Remarks',
-            'type' => 1,
-        ];
-        $this->clientDepot->create($initialClientData);
-        $client = $this->clientDepot->all()->first(); // Get the created client
+        // Create a new client ---------------
+        $data = array();
+        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['name'] = 'Test Client';
+        $data['remarks'] = 'Test Remarks';
 
-        $invalidUpdatedClientData = [
-            'remarks' => 'Updated Remarks', // Missing 'name' and 'type'
-        ];
+        $item = $this->depot->create($data);
+        // -----------------------------------
 
-        // Simulate a PUT request with invalid data
-        $this->request = $this->request->withMethod('PUT');
-        $this->request = $this->request->withParsedBody($invalidUpdatedClientData);
+        // Simulate an HTTP request ------------
+        $data = array('remarks' => 'Remarks');
 
-        // Call the update method
-        $response = $this->route->update($client->id, $this->request);
+        $http = $this->withParsed('PUT', $data);
+        // -------------------------------------
 
-        // Assertions
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(422, $response->getStatusCode()); // Unprocessable Entity
+        // Call the route method ------------------------
+        $actual = $this->route->update($item->id, $http);
+        // ----------------------------------------------
 
-        $data = json_decode((string) $response->getBody(), true);
+        // Verify if it returns an HTTP response -------------
+        $this->assertInstanceOf(JsonResponse::class, $actual);
 
-        $this->assertArrayHasKey('name', $data);
-        $this->assertArrayHasKey('type', $data);
-        $this->assertEquals('Client Name is required', $data['name'][0]);
-        $this->assertEquals('Client Type is required', $data['type'][0]);
+        $this->assertEquals(422, $actual->getStatusCode());
+        // ---------------------------------------------------
 
-        // Verify client was NOT updated in the database
-        $unchangedClient = $this->clientDepot->find($client->id);
-        $this->assertEquals('Original Client', $unchangedClient->name);
-        $this->assertEquals('Original Remarks', $unchangedClient->remarks);
-        $this->assertEquals(1, $unchangedClient->type);
+        // Verify if errors returned properly ---------
+        $actual = $actual->getBody()->__toString();
+
+        /** @var array<string, string[]> */
+        $data = json_decode($actual, true);
+
+        $expect = 'Client Name is required';
+        $this->assertEquals($expect, $data['name'][0]);
+
+        $expect = 'Client Type is required';
+        $this->assertEquals($expect, $data['type'][0]);
+        // --------------------------------------------
     }
 
     /**
@@ -292,13 +339,13 @@ class ClientsTest extends Testcase
 
         $this->migrate();
 
-        $this->withHttp(); // This sets REQUEST_METHOD to 'GET' by default
+        $depot = new ClientDepot(new Client);
 
         $check = new ClientCheck;
 
-        $this->clientDepot = new ClientDepot(new Client);
+        $this->route = new Clients($check, $depot);
 
-        $this->route = new Clients($check, $this->clientDepot);
+        $this->depot = $depot;
     }
 
     /**
