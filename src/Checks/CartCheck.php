@@ -53,32 +53,38 @@ class CartCheck extends Request
      */
     public function valid($data)
     {
-        $valid = parent::valid($data);
-
-        if (! $valid)
+        if (! parent::valid($data))
         {
             return count($this->errors) === 0;
         }
 
         /** @var integer */
-        $itemId = $data['item_id'];
+        $item = $data['item_id'];
 
-        if (! $this->item->rowExists($itemId))
+        if (! $this->item->rowExists($item))
         {
             $this->setError('item_id', 'Item not found');
 
             return count($this->errors) === 0;
         }
 
-        $item = $this->item->find($itemId);
+        $item = $this->item->find($item);
 
+        // Check if order is for sale -------
         /** @var integer */
         $type = $data['type'];
 
+        $isSale = $type === Order::TYPE_SALE;
+        // ----------------------------------
+
+        // Check if quantity is below current stock ---
         /** @var integer */
         $quantity = $data['quantity'];
 
-        if ($type === Order::TYPE_SALE && $item->quantity < $quantity)
+        $lowAmount = $item->quantity < $quantity;
+        // --------------------------------------------
+
+        if ($isSale && $lowAmount)
         {
             $this->setError('quantity', 'Not enough quantity');
         }
