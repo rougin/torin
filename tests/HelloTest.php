@@ -2,8 +2,6 @@
 
 namespace Rougin\Torin;
 
-use Rougin\Torin\Testcase;
-
 /**
  * @package Torin
  *
