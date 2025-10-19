@@ -9,63 +9,75 @@ use Rougin\Slytherin\Routing\Router as Slytherin;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Router extends Package
+class Router extends Slytherin
 {
     /**
      * @var string
      */
-    protected $namespace = 'Rougin\Torin\Routes';
+    protected $namespace = 'Rougin\Torin';
 
     /**
      * @var string
      */
-    protected $prefix = '/v1/';
+    protected $prefix = '/';
 
     /**
-     * @return \Rougin\Slytherin\Routing\RouterInterface
+     * @return \Rougin\Slytherin\Routing\RouteInterface[]
      */
-    protected function setRouter()
+    public function routes()
     {
-        $self = new Slytherin;
+        $this->pages();
 
-        $self->prefix($this->prefix, $this->namespace);
+        // Client ------------------------------------------------
+        $this->get('/v1/clients/select', 'Routes\Clients@select');
 
-        // Client -------------------------------------
-        $self->get('clients/select', 'Clients@select');
+        $this->delete('/v1/clients/:id', 'Routes\Clients@delete');
 
-        $self->delete('clients/:id', 'Clients@delete');
+        $this->get('/v1/clients', 'Routes\Clients@index');
 
-        $self->get('clients', 'Clients@index');
+        $this->put('/v1/clients/:id', 'Routes\Clients@update');
 
-        $self->put('clients/:id', 'Clients@update');
+        $this->post('/v1/clients', 'Routes\Clients@store');
+        // -------------------------------------------------------
 
-        $self->post('clients', 'Clients@store');
-        // --------------------------------------------
+        // Item ----------------------------------------------
+        $this->get('/v1/items/select', 'Routes\Items@select');
 
-        // Item -----------------------------------
-        $self->get('items/select', 'Items@select');
+        $this->delete('/v1/items/:id', 'Routes\Items@delete');
 
-        $self->delete('items/:id', 'Items@delete');
+        $this->get('/v1/items', 'Routes\Items@index');
 
-        $self->get('items', 'Items@index');
+        $this->put('/v1/items/:id', 'Routes\Items@update');
 
-        $self->put('items/:id', 'Items@update');
+        $this->post('/v1/items', 'Routes\Items@store');
+        // ---------------------------------------------------
 
-        $self->post('items', 'Items@store');
-        // ----------------------------------------
+        // Order ----------------------------------------------------
+        $this->delete('/v1/orders/:id', 'Routes\Orders@delete');
 
-        // Order -----------------------------------------
-        $self->delete('orders/:id', 'Orders@delete');
+        $this->post('/v1/orders/:id/status', 'Routes\Orders@status');
 
-        $self->post('orders/:id/status', 'Orders@status');
+        $this->get('/v1/orders', 'Routes\Orders@index');
 
-        $self->get('orders', 'Orders@index');
+        $this->post('/v1/orders/check', 'Routes\Orders@check');
 
-        $self->post('orders/check', 'Orders@check');
+        $this->post('/v1/orders', 'Routes\Orders@store');
+        // ----------------------------------------------------------
 
-        $self->post('orders', 'Orders@store');
-        // -----------------------------------------------
+        return $this->routes;
+    }
 
-        return $self;
+    /**
+     * @return void
+     */
+    protected function pages()
+    {
+        $this->get('/', 'Pages\Hello@index');
+
+        $this->get('clients', 'Pages\Clients@index');
+
+        $this->get('items', 'Pages\Items@index');
+
+        $this->get('orders', 'Pages\Orders@index');
     }
 }

@@ -109,7 +109,14 @@ return array(
      *
      * @var \Rougin\Slytherin\Middleware\MiddlewareInterface[]
      */
-    'middlewares' => \Rougin\Torin\Kernel::items(),
+    'middlewares' => array(
+
+        'Rougin\Onion\BodyParams',
+        'Rougin\Onion\CorsHeader',
+        'Rougin\Onion\FormParser',
+        'Rougin\Onion\NullString',
+
+    ),
 
     /**
      * Returns an array of directory paths to be used for the
@@ -157,8 +164,7 @@ return array(
          * @link below on how to create a package for Slytherin.
          * @link https://github.com/rougin/slytherin/wiki/IntegrationInterface-Implementation
          */
-        'Rougin\Torin\Plates',
-        'Rougin\Torin\Router',
+        'Rougin\Torin\Package',
 
         /**
          * This section specifies the packages came from Weasley.
