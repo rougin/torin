@@ -36,6 +36,9 @@ jobs:
     - name: Install dependencies
       run: composer install --no-plugins --no-progress --prefer-dist
 
+    - name: Create new ".env" file
+      run: cp ".env.example" ".env"
+
     - name: Run test suite
       run: vendor/bin/phpunit --coverage-clover=coverage.clover
 
