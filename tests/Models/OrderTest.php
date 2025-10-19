@@ -14,7 +14,7 @@ class OrderTest extends Testcase
     /**
      * @return void
      */
-    public function test_create_order()
+    public function test_should_create_order()
     {
         $model = new Client;
 
@@ -36,7 +36,7 @@ class OrderTest extends Testcase
     /**
      * @return void
      */
-    public function test_find_order()
+    public function test_should_find_order()
     {
         $model = new Client;
 

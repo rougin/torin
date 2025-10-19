@@ -14,7 +14,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_create_an_item()
+    public function test_should_create_an_item()
     {
         $model = new Item;
 
@@ -28,7 +28,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_find_an_item()
+    public function test_should_find_an_item()
     {
         $model = new Item;
 
@@ -45,7 +45,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_created_at()
+    public function test_should_get_created_at_timestamp()
     {
         $model = new Item;
 
@@ -60,7 +60,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_item_as_row()
+    public function test_should_get_item_as_row_array()
     {
         $model = new Item;
 
@@ -78,7 +78,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_item_as_select()
+    public function test_should_get_item_as_select_array()
     {
         $model = new Item;
 
@@ -95,7 +95,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_quantity_with_mixed_orders()
+    public function test_should_calculate_quantity_with_mixed_orders()
     {
         $model = new Item;
 
@@ -131,7 +131,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_quantity_with_no_orders()
+    public function test_should_calculate_quantity_with_no_orders()
     {
         $model = new Item;
 
@@ -145,7 +145,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_quantity_with_pending_orders()
+    public function test_should_calculate_quantity_with_pending_orders()
     {
         $model = new Item;
 
@@ -181,7 +181,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_quantity_with_purchase_orders()
+    public function test_should_calculate_quantity_with_purchase_orders()
     {
         $model = new Item;
 
@@ -215,7 +215,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_quantity_with_sale_orders()
+    public function test_should_calculate_quantity_with_sale_orders()
     {
         $model = new Item;
 
@@ -249,7 +249,7 @@ class ItemTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_updated_at()
+    public function test_should_get_updated_at_timestamp()
     {
         $model = new Item;
 

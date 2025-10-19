@@ -20,7 +20,7 @@ class ClientDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_find_all_clients()
+    public function test_should_find_all_clients()
     {
         $model = new Client;
 
@@ -41,7 +41,7 @@ class ClientDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_find_client_by_id()
+    public function test_should_find_client_by_id()
     {
         $model = new Client;
 
@@ -67,7 +67,7 @@ class ClientDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_create_client()
+    public function test_should_create_client()
     {
         $data = array('name' => 'New Client');
         $data['type'] = Client::TYPE_CUSTOMER;
@@ -82,7 +82,7 @@ class ClientDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_clients_for_select()
+    public function test_should_get_clients_for_select_input()
     {
         $data = array('name' => 'Client X');
         $data['type'] = Client::TYPE_CUSTOMER;
@@ -104,7 +104,7 @@ class ClientDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_update_client()
+    public function test_should_update_client()
     {
         $data = array('name' => 'Old Client');
         $data['type'] = Client::TYPE_CUSTOMER;

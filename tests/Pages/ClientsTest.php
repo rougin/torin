@@ -21,7 +21,7 @@ class ClientsTest extends Testcase
     /**
      * @return void
      */
-    public function test_page_output()
+    public function test_should_render_clients_page_output()
     {
         $depot = new ClientDepot(new Client);
 

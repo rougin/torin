@@ -21,7 +21,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_page_output()
+    public function test_should_render_orders_page_output()
     {
         $expect = $this->getPlate('Orders');
 

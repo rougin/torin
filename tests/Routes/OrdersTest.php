@@ -41,7 +41,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_change_order_status()
+    public function test_should_change_order_status()
     {
         // Create a new client and item -------
         $data = array();
@@ -95,7 +95,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_check_cart_with_valid_data()
+    public function test_should_check_cart_with_valid_data()
     {
         // Create a new client and item -------
         $data = array();
@@ -149,7 +149,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_create_order_with_store_method()
+    public function test_should_create_order_via_store_method()
     {
         // Create a new client and item -------
         $data = array();
@@ -197,7 +197,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_delete_order_with_delete_method()
+    public function test_should_delete_order_via_delete_method()
     {
         // Create a new client and item -------
         $data = array();
@@ -247,7 +247,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_all_orders_with_index_method()
+    public function test_should_get_all_orders_via_index_method()
     {
         // Create a new client and item -------
         $data = array();
@@ -316,7 +316,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_cannot_check_cart_with_invalid_data()
+    public function test_should_not_check_cart_with_invalid_data()
     {
         // Simulate an HTTP request -----
         $data = array('item_id' => 9999);
@@ -344,7 +344,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_cannot_check_cart_with_invalid_quantity()
+    public function test_should_not_check_cart_with_invalid_quantity()
     {
         // Create a new client and item -------
         $data = array();
@@ -402,7 +402,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_cannot_create_order_with_invalid_data()
+    public function test_should_not_create_order_with_invalid_data()
     {
         // Simulate an HTTP request ----------
         $data = array('remarks' => 'Remarks');
@@ -438,7 +438,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_cannot_delete_non_existent_order()
+    public function test_should_not_delete_non_existent_order()
     {
         // Simulate an HTTP request ------
         $http = $this->withHttp('DELETE');

@@ -27,7 +27,7 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_create_item_with_store_method()
+    public function test_should_create_item_via_store_method()
     {
         // Simulate an HTTP request ---------
         $data = array('name' => 'Test Item');
@@ -54,7 +54,7 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_delete_item_with_delete_method()
+    public function test_should_delete_item_via_delete_method()
     {
         // Create a new item ----------------
         $data = array('name' => 'Test Item');
@@ -85,7 +85,7 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_all_items_with_index_method()
+    public function test_should_get_all_items_via_index_method()
     {
         // Create new multiple items ----------
         $data = array('name' => 'Test Item 1');
@@ -128,7 +128,7 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_filters_with_index_method()
+    public function test_should_get_filtered_items_via_index_method()
     {
         // Create new multiple items ----------
         $data = array('name' => 'Test Item 1');
@@ -164,7 +164,7 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_items_for_select_method()
+    public function test_should_get_items_for_select_via_select_method()
     {
         // Create new multiple items ----------
         $data = array('name' => 'Test Item 1');
@@ -201,7 +201,7 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_update_item_with_update_method()
+    public function test_should_update_item_via_update_method()
     {
         // Create a new item ----------------
         $data = array('name' => 'Test Item');
@@ -235,7 +235,7 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_cannot_create_item_with_invalid_data()
+    public function test_should_not_create_item_with_invalid_data()
     {
         // Simulate an HTTP request ----------
         $data = array('detail' => 'Details');

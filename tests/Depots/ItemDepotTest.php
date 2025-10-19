@@ -21,7 +21,7 @@ class ItemDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_find_all_items()
+    public function test_should_find_all_items()
     {
         $model = new Item;
 
@@ -41,7 +41,7 @@ class ItemDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_create_item()
+    public function test_should_create_item()
     {
         $data = array('name' => 'New Item');
         $data['detail'] = 'New Item Detail';
@@ -63,7 +63,7 @@ class ItemDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_items_for_select()
+    public function test_should_get_items_for_select_input()
     {
         $data = array('name' => 'Item X');
         $data['detail'] = 'Detail X';
@@ -85,7 +85,7 @@ class ItemDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_update_item()
+    public function test_should_update_item()
     {
         $data = array('name' => 'Old Item Name');
         $data['detail'] = 'Old Item Description';
@@ -107,7 +107,7 @@ class ItemDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_find_item_with_orders_by_id()
+    public function test_should_find_item_with_orders_by_id()
     {
         $model = new Item;
 
@@ -136,7 +136,7 @@ class ItemDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_generate_item_code_with_correct_format()
+    public function test_should_generate_item_code_with_correct_format()
     {
         $pattern = '/^00-\d{8}-\d{5}$/';
 

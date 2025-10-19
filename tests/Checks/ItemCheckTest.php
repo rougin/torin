@@ -39,7 +39,7 @@ class ItemCheckTest extends Testcase
      *
      * @return void
      */
-    public function test_for_errors($data, $text)
+    public function test_should_return_errors_for_invalid_item_data($data, $text)
     {
         $check = new ItemCheck;
 
@@ -53,7 +53,7 @@ class ItemCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_for_passed()
+    public function test_should_pass_with_valid_item_data()
     {
         $data = array('name' => 'Test Item');
         $data['detail'] = 'Test Detail';

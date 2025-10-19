@@ -27,7 +27,7 @@ class ClientsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_create_client_with_store_method()
+    public function test_should_create_client_via_store_method()
     {
         // Simulate an HTTP request ----------
         $data = array();
@@ -56,7 +56,7 @@ class ClientsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_delete_client_with_delete_method()
+    public function test_should_delete_client_via_delete_method()
     {
         // Create a new client ---------------
         $data = array();
@@ -89,7 +89,7 @@ class ClientsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_all_clients_with_index_method()
+    public function test_should_get_all_clients_via_index_method()
     {
         // Create new multiple clients -------
         $data = array();
@@ -136,7 +136,7 @@ class ClientsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_get_clients_for_select_method()
+    public function test_should_get_clients_for_select_via_select_method()
     {
         // Create new multiple clients -------
         $data = array();
@@ -177,7 +177,7 @@ class ClientsTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_update_client_with_update_method()
+    public function test_should_update_client_via_update_method()
     {
         // Create a new client ---------------
         $data = array();
@@ -215,7 +215,7 @@ class ClientsTest extends Testcase
     /**
      * @return void
      */
-    public function test_cannot_create_client_with_invalid_data()
+    public function test_should_not_create_client_with_invalid_data()
     {
         // Simulate an HTTP request ----------
         $data = array('remarks' => 'Remarks');
@@ -248,7 +248,7 @@ class ClientsTest extends Testcase
     /**
      * @return void
      */
-    public function test_cannot_delete_non_existent_client()
+    public function test_should_not_delete_non_existent_client()
     {
         // Simulate an HTTP request ------
         $http = $this->withHttp('DELETE');
@@ -266,7 +266,7 @@ class ClientsTest extends Testcase
     /**
      * @return void
      */
-    public function test_cannot_update_client_with_invalid_data()
+    public function test_should_not_update_client_with_invalid_data()
     {
         // Create a new client ---------------
         $data = array();

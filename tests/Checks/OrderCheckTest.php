@@ -51,7 +51,7 @@ class OrderCheckTest extends Testcase
      *
      * @return void
      */
-    public function test_for_errors($data, $text)
+    public function test_should_return_errors_for_invalid_order_data($data, $text)
     {
         $check = new OrderCheck;
 
@@ -65,7 +65,7 @@ class OrderCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_for_passed()
+    public function test_should_pass_with_valid_order_data()
     {
         $data = array('client_id' => 1);
         $data['type'] = Order::TYPE_SALE;

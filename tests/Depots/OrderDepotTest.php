@@ -22,7 +22,7 @@ class OrderDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_change_order_status()
+    public function test_should_change_order_status()
     {
         // Create a new client ---------------
         $model = new Client;
@@ -64,7 +64,7 @@ class OrderDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_create_order()
+    public function test_should_create_order()
     {
         // Create a new client ---------------
         $model = new Client;

@@ -21,7 +21,7 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_page_output()
+    public function test_should_render_items_page_output()
     {
         $expect = $this->getPlate('Items');
 

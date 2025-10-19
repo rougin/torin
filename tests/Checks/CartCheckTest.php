@@ -73,7 +73,7 @@ class CartCheckTest extends Testcase
      *
      * @return void
      */
-    public function test_for_errors($data, $text)
+    public function test_should_return_errors_for_invalid_cart_data($data, $text)
     {
         $actual = $this->check->valid($data);
 
@@ -87,7 +87,7 @@ class CartCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_for_item_not_found_error()
+    public function test_should_return_error_when_item_not_found()
     {
         $data = array('item_id' => 999);
         $data['quantity'] = 10;
@@ -107,7 +107,7 @@ class CartCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_for_not_enough_quantity_error()
+    public function test_should_return_error_for_not_enough_quantity()
     {
         // Create a new item --------------
         $data = array('name' => 'Test');
@@ -153,7 +153,7 @@ class CartCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_for_passed()
+    public function test_should_pass_with_valid_cart_data()
     {
         // Create a new item --------------
         $data = array('name' => 'Test');

@@ -14,7 +14,7 @@ class ClientTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_create_a_client()
+    public function test_should_create_a_client()
     {
         $model = new Client;
 
@@ -29,7 +29,7 @@ class ClientTest extends Testcase
     /**
      * @return void
      */
-    public function test_can_find_a_client()
+    public function test_should_find_a_client()
     {
         $model = new Client;
 
