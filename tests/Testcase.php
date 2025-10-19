@@ -185,7 +185,16 @@ class Testcase extends Legacy
      */
     protected function assertRegex($pattern, $string)
     {
-        $this->assertMatchesRegularExpression($pattern, $string);
+        $method = 'assertMatchesRegularExpression';
+
+        if (method_exists($this, $method))
+        {
+            $this->assertMatchesRegularExpression($pattern, $string);
+
+            return;
+        }
+
+        $this->assertRegExp($pattern, $string);
     }
 
     /**
