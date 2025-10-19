@@ -12,7 +12,7 @@
   ],
   "require":
   {
-    "php": ">=5.4.0",
+    "php": ">=5.6.0",
     "illuminate/database": "*",
     "rougin/dexterine": "dev-master",
     "rougin/dexterity": "dev-master",
@@ -21,7 +21,6 @@
     "rougin/onion": "dev-master",
     "rougin/validia": "dev-master",
     "rougin/weasley": "~0.7",
-    "tedivm/jshrink": "~1.0",
     "vlucas/phpdotenv": "~2.0"
   },
   "require-dev":
