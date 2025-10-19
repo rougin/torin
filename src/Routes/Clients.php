@@ -140,11 +140,21 @@ class Clients
      */
     protected function setIndexData($params)
     {
-        /** @var integer */
-        $limit = $params['l'] ?? 10;
+        $limit = 10;
 
-        /** @var integer */
-        $page = $params['p'] ?? 1;
+        if (array_key_exists('l', $params))
+        {
+            /** @var integer */
+            $limit = $params['l'];
+        }
+
+        $page = 1;
+
+        if (array_key_exists('p', $params))
+        {
+            /** @var integer */
+            $page = $params['p'];
+        }
 
         $result = $this->client->get($page, $limit);
 
