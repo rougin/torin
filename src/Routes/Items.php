@@ -3,8 +3,12 @@
 namespace Rougin\Torin\Routes;
 
 use Rougin\Dexterity\Filter;
+use Rougin\Dexterity\Message\HttpResponse;
 use Rougin\Dexterity\Message\JsonResponse;
-use Rougin\Dexterity\Route;
+use Rougin\Dexterity\Route\WithDeleteMethod;
+use Rougin\Dexterity\Route\WithIndexMethod;
+use Rougin\Dexterity\Route\WithStoreMethod;
+use Rougin\Dexterity\Route\WithUpdateMethod;
 use Rougin\Torin\Checks\ItemCheck;
 use Rougin\Torin\Depots\ItemDepot;
 
@@ -13,8 +17,13 @@ use Rougin\Torin\Depots\ItemDepot;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Items extends Route
+class Items
 {
+    use WithDeleteMethod;
+    use WithIndexMethod;
+    use WithStoreMethod;
+    use WithUpdateMethod;
+
     /**
      * @var \Rougin\Torin\Checks\ItemCheck
      */
@@ -45,12 +54,36 @@ class Items extends Route
     }
 
     /**
-     * @param integer $code
-     *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function asInvalid($code = 422)
+    protected function invalidDelete()
     {
+        $code = HttpResponse::UNPROCESSABLE;
+
+        $errors = $this->check->errors();
+
+        return new JsonResponse($errors, $code);
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function invalidStore()
+    {
+        $code = HttpResponse::UNPROCESSABLE;
+
+        $errors = $this->check->errors();
+
+        return new JsonResponse($errors, $code);
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function invalidUpdate()
+    {
+        $code = HttpResponse::UNPROCESSABLE;
+
         $errors = $this->check->errors();
 
         return new JsonResponse($errors, $code);
@@ -132,18 +165,17 @@ class Items extends Route
             $search = $params['k'];
         }
 
-        // Add filter to search items by keyword ------
+        // Add filter to search items by keyword -------------
         if ($search)
         {
             $filter = new Filter;
 
-            $filter->setStr('name', $search);
-            $filter->setStr('code', $search);
-            $filter->withSearch(array('name', 'code'));
+            $filter->setAsString('name', $search)->asSearch();
+            $filter->setAsString('code', $search)->asSearch();
 
             $this->item->withFilter($filter);
         }
-        // --------------------------------------------
+        // ---------------------------------------------------
 
         $result = $this->item->get($page, $limit);
 
