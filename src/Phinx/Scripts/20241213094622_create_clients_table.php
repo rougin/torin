@@ -14,12 +14,9 @@ final class CreateClientsTable extends AbstractMigration
      */
     public function change()
     {
-        $properties = array('id' => false, 'primary_key' => array('id'));
-
-        $table = $this->table('clients', $properties);
+        $table = $this->table('clients');
 
         $table
-            ->addColumn('id', 'integer', array('limit' => 10, 'identity' => true))
             ->addColumn('parent_id', 'integer', array('limit' => 10, 'null' => true))
             ->addColumn('type', 'integer', array('limit' => 1))
             ->addColumn('code', 'string', array('limit' => 100, 'null' => true))

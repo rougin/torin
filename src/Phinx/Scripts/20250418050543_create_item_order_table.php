@@ -14,14 +14,11 @@ final class CreateItemOrderTable extends AbstractMigration
      */
     public function change()
     {
-        $properties = array('id' => false, 'primary_key' => array('id'));
+        $table = $this->table('item_order');
 
-        $table = $this->table('item_order', $properties);
-
-        $constraints = array('delete' => 'CASCADE', 'update' => 'CASCADE');
+        $keys = array('delete' => 'CASCADE', 'update' => 'CASCADE');
 
         $table
-            ->addColumn('id', 'integer', array('limit' => 10, 'identity' => true))
             ->addColumn('item_id', 'integer', array('length' => 10))
             ->addColumn('order_id', 'integer', array('length' => 10))
             ->addColumn('quantity', 'integer', array('limit' => 10))
@@ -31,8 +28,8 @@ final class CreateItemOrderTable extends AbstractMigration
             ->addColumn('created_at', 'datetime')
             ->addColumn('updated_at', 'datetime', array('null' => true))
             ->addColumn('deleted_at', 'datetime', array('null' => true))
-            ->addForeignKey('item_id', 'items', 'id', $constraints)
-            ->addForeignKey('order_id', 'orders', 'id', $constraints)
+            ->addForeignKey('item_id', 'items', 'id', $keys)
+            ->addForeignKey('order_id', 'orders', 'id', $keys)
             ->create();
     }
 }

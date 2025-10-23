@@ -14,14 +14,11 @@ final class CreateOrdersTable extends AbstractMigration
      */
     public function change()
     {
-        $properties = array('id' => false, 'primary_key' => array('id'));
+        $table = $this->table('orders');
 
-        $table = $this->table('orders', $properties);
-
-        $constraints = array('delete' => 'CASCADE', 'update' => 'CASCADE');
+        $keys = array('delete' => 'CASCADE', 'update' => 'CASCADE');
 
         $table
-            ->addColumn('id', 'integer', array('limit' => 10, 'identity' => true))
             ->addColumn('client_id', 'integer', array('length' => 10, 'null' => true))
             ->addColumn('type', 'integer', array('limit' => 1))
             ->addColumn('status', 'integer', array('limit' => 1, 'default' => 0))
@@ -33,7 +30,7 @@ final class CreateOrdersTable extends AbstractMigration
             ->addColumn('created_at', 'datetime')
             ->addColumn('updated_at', 'datetime', array('null' => true))
             ->addColumn('deleted_at', 'datetime', array('null' => true))
-            ->addForeignKey('client_id', 'clients', 'id', $constraints)
+            ->addForeignKey('client_id', 'clients', 'id', $keys)
             ->create();
     }
 }
