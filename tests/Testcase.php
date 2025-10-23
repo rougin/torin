@@ -117,6 +117,8 @@ class Testcase extends Legacy
 
         $capsule->addConnection($data, 'torin');
 
+        $capsule->addConnection($data);
+
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
 
