@@ -29,6 +29,8 @@ class ItemsTest extends Testcase
 
         $actual = $this->page->index($depot);
 
+        $actual = $this->parseHtml($actual);
+
         $this->assertEquals($expect, $actual);
     }
 

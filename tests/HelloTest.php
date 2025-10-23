@@ -18,9 +18,9 @@ class HelloTest extends Testcase
     {
         // Expect the template from "Hello" page ---
         $expect = $this->getPlate('Hello');
-
-        $this->expectOutputString($expect);
         // -----------------------------------------
+
+        ob_start();
 
         // Set the "$_SERVER" variables manually ---
         $_SERVER['REQUEST_METHOD'] = 'GET';
@@ -32,5 +32,14 @@ class HelloTest extends Testcase
         // Run the application from "index.php" -----
         require __DIR__ . '/../app/public/index.php';
         // ------------------------------------------
+
+        /** @var string */
+        $actual = ob_get_contents();
+
+        ob_end_clean();
+
+        $actual = $this->parseHtml($actual);
+
+        $this->assertEquals($expect, $actual);
     }
 }

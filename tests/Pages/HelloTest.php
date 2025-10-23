@@ -25,6 +25,8 @@ class HelloTest extends Testcase
 
         $actual = $this->page->index();
 
+        $actual = $this->parseHtml($actual);
+
         $this->assertEquals($expect, $actual);
     }
 

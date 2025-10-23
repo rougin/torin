@@ -34,6 +34,53 @@ class Testcase extends Legacy
     protected $request;
 
     /**
+     * @param string $pattern
+     * @param string $string
+     *
+     * @return void
+     */
+    protected function assertRegex($pattern, $string)
+    {
+        $method = 'assertMatchesRegularExpression';
+
+        if (method_exists($this, $method))
+        {
+            $this->assertMatchesRegularExpression($pattern, $string);
+
+            return;
+        }
+
+        $this->assertRegExp($pattern, $string);
+    }
+
+    /**
+     * @param string[] $paths
+     *
+     * @return integer
+     */
+    protected function getLastVersion($paths)
+    {
+        $version = 0;
+
+        foreach ($paths as $path)
+        {
+            /** @var string[] */
+            $files = glob($path . '/*.php');
+
+            foreach ($files as $file)
+            {
+                $temp = basename($file, '.php');
+
+                $version = substr($temp, 0, 14);
+
+                $version = (int) $version;
+            }
+        }
+
+        return $version;
+    }
+
+    /**
      * @param string $name
      *
      * @return string
@@ -45,7 +92,9 @@ class Testcase extends Legacy
         $file = $path . '/' . $name . '.html';
 
         /** @var string */
-        return file_get_contents($file);
+        $html = file_get_contents($file);
+
+        return $this->parseHtml($html);
     }
 
     /**
@@ -64,6 +113,18 @@ class Testcase extends Legacy
         // Run the migration up to the specified version ---
         $phinx->migrate('test', $version);
         // -------------------------------------------------
+    }
+
+    /**
+     * Replaces "\r\n" to "\n" for Windows machines.
+     *
+     * @param string $html
+     *
+     * @return string
+     */
+    protected function parseHtml($html)
+    {
+        return str_replace("\r\n", "\n", $html);
     }
 
     /**
@@ -180,52 +241,5 @@ class Testcase extends Legacy
         $paths[] = __DIR__ . '/../app/plates';
 
         return new Render($paths);
-    }
-
-    /**
-     * @param string $pattern
-     * @param string $string
-     *
-     * @return void
-     */
-    protected function assertRegex($pattern, $string)
-    {
-        $method = 'assertMatchesRegularExpression';
-
-        if (method_exists($this, $method))
-        {
-            $this->assertMatchesRegularExpression($pattern, $string);
-
-            return;
-        }
-
-        $this->assertRegExp($pattern, $string);
-    }
-
-    /**
-     * @param string[] $paths
-     *
-     * @return integer
-     */
-    protected function getLastVersion($paths)
-    {
-        $version = 0;
-
-        foreach ($paths as $path)
-        {
-            /** @var string[] */
-            $files = glob($path . '/*.php');
-
-            foreach ($files as $file)
-            {
-                $temp = basename($file, '.php');
-
-                $version = substr($temp, 0, 14);
-
-                $version = (int) $version;
-            }
-        }
-
-        return $version;
     }
 }
