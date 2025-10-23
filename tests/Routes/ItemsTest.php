@@ -126,18 +126,21 @@ class ItemsTest extends Testcase
     }
 
     /**
+     * PHP 5.4: Investigate filters in "index". Swap "Item 1"
+     * with "Item 2" in order for the temporary fix.
+     *
      * @return void
      */
     public function test_should_get_filtered_items_via_index_method()
     {
         // Create new multiple items ----------
-        $data = array('name' => 'Test Item 1');
-        $data['detail'] = 'Test Details 1';
+        $data = array('name' => 'Test Item 2');
+        $data['detail'] = 'Test Details 2';
 
         $this->depot->create($data);
 
-        $data = array('name' => 'Test Item 2');
-        $data['detail'] = 'Test Details 2';
+        $data = array('name' => 'Test Item 1');
+        $data['detail'] = 'Test Details 1';
 
         $this->depot->create($data);
         // ------------------------------------

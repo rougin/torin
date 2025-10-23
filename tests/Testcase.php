@@ -117,7 +117,10 @@ class Testcase extends Legacy
 
         $capsule->addConnection($data, 'torin');
 
+        // PHP 5.4: Requires to add a "default" ---
+        // connection prior to Laravel 5.1 --------
         $capsule->addConnection($data);
+        // ----------------------------------------
 
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
