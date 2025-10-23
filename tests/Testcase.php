@@ -190,19 +190,22 @@ class Testcase extends Legacy
     }
 
     /**
+     * @param string $uri
      * @param string $method
      *
      * @return \Psr\Http\Message\ServerRequestInterface
      */
-    protected function withHttp($method = 'GET')
+    protected function withHttp($uri = '/', $method = 'GET')
     {
-        $server = array('REQUEST_METHOD' => $method);
+        $data = array();
 
-        $server['REQUEST_URI'] = '/';
-        $server['SERVER_NAME'] = 'localhost';
-        $server['SERVER_PORT'] = '80';
+        $data['HTTP_HOST'] = 'localhost';
+        $data['REQUEST_METHOD'] = $method;
+        $data['REQUEST_URI'] = $uri;
+        $data['SERVER_NAME'] = 'localhost';
+        $data['SERVER_PORT'] = '80';
 
-        return new ServerRequest($server);
+        return new ServerRequest($data);
     }
 
     /**
@@ -225,7 +228,7 @@ class Testcase extends Legacy
      */
     protected function withParsed($items, $method = 'POST')
     {
-        $http = $this->withHttp($method);
+        $http = $this->withHttp('/', $method);
 
         return $http->withParsedBody($items);
     }

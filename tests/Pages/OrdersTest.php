@@ -43,11 +43,13 @@ class OrdersTest extends Testcase
 
         $this->migrate();
 
+        $http = $this->withHttp('/orders');
+
         $plate = $this->withPlate();
 
-        $http = $this->withHttp();
+        $page = new Orders($plate, $http);
 
-        $this->page = new Orders($plate, $http);
+        $this->page = $page;
     }
 
     /**

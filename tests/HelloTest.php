@@ -23,6 +23,7 @@ class HelloTest extends Testcase
         ob_start();
 
         // Set the "$_SERVER" variables manually ---
+        $_SERVER['HTTP_HOST'] = 'localhost';
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/';
         $_SERVER['SERVER_NAME'] = 'localhost';

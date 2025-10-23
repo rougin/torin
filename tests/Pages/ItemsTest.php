@@ -43,11 +43,13 @@ class ItemsTest extends Testcase
 
         $this->migrate();
 
+        $http = $this->withHttp('/items');
+
         $plate = $this->withPlate();
 
-        $http = $this->withHttp();
+        $page = new Items($plate, $http);
 
-        $this->page = new Items($plate, $http);
+        $this->page = $page;
     }
 
     /**

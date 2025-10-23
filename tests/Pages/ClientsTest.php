@@ -43,11 +43,13 @@ class ClientsTest extends Testcase
 
         $this->migrate();
 
+        $http = $this->withHttp('/clients');
+
         $plate = $this->withPlate();
 
-        $http = $this->withHttp();
+        $page = new Clients($plate, $http);
 
-        $this->page = new Clients($plate, $http);
+        $this->page = $page;
     }
 
     /**
