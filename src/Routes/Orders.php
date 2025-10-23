@@ -3,11 +3,8 @@
 namespace Rougin\Torin\Routes;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Rougin\Dexterity\Message\HttpResponse;
 use Rougin\Dexterity\Message\JsonResponse;
-use Rougin\Dexterity\Route\WithDeleteMethod;
-use Rougin\Dexterity\Route\WithIndexMethod;
-use Rougin\Dexterity\Route\WithStoreMethod;
+use Rougin\Dexterity\Route;
 use Rougin\Torin\Checks\CartCheck;
 use Rougin\Torin\Checks\OrderCheck;
 use Rougin\Torin\Depots\ItemDepot;
@@ -18,12 +15,8 @@ use Rougin\Torin\Depots\OrderDepot;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Orders
+class Orders extends Route
 {
-    use WithDeleteMethod;
-    use WithIndexMethod;
-    use WithStoreMethod;
-
     /**
      * @var \Rougin\Torin\Checks\OrderCheck
      */
@@ -82,25 +75,12 @@ class Orders
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function invalidDelete()
-    {
-        $code = HttpResponse::UNPROCESSABLE;
-
-        $errors = $this->check->errors();
-
-        return new JsonResponse($errors, $code);
-    }
-
-    /**
+     * @param integer $code
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function invalidStore()
+    protected function asInvalid($code = 422)
     {
-        $code = HttpResponse::UNPROCESSABLE;
-
         $errors = $this->check->errors();
 
         return new JsonResponse($errors, $code);

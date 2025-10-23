@@ -2,12 +2,8 @@
 
 namespace Rougin\Torin\Routes;
 
-use Rougin\Dexterity\Message\HttpResponse;
 use Rougin\Dexterity\Message\JsonResponse;
-use Rougin\Dexterity\Route\WithDeleteMethod;
-use Rougin\Dexterity\Route\WithIndexMethod;
-use Rougin\Dexterity\Route\WithStoreMethod;
-use Rougin\Dexterity\Route\WithUpdateMethod;
+use Rougin\Dexterity\Route;
 use Rougin\Torin\Checks\ClientCheck;
 use Rougin\Torin\Depots\ClientDepot;
 
@@ -16,13 +12,8 @@ use Rougin\Torin\Depots\ClientDepot;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Clients
+class Clients extends Route
 {
-    use WithDeleteMethod;
-    use WithIndexMethod;
-    use WithStoreMethod;
-    use WithUpdateMethod;
-
     /**
      * @var \Rougin\Torin\Checks\ClientCheck
      */
@@ -53,36 +44,12 @@ class Clients
     }
 
     /**
+     * @param integer $code
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function invalidDelete()
+    protected function asInvalid($code = 422)
     {
-        $code = HttpResponse::UNPROCESSABLE;
-
-        $errors = $this->check->errors();
-
-        return new JsonResponse($errors, $code);
-    }
-
-    /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function invalidStore()
-    {
-        $code = HttpResponse::UNPROCESSABLE;
-
-        $errors = $this->check->errors();
-
-        return new JsonResponse($errors, $code);
-    }
-
-    /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function invalidUpdate()
-    {
-        $code = HttpResponse::UNPROCESSABLE;
-
         $errors = $this->check->errors();
 
         return new JsonResponse($errors, $code);
