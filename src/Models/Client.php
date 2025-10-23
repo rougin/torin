@@ -43,17 +43,18 @@ class Client extends Model
     /**
      * @var array<string, string>
      */
-    protected $casts =
-    [
+    protected $casts = array(
+
         'parent_id' => 'integer',
         'type' => 'integer',
-    ];
+
+    );
 
     /**
      * @var array<integer, string>
      */
-    protected $fillable =
-    [
+    protected $fillable = array(
+
         'parent_id',
         'code',
         'name',
@@ -62,7 +63,8 @@ class Client extends Model
         'email',
         'created_at',
         'updated_at',
-    ];
+
+    );
 
     /**
      * @var string

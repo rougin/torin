@@ -51,18 +51,19 @@ class Order extends Model
     /**
      * @var array<string, string>
      */
-    protected $casts =
-    [
+    protected $casts = array(
+
         'client_id' => 'integer',
         'type' => 'integer',
         'status' => 'integer',
-    ];
+
+    );
 
     /**
      * @var array<integer, string>
      */
-    protected $fillable =
-    [
+    protected $fillable = array(
+
         'client_id',
         'code',
         'remarks',
@@ -70,7 +71,8 @@ class Order extends Model
         'status',
         'created_at',
         'updated_at',
-    ];
+
+    );
 
     /**
      * @var string
@@ -102,6 +104,9 @@ class Order extends Model
      */
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'item_order', 'order_id', 'item_id')->withTimestamps();
+        $class = 'Rougin\Torin\Models\Item';
+
+        return $this->belongsToMany($class, 'item_order', 'order_id', 'item_id')
+            ->withTimestamps();
     }
 }

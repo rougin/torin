@@ -21,22 +21,24 @@ class CartCheck extends Request
     /**
      * @var array<string, string>
      */
-    protected $labels =
-    [
+    protected $labels = array(
+
         'item_id' => 'An item',
         'quantity' => 'Quantity',
         'type' => 'Order Type',
-    ];
+
+    );
 
     /**
      * @var array<string, string>
      */
-    protected $rules =
-    [
+    protected $rules = array(
+
         'item_id' => 'required',
         'quantity' => 'required',
         'type' => 'required',
-    ];
+
+    );
 
     /**
      * @param \Rougin\Torin\Depots\ItemDepot $item

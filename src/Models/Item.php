@@ -41,23 +41,25 @@ class Item extends Model
     /**
      * @var array<string, string>
      */
-    protected $casts =
-    [
+    protected $casts = array(
+
         'parent_id' => 'integer',
-    ];
+
+    );
 
     /**
      * @var array<integer, string>
      */
-    protected $fillable =
-    [
+    protected $fillable = array(
+
         'parent_id',
         'code',
         'name',
         'detail',
         'created_at',
         'updated_at',
-    ];
+
+    );
 
     /**
      * @var string
@@ -168,6 +170,9 @@ class Item extends Model
      */
     public function orders()
     {
-        return $this->belongsToMany(Order::class, 'item_order', 'item_id', 'order_id')->withPivot('quantity');
+        $class = 'Rougin\Torin\Models\Order';
+
+        return $this->belongsToMany($class, 'item_order', 'item_id', 'order_id')
+            ->withPivot('quantity');
     }
 }

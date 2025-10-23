@@ -7,7 +7,6 @@ use Rougin\Slytherin\Integration\Configuration;
 use Rougin\Slytherin\Integration\IntegrationInterface;
 use Rougin\Slytherin\Routing\RouterInterface;
 use Staticka\Render;
-use Staticka\Render\RenderInterface;
 
 /**
  * @package Torin
@@ -24,28 +23,29 @@ class Package implements IntegrationInterface
      */
     public function define(ContainerInterface $app, Configuration $config)
     {
-        // Initialize the "RenderInterface" ---
+        // Initialize the "RenderInterface" ------
         /** @var string|string[] */
         $path = $config->get('app.views', '');
 
         $self = new Render($path);
 
-        $name = RenderInterface::class;
+        $name = 'Staticka\Render\RenderInterface';
 
         $app = $app->set($name, $self);
-        // ------------------------------------
+        // ---------------------------------------
 
-        // @codeCoverageIgnoreStart ------------
-        if (! $app->has(RouterInterface::class))
+        $name = 'Rougin\Slytherin\Routing\RouterInterface';
+
+        // @codeCoverageIgnoreStart ---
+        if (! $app->has($name))
         {
             return $app;
         }
-        // @codeCoverageIgnoreEnd --------------
+        // @codeCoverageIgnoreEnd -----
 
-        // Initialize the "RouterInterface" ------
         $self = new Router;
 
-        $temp = $app->get(RouterInterface::class);
+        $temp = $app->get($name);
 
         // @codeCoverageIgnoreStart -----------
         if (! $temp instanceof RouterInterface)
@@ -55,8 +55,7 @@ class Package implements IntegrationInterface
         // @codeCoverageIgnoreEnd -------------
 
         $self = $temp->merge($self->routes());
-        // ---------------------------------------
 
-        return $app->set(RouterInterface::class, $self);
+        return $app->set($name, $self);
     }
 }

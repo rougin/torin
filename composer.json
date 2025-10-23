@@ -14,9 +14,9 @@
   ],
   "require":
   {
-    "php": ">=5.6.0",
+    "php": ">=5.3.0",
     "illuminate/database": "*",
-    "robmorgan/phinx": "~0.1",
+    "robmorgan/phinx": "*",
     "rougin/dexterine": "dev-master",
     "rougin/dexterity": "dev-master",
     "rougin/fortem": "dev-master",
