@@ -5,7 +5,6 @@ namespace Rougin\Torin;
 use Rougin\Slytherin\Container\ContainerInterface;
 use Rougin\Slytherin\Integration\Configuration;
 use Rougin\Slytherin\Integration\IntegrationInterface;
-use Rougin\Slytherin\Routing\RouterInterface;
 use Staticka\Render;
 
 /**
@@ -31,30 +30,19 @@ class Package implements IntegrationInterface
 
         $name = 'Staticka\Render\RenderInterface';
 
-        $app = $app->set($name, $self);
+        $app->set($name, $self);
         // ---------------------------------------
 
+        // Initialize the "RouterInterface" -----------------
         $name = 'Rougin\Slytherin\Routing\RouterInterface';
-
-        // @codeCoverageIgnoreStart ---
-        if (! $app->has($name))
-        {
-            return $app;
-        }
-        // @codeCoverageIgnoreEnd -----
 
         $self = new Router;
 
+        /** @var \Rougin\Slytherin\Routing\RouterInterface */
         $temp = $app->get($name);
 
-        // @codeCoverageIgnoreStart -----------
-        if (! $temp instanceof RouterInterface)
-        {
-            return $app;
-        }
-        // @codeCoverageIgnoreEnd -------------
-
         $self = $temp->merge($self->routes());
+        // --------------------------------------------------
 
         return $app->set($name, $self);
     }

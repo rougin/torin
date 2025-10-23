@@ -110,14 +110,4 @@ class ItemDepot extends EloquentDepot
 
         return '00-' . $time . '-' . $code;
     }
-
-    /**
-     * @param \Rougin\Torin\Models\Item $row
-     *
-     * @return array<string, mixed>
-     */
-    protected function parseRow($row)
-    {
-        return $row->asRow();
-    }
 }

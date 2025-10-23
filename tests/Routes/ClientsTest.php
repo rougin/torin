@@ -107,9 +107,9 @@ class ClientsTest extends Testcase
         $this->depot->create($data);
         // -----------------------------------
 
-        // Simulate an HTTP request ---
-        $http = $this->withHttp();
-        // ----------------------------
+        // Simulate an HTTP request -------------------------
+        $http = $this->withParams(array('p' => 1, 'l' => 5));
+        // --------------------------------------------------
 
         // Call the route method ------------
         $actual = $this->route->index($http);
