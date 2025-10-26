@@ -2,10 +2,10 @@
 
 namespace Rougin\Torin;
 
-use LegacyPHPUnit\TestCase as Legacy;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Phinx\Config\Config;
-use Phinx\Migration\Manager;
+use LegacyPHPUnit\TestCase as Legacy;
+use Rougin\Slytherin\Container\Container;
+use Rougin\Slytherin\Container\ReflectionContainer;
 use Rougin\Slytherin\Http\ServerRequest;
 use Staticka\Render;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -39,7 +39,7 @@ class Testcase extends Legacy
      *
      * @return void
      */
-    protected function assertRegex($pattern, $string)
+    public function doAssertRegex($pattern, $string)
     {
         $method = 'assertMatchesRegularExpression';
 
@@ -54,12 +54,17 @@ class Testcase extends Legacy
     }
 
     /**
-     * @param string[] $paths
+     * @param string|string[] $paths
      *
      * @return integer
      */
     protected function getLastVersion($paths)
     {
+        if (is_string($paths))
+        {
+            $paths = array($paths);
+        }
+
         $version = 0;
 
         foreach ($paths as $path)
@@ -104,11 +109,17 @@ class Testcase extends Legacy
     {
         $phinx = $this->setPhinx();
 
-        $paths = $phinx->getConfig()->getMigrationPaths();
+        // Get the last version (e.g., "20241213094622") ---
+        // PHP 5.3 - Get paths directly instead ---
+        $folder = __DIR__ . '/../app/config';
 
-        // Return the latest version (e.g., '20241213094622') ---
+        $config = require $folder . '/phinx.php';
+
+        $paths = $config['paths']['migrations'];
+        // ----------------------------------------
+
         $version = $this->getLastVersion($paths);
-        // ------------------------------------------------------
+        // -------------------------------------------------
 
         // Run the migration up to the specified version ---
         $phinx->migrate('test', $version);
@@ -140,6 +151,8 @@ class Testcase extends Legacy
      */
     protected function setPhinx()
     {
+        $app = new Container;
+
         // Prepare the PDO to the configuration file -----------
         $data = require __DIR__ . '/../app/config/phinx.php';
 
@@ -147,14 +160,26 @@ class Testcase extends Legacy
 
         $data['environments']['test']['connection'] = $pdo;
 
-        $config = new Config($data);
+        $config = new \Phinx\Config\Config($data);
+
+        $app->set('Phinx\Config\ConfigInterface', $config);
         // -----------------------------------------------------
 
-        $input = new ArrayInput(array());
+        // Prepare the default Input and Output classes -------------
+        $input = 'Symfony\Component\Console\Input\InputInterface';
+        $app->set($input, new ArrayInput(array()));
 
-        $output = new NullOutput;
+        $output = 'Symfony\Component\Console\Output\OutputInterface';
+        $app->set($output, new NullOutput);
+        // ----------------------------------------------------------
 
-        return new Manager($config, $input, $output);
+        // PHP 5.3 - Use "Reflection API" for "Manager" as ---
+        // it has different arguments in "v0.6.0" onwards ----
+        $reflect = new ReflectionContainer($app);
+
+        /** @var \Phinx\Migration\Manager */
+        return $reflect->get('Phinx\Migration\Manager');
+        // ---------------------------------------------------
     }
 
     /**
@@ -162,7 +187,9 @@ class Testcase extends Legacy
      */
     protected function shutdown()
     {
-        $this->capsule->getConnection('torin')->disconnect();
+        // PHP 5.3 - "disconnect" is an undefined method -------
+        // $this->capsule->getConnection('torin')->disconnect();
+        // -----------------------------------------------------
     }
 
     /**

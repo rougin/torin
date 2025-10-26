@@ -57,7 +57,7 @@ class ItemDepotTest extends Testcase
         $this->assertEquals($expect, $actual->code);
 
         $regex = '/^00-\d{8}-\d{5}$/';
-        $this->assertRegex($regex, $actual->code);
+        $this->doAssertRegex($regex, $actual->code);
     }
 
     /**
@@ -142,38 +142,38 @@ class ItemDepotTest extends Testcase
 
         $today = date('Ymd');
 
-        // Create the first item ------------------
+        // Create the first item --------------------
         $data = array('name' => 'Item 1');
         $data['detail'] = 'Detail 1';
         $item1 = $this->depot->create($data);
 
-        $this->assertRegex($pattern, $item1->code);
+        $this->doAssertRegex($pattern, $item1->code);
 
         $expect = '00-' . $today . '-00001';
         $this->assertEquals($expect, $item1->code);
-        // ----------------------------------------
+        // ------------------------------------------
 
-        // Create the first item ------------------
+        // Create the first item --------------------
         $data = array('name' => 'Item 2');
         $data['detail'] = 'Detail 2';
         $item2 = $this->depot->create($data);
 
-        $this->assertRegex($pattern, $item2->code);
+        $this->doAssertRegex($pattern, $item2->code);
 
         $expect = '00-' . $today . '-00002';
         $this->assertEquals($expect, $item2->code);
-        // ----------------------------------------
+        // ------------------------------------------
 
-        // Create the first item ------------------
+        // Create the first item --------------------
         $data = array('name' => 'Item 3');
         $data['detail'] = 'Detail 3';
         $item3 = $this->depot->create($data);
 
-        $this->assertRegex($pattern, $item3->code);
+        $this->doAssertRegex($pattern, $item3->code);
 
         $expect = '00-' . $today . '-00003';
         $this->assertEquals($expect, $item3->code);
-        // ----------------------------------------
+        // ------------------------------------------
     }
 
     /**
