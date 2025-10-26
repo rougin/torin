@@ -20,6 +20,9 @@ $env->load();
 return array(
 
     /**
+     * PHP 5.3 - Did not supported yet multiple
+     * database migrations and seeders folders.
+     *
      * Paths to be used for database migration.
      *
      * @var array<string, string[]>
@@ -27,18 +30,14 @@ return array(
     'paths' => array(
 
         /**
-         * @var array
+         * @var string|string[]
          */
-        'migrations' => array(
-            $root . '/src/Phinx/Scripts',
-        ),
+        'migrations' => $root . '/src/Phinx/Scripts',
 
         /**
-         * @var array
+         * @var string|string[]
          */
-        'seeds' => array(
-            $root . '/src/Phinx/Seeders',
-        ),
+        'seeds' => $root . '/src/Phinx/Seeders',
 
     ),
 
@@ -46,7 +45,7 @@ return array(
      * Returns an array of configurations exclusive
      * for a specified environment (e.g., "test").
      *
-     * @var array
+     * @var array<string, mixed>
      */
     'environments' => array(
 
