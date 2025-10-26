@@ -39,6 +39,10 @@ jobs:
     - name: Create new ".env" file
       run: cp ".env.example" ".env"
 
+    - name: Comment "SoftDeletes" for PHP 5.3
+      if: ${{ matrix.php-versions != '5.3' }}
+      run: find app/Models -type f -name "*.php" -exec sed -i 's/use SoftDeletes;/ \/\/ use SoftDeletes;/' {} +
+
     - name: Run test suite
       run: vendor/bin/phpunit --coverage-clover=coverage.clover
 
