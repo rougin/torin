@@ -22,7 +22,7 @@
     "rougin/fortem": "dev-master",
     "rougin/gable": "dev-master",
     "rougin/onion": "dev-master",
-    "rougin/validia": "dev-master",
+    "rougin/valla": "dev-master",
     "rougin/weasley": "~0.7",
     "vlucas/phpdotenv": "~2.0"
   },
