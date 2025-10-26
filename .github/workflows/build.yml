@@ -40,7 +40,7 @@ jobs:
       run: cp ".env.example" ".env"
 
     - name: Comment "SoftDeletes" for PHP 5.3
-      if: ${{ matrix.php-versions != '5.3' }}
+      if: ${{ matrix.php-versions == '5.3' }}
       run: find src/Models -type f -name "*.php" -exec sed -i 's/use SoftDeletes;/ \/\/ use SoftDeletes;/' {} +
 
     - name: Run test suite
