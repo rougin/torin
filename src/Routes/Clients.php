@@ -2,8 +2,8 @@
 
 namespace Rougin\Torin\Routes;
 
-use Rougin\Dexterity\Message\JsonResponse;
-use Rougin\Dexterity\Route;
+use Rougin\Dexter\Message\JsonResponse;
+use Rougin\Dexter\Route;
 use Rougin\Torin\Checks\ClientCheck;
 use Rougin\Torin\Depots\ClientDepot;
 

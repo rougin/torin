@@ -3,8 +3,8 @@
 namespace Rougin\Torin\Routes;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Rougin\Dexterity\Message\JsonResponse;
-use Rougin\Dexterity\Route;
+use Rougin\Dexter\Message\JsonResponse;
+use Rougin\Dexter\Route;
 use Rougin\Torin\Checks\CartCheck;
 use Rougin\Torin\Checks\OrderCheck;
 use Rougin\Torin\Depots\ItemDepot;

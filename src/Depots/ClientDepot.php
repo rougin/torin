@@ -2,7 +2,7 @@
 
 namespace Rougin\Torin\Depots;
 
-use Rougin\Dexterity\Depots\EloquentDepot;
+use Rougin\Dexter\Depots\EloquentDepot;
 use Rougin\Torin\Models\Client;
 
 /**
