@@ -13,21 +13,21 @@
       <div class="mb-3">
         <div class="row">
           <div class="col-sm-6">
-            <?= $form->label('Client Name', 'form-label mb-0')->asRequired() ?>
-            <?= $form->input('name', 'form-control')->asModel()->disablesOn('loading') ?>
-            <?= $form->error('error.name') ?>
+            <?php echo $form->label('Client Name', 'form-label mb-0')->asRequired() ?>
+            <?php echo $form->input('name', 'form-control')->asModel()->disablesOn('loading') ?>
+            <?php echo $form->error('error.name') ?>
           </div>
           <div class="col-sm-6">
-            <?= $form->label('Client Type', 'form-label mb-0')->asRequired() ?>
-            <?= $form->select('type', ['Customer', 'Supplier'], 'form-select')->asModel()->disablesOn('loading') ?>
-            <?= $form->error('error.type') ?>
+            <?php echo $form->label('Client Type', 'form-label mb-0')->asRequired() ?>
+            <?php $options = array('Customer', 'Supplier'); echo $form->select('type', $options, 'form-select')->asModel()->disablesOn('loading') ?>
+            <?php echo $form->error('error.type') ?>
           </div>
         </div>
       </div>
       <div>
-        <?= $form->label('Remarks', 'form-label mb-0') ?>
-        <?= $form->input('remarks', 'form-control')->asModel()->disablesOn('loading') ?>
-        <?= $form->error('error.remarks') ?>
+        <?php echo $form->label('Remarks', 'form-label mb-0') ?>
+        <?php echo $form->input('remarks', 'form-control')->asModel()->disablesOn('loading') ?>
+        <?php echo $form->error('error.remarks') ?>
       </div>
     </div>
     <div class="modal-footer border-top-0 bg-light">
@@ -36,12 +36,12 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-      <?= $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
+      <?php echo $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
       <template x-if="id">
-        <?= $form->button('Update', 'btn btn-primary')->onClick('update(id)')->disablesOn('loading') ?>
+        <?php echo $form->button('Update', 'btn btn-primary')->onClick('update(id)')->disablesOn('loading') ?>
       </template>
       <template x-if="! id">
-        <?= $form->button('Create New', 'btn btn-secondary')->onClick('store')->disablesOn('loading') ?>
+        <?php echo $form->button('Create New', 'btn btn-secondary')->onClick('store')->disablesOn('loading') ?>
       </template>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <script type="text/javascript">
-<?= $script = $form->script('orders')
+<?php echo $script = $form->script('orders')
   ->with('STATUS_CANCELLED', 2)
   ->with('STATUS_PENDING', 0)
   ->with('STATUS_COMPLETED', 1)
@@ -22,13 +22,13 @@
   ->withError()
   ->withLoading() ?>
 
-<?= $pagee->toObject('orders') ?>
+<?php echo $pagee->toObject('orders') ?>
 
-<?= $depot->withInit($pagee->getPage())
+<?php echo $depot->withInit($pagee->getPage())
   ->addSelect('ts_clients', '#clients', $url->set('/v1/clients/select'))
   ->addSelect('ts_items', '#items', $url->set('/v1/items/select')) ?>
 
-<?= $depot->withClose()
+<?php echo $depot->withClose()
   ->withScript($script)
   ->hideModal('delete-order-modal')
   ->hideModal('mark-order-modal')
@@ -39,18 +39,18 @@
   ->resetField('remarks')
   ->resetField('loadError') ?>
 
-<?= $depot->withLoad($pagee)
+<?php echo $depot->withLoad($pagee)
   ->setLink($url->set('/v1/orders')) ?>
 
-<?= $depot->withModal('mark')
+<?php echo $depot->withModal('mark')
   ->addField('status', false)
   ->addField('id')
   ->showModal('mark-order-modal') ?>
 
-<?= $depot->withRemove()
+<?php echo $depot->withRemove()
   ->setLink($url->set('/v1/orders')) ?>
 
-<?= $depot->withStore()
+<?php echo $depot->withStore()
   ->addField('client_id')
   ->addField('remarks')
   ->addField('type')
@@ -58,7 +58,7 @@
   ->setAlert('Client created!', 'Client successfully created.')
   ->setLink($url->set('/v1/orders')) ?>
 
-<?= $depot->withTrash()
+<?php echo $depot->withTrash()
   ->addField('code')
   ->addField('id')
   ->showModal('delete-order-modal') ?>

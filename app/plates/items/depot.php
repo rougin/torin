@@ -1,5 +1,5 @@
 <script type="text/javascript">
-<?= $script = $form->script('items')
+<?php echo $script = $form->script('items')
   ->with('name')
   ->with('detail')
   ->with('items', array())
@@ -10,11 +10,11 @@
   ->withError()
   ->withLoading() ?>
 
-<?= $pagee->toObject('items') ?>
+<?php echo $pagee->toObject('items') ?>
 
-<?= $depot->withInit($pagee->getPage()) ?>
+<?php echo $depot->withInit($pagee->getPage()) ?>
 
-<?= $depot->withClose()
+<?php echo $depot->withClose()
   ->withScript($script)
   ->hideModal('delete-item-modal')
   ->hideModal('item-detail-modal')
@@ -24,30 +24,30 @@
   ->resetField('name')
   ->resetField('loadError') ?>
 
-<?= $depot->withEdit()
+<?php echo $depot->withEdit()
   ->addField('name')
   ->addField('detail')
   ->addField('id')
   ->showModal('item-detail-modal') ?>
 
-<?= $depot->withLoad($pagee)
+<?php echo $depot->withLoad($pagee)
   ->setLink($url->set('/v1/items')) ?>
 
-<?= $depot->withRemove()
+<?php echo $depot->withRemove()
   ->setLink($url->set('/v1/items')) ?>
 
-<?= $depot->withStore()
+<?php echo $depot->withStore()
   ->addField('name')
   ->addField('detail')
   ->setAlert('Item created!', 'Item successfully created.')
   ->setLink($url->set('/v1/items')) ?>
 
-<?= $depot->withTrash()
+<?php echo $depot->withTrash()
   ->addField('name')
   ->addField('id')
-  ->showModal('delete-item-modal') ?>
+  ->showModal('item-delete-modal') ?>
 
-<?= $depot->withUpdate()
+<?php echo $depot->withUpdate()
   ->addField('name')
   ->addField('detail')
   ->setAlert('Item updated!', 'Item successfully updated.')
