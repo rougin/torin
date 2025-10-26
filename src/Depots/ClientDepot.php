@@ -28,6 +28,16 @@ class ClientDepot extends EloquentDepot
     }
 
     /**
+     * Returns all items.
+     *
+     * @return \Rougin\Torin\Models\Client[]
+     */
+    public function all()
+    {
+        return $this->model->all();
+    }
+
+    /**
      * @param array<string, mixed> $data
      *
      * @return \Rougin\Torin\Models\Client
@@ -86,16 +96,6 @@ class ClientDepot extends EloquentDepot
         $row->type = $type;
 
         return $row->save();
-    }
-
-    /**
-     * Returns all items.
-     *
-     * @return \Rougin\Torin\Models\Client[]
-     */
-    public function all()
-    {
-        return $this->model->all();
     }
 
     /**

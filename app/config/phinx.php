@@ -1,8 +1,8 @@
 <?php
 
-// Define the root directory ---
-$root = __DIR__ . '/../../';
-// -----------------------------
+// Define the root directory -----
+$root = dirname(dirname(__DIR__));
+// -------------------------------
 
 // Load variables from ".env" ---
 $env = new Dotenv\Dotenv($root);

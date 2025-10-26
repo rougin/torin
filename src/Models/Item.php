@@ -133,21 +133,29 @@ class Item extends Model
 
         foreach ($this->orders as $order)
         {
-            if ($order->status !== Order::STATUS_COMPLETED)
+            // PHP 5.3 - "$casts" not working ------
+            $status = (int) $order->status;
+
+            if ($status !== Order::STATUS_COMPLETED)
             {
                 continue;
             }
+            // -------------------------------------
 
             // @phpstan-ignore-next-line ----
             $value = $order->pivot->quantity;
             // ------------------------------
 
-            if ($order->type === Order::TYPE_SALE)
+            // PHP 5.3 - "$casts" not working ---
+            $type = (int) $order->type;
+
+            if ($type === Order::TYPE_SALE)
             {
                 $total = $total - $value;
 
                 continue;
             }
+            // ----------------------------------
 
             $total = $total + $value;
         }

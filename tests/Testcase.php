@@ -54,38 +54,6 @@ class Testcase extends Legacy
     }
 
     /**
-     * @param string|string[] $paths
-     *
-     * @return integer
-     */
-    protected function getLastVersion($paths)
-    {
-        if (is_string($paths))
-        {
-            $paths = array($paths);
-        }
-
-        $version = 0;
-
-        foreach ($paths as $path)
-        {
-            /** @var string[] */
-            $files = glob($path . '/*.php');
-
-            foreach ($files as $file)
-            {
-                $temp = basename($file, '.php');
-
-                $version = substr($temp, 0, 14);
-
-                $version = (int) $version;
-            }
-        }
-
-        return $version;
-    }
-
-    /**
      * @param string $name
      *
      * @return string
@@ -109,21 +77,7 @@ class Testcase extends Legacy
     {
         $phinx = $this->setPhinx();
 
-        // Get the last version (e.g., "20241213094622") ---
-        // PHP 5.3 - Get paths directly instead ---
-        $folder = __DIR__ . '/../app/config';
-
-        $config = require $folder . '/phinx.php';
-
-        $paths = $config['paths']['migrations'];
-        // ----------------------------------------
-
-        $version = $this->getLastVersion($paths);
-        // -------------------------------------------------
-
-        // Run the migration up to the specified version ---
-        $phinx->migrate('test', $version);
-        // -------------------------------------------------
+        $phinx->migrate('test');
     }
 
     /**
