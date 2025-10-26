@@ -1,5 +1,5 @@
 <script type="text/javascript">
-<?php echo $script = $form->script('clients')
+<?= $script = $form->script('clients')
   ->with('name')
   ->with('remarks')
   ->with('type')
@@ -11,11 +11,11 @@
   ->withError()
   ->withLoading() ?>
 
-<?php echo $pagee->toObject('clients') ?>
+<?= $pagee->toObject('clients') ?>
 
-<?php echo $depot->withInit($pagee->getPage()) ?>
+<?= $depot->withInit($pagee->getPage()) ?>
 
-<?php echo $depot->withClose()
+<?= $depot->withClose()
   ->withScript($script)
   ->hideModal('delete-client-modal')
   ->hideModal('client-detail-modal')
@@ -25,32 +25,32 @@
   ->resetField('name')
   ->resetField('loadError') ?>
 
-<?php echo $depot->withEdit()
+<?= $depot->withEdit()
   ->addField('name')
   ->addField('remarks')
   ->addField('type')
   ->addField('id')
   ->showModal('client-detail-modal') ?>
 
-<?php echo $depot->withLoad($pagee)
+<?= $depot->withLoad($pagee)
   ->setLink($url->set('/v1/clients')) ?>
 
-<?php echo $depot->withRemove()
+<?= $depot->withRemove()
   ->setLink($url->set('/v1/clients')) ?>
 
-<?php echo $depot->withStore()
+<?= $depot->withStore()
   ->addField('name')
   ->addField('remarks')
   ->addField('type')
   ->setAlert('Client created!', 'Client successfully created.')
   ->setLink($url->set('/v1/clients')) ?>
 
-<?php echo $depot->withTrash()
+<?= $depot->withTrash()
   ->addField('name')
   ->addField('id')
   ->showModal('delete-client-modal') ?>
 
-<?php echo $depot->withUpdate()
+<?= $depot->withUpdate()
   ->addField('name')
   ->addField('remarks')
   ->addField('type')

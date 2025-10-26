@@ -6,7 +6,7 @@
     </div>
     <div class="modal-body">
       <p class="mb-0">Are you sure that you want to change the order status to <span class="fw-bold text-uppercase" x-text="status === STATUS_COMPLETED ? 'Fulfilled' : (status === STATUS_CANCELLED ? 'Cancelled' : 'Pending')"></span>?</p>
-      <?php echo $form->error('error.mark') ?>
+      <?= $form->error('error.mark') ?>
     </div>
     <div class="modal-footer border-top-0 bg-light">
       <div class="me-auto">
@@ -14,8 +14,8 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-      <?php echo $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
-      <?php echo $form->button('Change Status', 'btn btn-warning')->onClick('change(id, status)')->disablesOn('loading') ?>
+      <?= $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
+      <?= $form->button('Change Status', 'btn btn-warning')->onClick('change(id, status)')->disablesOn('loading') ?>
     </div>
   </div>
 </div>

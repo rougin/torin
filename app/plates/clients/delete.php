@@ -6,7 +6,7 @@
     </div>
     <div class="modal-body">
       <p class="mb-0">Are you sure that you want to delete the client <span class="fw-bold" x-text="name"></span>?</p>
-      <?php echo $form->error('error.delete') ?>
+      <?= $form->error('error.delete') ?>
     </div>
     <div class="modal-footer border-top-0 bg-light">
       <div class="me-auto">
@@ -14,8 +14,8 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-      <?php echo $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
-      <?php echo $form->button('Delete', 'btn btn-danger')->onClick('remove(id)')->disablesOn('loading') ?>
+      <?= $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
+      <?= $form->button('Delete', 'btn btn-danger')->onClick('remove(id)')->disablesOn('loading') ?>
     </div>
   </div>
 </div>
