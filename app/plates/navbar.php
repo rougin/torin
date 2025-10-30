@@ -4,28 +4,28 @@
     <div class="collapse navbar-collapse d-flex" id="navbarNav">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <?php if ($url->isCurrent('/')): ?>
+          <?php if ($url->isActive('/')): ?>
             <div class="nav-link active fw-bold">Home</div>
           <?php else: ?>
             <a class="nav-link" href="<?php echo $url->set('/') ?>">Home</a>
           <?php endif ?>
         </li>
         <li class="nav-item">
-          <?php if ($url->isCurrent('/orders')): ?>
+          <?php if ($url->isActive('/orders')): ?>
             <div class="nav-link active fw-bold">Orders</div>
           <?php else: ?>
             <a class="nav-link" href="<?php echo $url->set('/orders') ?>">Orders</a>
           <?php endif ?>
         </li>
         <li class="nav-item">
-          <?php if ($url->isCurrent('/clients')): ?>
+          <?php if ($url->isActive('/clients')): ?>
             <div class="nav-link active fw-bold">Clients</div>
           <?php else: ?>
             <a class="nav-link" href="<?php echo $url->set('/clients') ?>">Clients</a>
           <?php endif ?>
         </li>
         <li class="nav-item">
-          <?php if ($url->isCurrent('/items')): ?>
+          <?php if ($url->isActive('/items')): ?>
             <div class="nav-link active fw-bold">Items</div>
           <?php else: ?>
             <a class="nav-link" href="<?php echo $url->set('/items') ?>">Items</a>
