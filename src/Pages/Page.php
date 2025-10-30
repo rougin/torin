@@ -58,18 +58,11 @@ class Page
     }
 
     /**
-     * TODO: Remove usage of "APP_URL".
-     *
      * @return \Rougin\Fortem\Helpers\LinkHelper
      */
     protected function getLinkHelper()
     {
-        $server = $this->request->getServerParams();
-
-        /** @var string */
-        $link = getenv('APP_URL');
-
-        return new LinkHelper($link, $server);
+        return new LinkHelper($this->request->getServerParams());
     }
 
     /**
@@ -82,7 +75,9 @@ class Page
     protected function render($name, $data = array())
     {
         // Initialize the list of helpers ----------
-        $helpers = array($this->getLinkHelper());
+        $data['url'] = $this->getLinkHelper();
+
+        $helpers = array();
 
         $form = new FormHelper;
 
