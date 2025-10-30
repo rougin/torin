@@ -30,14 +30,23 @@ class Page
     protected $request;
 
     /**
+     * @var \Rougin\Fortem\Helpers\LinkHelper
+     */
+    protected $link;
+
+    /**
      * @param \Staticka\Render\RenderInterface         $plate
      * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public function __construct(RenderInterface $plate, ServerRequestInterface $request)
     {
+        $this->request = $request;
+
         $this->plate = $plate;
 
-        $this->request = $request;
+        $server = $request->getServerParams();
+
+        $this->link = new LinkHelper($server);
     }
 
     /**
@@ -50,19 +59,11 @@ class Page
     {
         $pagee = Pagee::fromRequest($this->request);
 
-        $link = $this->getLinkHelper();
-
         $pagee->asAlpine()->setTotal($total);
 
-        return $pagee->setLink($link->set($name));
-    }
+        $url = $this->link->set($name);
 
-    /**
-     * @return \Rougin\Fortem\Helpers\LinkHelper
-     */
-    protected function getLinkHelper()
-    {
-        return new LinkHelper($this->request->getServerParams());
+        return $pagee->setLink($url);
     }
 
     /**
@@ -75,9 +76,7 @@ class Page
     protected function render($name, $data = array())
     {
         // Initialize the list of helpers ----------
-        $data['url'] = $this->getLinkHelper();
-
-        $helpers = array();
+        $helpers = array($this->link);
 
         $form = new FormHelper;
 
