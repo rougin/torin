@@ -57,9 +57,28 @@ class Page
      */
     protected function setPagee($name, $total)
     {
-        $pagee = Pagee::fromRequest($this->request);
+        $pagee = new Pagee;
 
-        $pagee->asAlpine()->setTotal($total);
+        $pagee->asAlpine();
+
+        /** @var array<string, string> */
+        $params = $this->request->getQueryParams();
+
+        $key = $pagee->getLimitKey();
+
+        if (array_key_exists($key, $params))
+        {
+            $pagee->setLimit((int) $params[$key]);
+        }
+
+        $key = $pagee->getPageKey();
+
+        if (array_key_exists($key, $params))
+        {
+            $pagee->setPage((int) $params[$key]);
+        }
+
+        $pagee->setTotal($total);
 
         $url = $this->link->set($name);
 
