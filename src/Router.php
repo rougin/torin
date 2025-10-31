@@ -26,43 +26,45 @@ class Router extends Slytherin
      */
     public function routes()
     {
-        $this->pages();
+        $this->prefix('/v1', 'Rougin\Torin\Routes');
 
-        // Client ------------------------------------------------
-        $this->get('/v1/clients/select', 'Routes\Clients@select');
+        // Client --------------------------------------
+        $this->get('/clients/select', 'Clients@select');
 
-        $this->delete('/v1/clients/:id', 'Routes\Clients@delete');
+        $this->delete('/clients/:id', 'Clients@delete');
 
-        $this->get('/v1/clients', 'Routes\Clients@index');
+        $this->get('/clients', 'Clients@index');
 
-        $this->put('/v1/clients/:id', 'Routes\Clients@update');
+        $this->put('/clients/:id', 'Clients@update');
 
-        $this->post('/v1/clients', 'Routes\Clients@store');
-        // -------------------------------------------------------
+        $this->post('/clients', 'Clients@store');
+        // ---------------------------------------------
 
-        // Item ----------------------------------------------
-        $this->get('/v1/items/select', 'Routes\Items@select');
+        // Item ------------------------------------
+        $this->get('/items/select', 'Items@select');
 
-        $this->delete('/v1/items/:id', 'Routes\Items@delete');
+        $this->delete('/items/:id', 'Items@delete');
 
-        $this->get('/v1/items', 'Routes\Items@index');
+        $this->get('/items', 'Items@index');
 
-        $this->put('/v1/items/:id', 'Routes\Items@update');
+        $this->put('/items/:id', 'Items@update');
 
-        $this->post('/v1/items', 'Routes\Items@store');
-        // ---------------------------------------------------
+        $this->post('/items', 'Items@store');
+        // -----------------------------------------
 
-        // Order ----------------------------------------------------
-        $this->delete('/v1/orders/:id', 'Routes\Orders@delete');
+        // Order ------------------------------------------
+        $this->delete('/orders/:id', 'Orders@delete');
 
-        $this->post('/v1/orders/:id/status', 'Routes\Orders@status');
+        $this->post('/orders/:id/status', 'Orders@status');
 
-        $this->get('/v1/orders', 'Routes\Orders@index');
+        $this->get('/orders', 'Orders@index');
 
-        $this->post('/v1/orders/check', 'Routes\Orders@check');
+        $this->post('/orders/check', 'Orders@check');
 
-        $this->post('/v1/orders', 'Routes\Orders@store');
-        // ----------------------------------------------------------
+        $this->post('/orders', 'Orders@store');
+        // ------------------------------------------------
+
+        $this->withPages();
 
         return $this->routes;
     }
@@ -70,14 +72,16 @@ class Router extends Slytherin
     /**
      * @return void
      */
-    protected function pages()
+    protected function withPages()
     {
-        $this->get('/', 'Pages\Hello@index');
+        $this->prefix('/', 'Rougin\Torin\Pages');
 
-        $this->get('clients', 'Pages\Clients@index');
+        $this->get('/', 'Hello@index');
 
-        $this->get('items', 'Pages\Items@index');
+        $this->get('clients', 'Clients@index');
 
-        $this->get('orders', 'Pages\Orders@index');
+        $this->get('items', 'Items@index');
+
+        $this->get('orders', 'Orders@index');
     }
 }
