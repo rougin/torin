@@ -17,7 +17,7 @@ class System
     /**
      * @var \Rougin\Slytherin\Container\ContainerInterface
      */
-    protected $container;
+    protected $app;
 
     /**
      * @var \Rougin\Slytherin\Integration\Configuration
@@ -40,9 +40,11 @@ class System
         $env->load();
         // ------------------------------
 
+        $app = new Container;
+
         $this->root = $root;
 
-        $this->setContainer(new Container);
+        $this->setContainer($app);
     }
 
     /**
@@ -50,17 +52,17 @@ class System
      */
     public function getContainer()
     {
-        return $this->container;
+        return $this->app;
     }
 
     /**
-     * @param \Rougin\Slytherin\Container\ContainerInterface $container
+     * @param \Rougin\Slytherin\Container\ContainerInterface $app
      *
      * @return self
      */
-    public function setContainer(ContainerInterface $container)
+    public function setContainer(ContainerInterface $app)
     {
-        $this->container = $container;
+        $this->app = $app;
 
         return $this;
     }
@@ -72,18 +74,18 @@ class System
      */
     public function make()
     {
-        $container = $this->getContainer();
-
-        // Loads data from the "config" directory ---
+        // Load data from the "config" directory ---
         $config = new Configuration;
 
         $config->load($this->root . '/app/config');
 
         /** @var string[] */
         $packages = $config->get('app.packages');
-        // ------------------------------------------
+        // -----------------------------------------
 
-        $app = new Slytherin($container, $config);
+        $app = $this->getContainer();
+
+        $app = new Slytherin($app, $config);
 
         return $app->integrate($packages);
     }

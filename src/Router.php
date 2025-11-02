@@ -14,20 +14,18 @@ class Router extends Slytherin
     /**
      * @var string
      */
-    protected $namespace = 'Rougin\Torin';
+    protected $namespace = 'Rougin\Torin\Routes';
 
     /**
      * @var string
      */
-    protected $prefix = '/';
+    protected $prefix = '/v1';
 
     /**
      * @return \Rougin\Slytherin\Routing\RouteInterface[]
      */
     public function routes()
     {
-        $this->prefix('/v1', 'Rougin\Torin\Routes');
-
         // Client --------------------------------------
         $this->get('/clients/select', 'Clients@select');
 
@@ -64,7 +62,7 @@ class Router extends Slytherin
         $this->post('/orders', 'Orders@store');
         // ------------------------------------------------
 
-        $this->withPages();
+        $this->pages();
 
         return $this->routes;
     }
@@ -72,7 +70,7 @@ class Router extends Slytherin
     /**
      * @return void
      */
-    protected function withPages()
+    protected function pages()
     {
         $this->prefix('/', 'Rougin\Torin\Pages');
 
