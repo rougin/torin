@@ -30,7 +30,7 @@
   ->addField('id')
   ->showModal('item-detail-modal') ?>
 
-<?php echo $depot->withLoad($pagee)
+<?php echo $depot->withLoad()
   ->setLink($url->set('/v1/items')) ?>
 
 <?php echo $depot->withRemove()

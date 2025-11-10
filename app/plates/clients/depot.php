@@ -32,7 +32,7 @@
   ->addField('id')
   ->showModal('client-detail-modal') ?>
 
-<?php echo $depot->withLoad($pagee)
+<?php echo $depot->withLoad()
   ->setLink($url->set('/v1/clients')) ?>
 
 <?php echo $depot->withRemove()
