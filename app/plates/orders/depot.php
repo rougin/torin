@@ -29,10 +29,10 @@
   ->addSelect('ts_items', '#items', $url->set('/v1/items/select')) ?>
 
 <?php echo $depot->withClose()
-  ->withScript($script)
   ->hideModal('delete-order-modal')
   ->hideModal('mark-order-modal')
   ->hideModal('order-detail-modal')
+  ->setDefaults($script->getFields())
   ->resetField('client_id')
   ->resetField('error')
   ->resetField('id')

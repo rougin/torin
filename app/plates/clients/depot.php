@@ -16,9 +16,9 @@
 <?php echo $depot->withInit($pagee->getPage()) ?>
 
 <?php echo $depot->withClose()
-  ->withScript($script)
   ->hideModal('delete-client-modal')
   ->hideModal('client-detail-modal')
+  ->setDefaults($script->getFields())
   ->resetField('remarks')
   ->resetField('error')
   ->resetField('id')
