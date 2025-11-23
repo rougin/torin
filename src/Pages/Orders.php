@@ -59,8 +59,8 @@ class Orders extends Page
         $table->withDeleteAction('trash(item)');
 
         $table->withLoading();
-        $table->withNoItemsText('No orders found.');
-        $table->withLoadErrorText('An error occured in getting the orders.');
+        $table->withEmptyText('No orders found.');
+        $table->withErrorText('An error occured in getting the orders.');
         $table->withAlpine();
         $table->withOpacity(50);
 

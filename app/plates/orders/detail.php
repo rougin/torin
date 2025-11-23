@@ -12,13 +12,15 @@
     <div class="modal-body">
       <div class="row mb-3">
         <div class="col-sm-8">
-          <?php echo $form->label('Client Name', 'form-label mb-0')->asRequired() ?>
-          <?php echo $form->select('client_id', array(), 'form-select')->withId('clients')->asModel()->disablesOn('loading') ?>
+          <?php echo $form->label('Client Name')->withClass('form-label mb-0')->asRequired() ?>
+          <?php echo $form->select('client_id')->withClass('form-select')
+            ->withId('clients')->asModel()->disablesOn('loading') ?>
           <?php echo $form->error('error.client_id') ?>
         </div>
         <div class="col-sm-4">
-          <?php echo $form->label('Order Type', 'form-label mb-0')->asRequired() ?>
-          <?php echo $form->select('type', array('Sale', 'Purchase', 'Transfer'), 'form-select')->withId('type')->asModel()->disablesOn('loading') ?>
+          <?php echo $form->label('Order Type')->withClass('form-label mb-0')->asRequired() ?>
+          <?php echo $form->select('type', array('Sale', 'Purchase', 'Transfer'))
+            ->withClass('form-select')->withId('type')->asModel()->disablesOn('loading') ?>
           <?php echo $form->error('error.type') ?>
         </div>
       </div>
@@ -27,15 +29,16 @@
           <div>
             <div class="row align-items-end">
               <div class="col-sm-7">
-                <?php echo $form->label('Item to add', 'form-label mb-0 small') ?>
-                <?php echo $form->select('item_id', array(), 'form-select')->withId('items')->asModel()->disablesOn('loading') ?>
+                <?php echo $form->label('Item to add')->withClass('form-label mb-0 small') ?>
+                <?php echo $form->select('item_id')->withClass('form-select')
+                  ->withId('items')->asModel()->disablesOn('loading') ?>
               </div>
               <div class="col-sm-3">
-                <?php echo $form->label('Quantity', 'form-label mb-0 small') ?>
-                <?php echo $form->input('quantity', 'form-control')->asNumber()->asModel()->disablesOn('loading') ?>
+                <?php echo $form->label('Quantity')->withClass('form-label mb-0 small') ?>
+                <?php echo $form->input('quantity')->withClass('form-control')->asNumber()->asModel()->disablesOn('loading') ?>
               </div>
               <div class="col-sm-2 align-self-end">
-                <?php echo $form->button('Add', 'btn btn-secondary')->onClick('add')->disablesOn('loading || ! item_id || ! quantity') ?>
+                <?php echo $form->button('Add')->withClass('btn btn-secondary')->onClick('add')->disablesOn('loading || ! item_id || ! quantity') ?>
               </div>
             </div>
           </div>
@@ -75,8 +78,8 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <?php echo $form->label('Remarks', 'form-label mb-0') ?>
-          <?php echo $form->input('remarks', 'form-control')->asModel()->disablesOn('loading') ?>
+          <?php echo $form->label('Remarks')->withClass('form-label mb-0') ?>
+          <?php echo $form->input('remarks')->withClass('form-control')->asModel()->disablesOn('loading') ?>
           <?php echo $form->error('error.remarks') ?>
         </div>
       </div>
@@ -87,12 +90,15 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-      <?php echo $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
+      <?php echo $form->button('Cancel')->withClass('btn btn-link text-secondary text-decoration-none')
+        ->with('@click', 'close')->disablesOn('loading') ?>
       <template x-if="id">
-        <?php echo $form->button('Update', 'btn btn-primary')->onClick('update(id)')->disablesOn('loading') ?>
+        <?php echo $form->button('Update')->withClass('btn btn-primary')
+          ->onClick('update(id)')->disablesOn('loading') ?>
       </template>
       <template x-if="! id">
-        <?php echo $form->button('Create New', 'btn btn-secondary')->onClick('store')->disablesOn('loading') ?>
+        <?php echo $form->button('Create New')->withClass('btn btn-secondary')
+          ->onClick('store')->disablesOn('loading') ?>
       </template>
     </div>
   </div>

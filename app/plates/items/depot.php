@@ -1,7 +1,7 @@
 <script type="text/javascript">
 <?php echo $script = $form->script('items')
-  ->with('name')
-  ->with('detail')
+  ->with('name', null)
+  ->with('detail', null)
   ->with('items', array())
   ->with('empty', false)
   ->with('loadError', false)

@@ -14,8 +14,11 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-      <?php echo $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
-      <?php echo $form->button('Delete', 'btn btn-danger')->onClick('remove(id)')->disablesOn('loading') ?>
+      <?php echo $form->button('Cancel')
+        ->withClass('btn btn-link text-secondary text-decoration-none')
+        ->with('@click', 'close')->disablesOn('loading') ?>
+      <?php echo $form->button('Delete')->withClass('btn btn-danger')
+        ->onClick('remove(id)')->disablesOn('loading') ?>
     </div>
   </div>
 </div>

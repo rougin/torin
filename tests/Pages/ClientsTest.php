@@ -47,6 +47,12 @@ class ClientsTest extends Testcase
 
         $plate = $this->withPlate();
 
+        // Add query parameters to the request ---
+        $param = array('p' => 1, 'l' => 10);
+
+        $http = $http->withQueryParams($param);
+        // ---------------------------------------
+
         $page = new Clients($plate, $http);
 
         $this->page = $page;

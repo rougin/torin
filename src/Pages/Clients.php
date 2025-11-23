@@ -52,8 +52,8 @@ class Clients extends Page
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
         $table->withLoading($pagee->getLimit());
-        $table->withNoItemsText('No clients found.');
-        $table->withLoadErrorText('An error occured in getting the clients.');
+        $table->withEmptyText('No clients found.');
+        $table->withErrorText('An error occured in getting the clients.');
         $table->withAlpine();
         $table->withOpacity(50);
 

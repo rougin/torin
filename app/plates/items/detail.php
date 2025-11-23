@@ -11,13 +11,13 @@
     </div>
     <div class="modal-body">
       <div class="mb-3">
-        <?php echo $form->label('Name', 'form-label mb-0')->asRequired() ?>
-        <?php echo $form->input('name', 'form-control')->asModel()->disablesOn('loading') ?>
+        <?php echo $form->label('Name')->withClass('form-label mb-0')->asRequired() ?>
+        <?php echo $form->input('name')->withClass('form-control')->asModel()->disablesOn('loading') ?>
         <?php echo $form->error('error.name') ?>
       </div>
       <div>
-        <?php echo $form->label('Description', 'form-label mb-0')->asRequired() ?>
-        <?php echo $form->input('detail', 'form-control')->asModel()->disablesOn('loading') ?>
+        <?php echo $form->label('Description')->withClass('form-label mb-0')->asRequired() ?>
+        <?php echo $form->input('detail')->withClass('form-control')->asModel()->disablesOn('loading') ?>
         <?php echo $form->error('error.detail') ?>
       </div>
     </div>
@@ -27,12 +27,15 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-      <?php echo $form->button('Cancel', 'btn btn-link text-secondary text-decoration-none')->with('@click', 'close')->disablesOn('loading') ?>
+      <?php echo $form->button('Cancel')->withClass('btn btn-link text-secondary text-decoration-none')
+        ->with('@click', 'close')->disablesOn('loading') ?>
       <template x-if="id">
-        <?php echo $form->button('Update', 'btn btn-primary')->onClick('update(id)')->disablesOn('loading') ?>
+        <?php echo $form->button('Update')->withClass('btn btn-primary')
+          ->onClick('update(id)')->disablesOn('loading') ?>
       </template>
       <template x-if="! id">
-        <?php echo $form->button('Create New', 'btn btn-secondary')->onClick('store')->disablesOn('loading') ?>
+        <?php echo $form->button('Create New')->withClass('btn btn-secondary')
+          ->onClick('store')->disablesOn('loading') ?>
       </template>
     </div>
   </div>
