@@ -34,8 +34,9 @@ class Orders extends Page
         // Generate the HTML table ----------------------------------------------------------
         $table = new Table;
         $table->setClass('table mb-0');
-
+        $table->withAlpine();
         $table->newColumn();
+
         $table->setCell('Type', 'left')->withWidth(5);
         $table->addBadge('Purchase', 'item.type === TYPE_PURCHASE', 'text-bg-primary');
         $table->addBadge('Sales', 'item.type === TYPE_SALE', 'text-bg-success');
@@ -61,7 +62,6 @@ class Orders extends Page
         $table->withLoading();
         $table->withEmptyText('No orders found.');
         $table->withErrorText('An error occured in getting the orders.');
-        $table->withAlpine();
         $table->withOpacity(50);
 
         $data['table'] = $table;

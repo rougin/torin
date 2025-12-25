@@ -32,6 +32,7 @@ class Clients extends Page
 
         // Generate the HTML table ----------------------------------------------
         $table = new Table;
+        $table->withAlpine();
         $table->setClass('table mb-0');
         $table->newColumn();
 
@@ -54,7 +55,6 @@ class Clients extends Page
         $table->withLoading($pagee->getLimit());
         $table->withEmptyText('No clients found.');
         $table->withErrorText('An error occured in getting the clients.');
-        $table->withAlpine();
         $table->withOpacity(50);
 
         $data['table'] = $table;

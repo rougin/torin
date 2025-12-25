@@ -32,9 +32,10 @@ class Items extends Page
 
         // Generate the HTML table -----------------------------------------------
         $table = new Table;
+        $table->withAlpine();
         $table->setClass('table mb-0');
-
         $table->newColumn();
+
         $table->setCell('Item Code', 'left')->withWidth(10)->withName('code');
         $table->setCell('Name', 'left')->withWidth(15);
         $table->setCell('Description', 'left')->withWidth(15)->withName('detail');
@@ -45,7 +46,6 @@ class Items extends Page
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');
         $table->withLoading($pagee->getLimit());
-        $table->withAlpine();
         $table->withOpacity(50);
 
         $data['table'] = $table;
