@@ -38,13 +38,13 @@ class Orders extends Page
         $table->newColumn();
 
         $table->setCell('Type', 'left')->withWidth(5);
-        $table->addBadge('Purchase', 'item.type === TYPE_PURCHASE', 'text-bg-primary');
-        $table->addBadge('Sales', 'item.type === TYPE_SALE', 'text-bg-success');
-        $table->addBadge('Transfer', 'item.type === TYPE_TRANSFER', 'text-bg-secondary');
+        $table->addBadge('Purchase', 'text-bg-primary', 'item.type === TYPE_PURCHASE');
+        $table->addBadge('Sales', 'text-bg-success', 'item.type === TYPE_SALE');
+        $table->addBadge('Transfer', 'text-bg-secondary', 'item.type === TYPE_TRANSFER');
         $table->setCell('Status', 'left')->withWidth(5);
-        $table->addBadge('Cancelled', 'item.status === STATUS_CANCELLED', 'text-bg-danger');
-        $table->addBadge('Fulfilled', 'item.status === STATUS_COMPLETED', 'text-bg-success');
-        $table->addBadge('Pending', 'item.status === STATUS_PENDING', 'text-bg-warning');
+        $table->addBadge('Cancelled', 'text-bg-danger', 'item.status === STATUS_CANCELLED');
+        $table->addBadge('Fulfilled', 'text-bg-success', 'item.status === STATUS_COMPLETED');
+        $table->addBadge('Pending', 'text-bg-warning', 'item.status === STATUS_PENDING');
         $table->setCell('Order Code', 'left')->withName('code')->withWidth(13);
         $table->setCell('Client Name', 'left')->withName('client.name');
         $table->setCell('Remarks', 'left')->withName('remarks');
@@ -55,6 +55,7 @@ class Orders extends Page
         $action = new Action;
         $action->setName('Mark as Complete');
         $action->ifClicked('mark(item, STATUS_COMPLETED)');
+        $action->withAlpine();
         $table->addAction($action);
         $table->withUpdateAction('edit(item)');
         $table->withDeleteAction('trash(item)');

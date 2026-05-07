@@ -37,8 +37,8 @@ class Clients extends Page
         $table->newColumn();
 
         $table->setCell('Type', 'left')
-            ->addBadge('Customer', 'item.type === 0', 'text-bg-success')
-            ->addBadge('Supplier', 'item.type === 1', 'text-bg-primary')
+            ->addBadge('Customer', 'text-bg-success', 'item.type === 0')
+            ->addBadge('Supplier', 'text-bg-primary', 'item.type === 1')
             ->withWidth(5);
         $table->setCell('Client Name', 'left')
             ->addHtml('<p class="mb-0" x-text="item.name"></p>')
