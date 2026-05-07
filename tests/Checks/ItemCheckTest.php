@@ -14,7 +14,7 @@ class ItemCheckTest extends Testcase
     /**
      * @return mixed[][]
      */
-    public function for_errors_provider()
+    public static function for_errors_provider()
     {
         $items = array();
 
