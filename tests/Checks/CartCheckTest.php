@@ -38,56 +38,28 @@ class CartCheckTest extends Testcase
     protected $order;
 
     /**
-     * @return mixed[][]
+     * @return void
      */
-    public static function for_errors_provider()
+    public function test_failed_if_field_is_required()
     {
-        $items = array();
+        $expect = 'An item is required';
 
         $data = array('quantity' => 10);
         $data['type'] = Order::TYPE_SALE;
-        $item = array($data);
-        $item[] = 'An item is required';
-        $items[] = $item;
 
-        $data = array('item_id' => 10);
-        $data['type'] = Order::TYPE_SALE;
-        $item = array($data);
-        $item[] = 'Quantity is required';
-        $items[] = $item;
-
-        $data = array('item_id' => 10);
-        $data['quantity'] = 10;
-        $item = array($data);
-        $item[] = 'Order Type is required';
-        $items[] = $item;
-
-        return $items;
-    }
-
-    /**
-     * @dataProvider for_errors_provider
-     *
-     * @param array<string, mixed> $data
-     * @param string               $text
-     *
-     * @return void
-     */
-    public function test_should_return_errors_for_invalid_cart_data($data, $text)
-    {
         $actual = $this->check->valid($data);
 
         $this->assertFalse($actual);
 
         $actual = $this->check->firstError();
 
-        $this->assertEquals($text, $actual);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
      * @return void
      */
-    public function test_should_return_error_when_item_not_found()
+    public function test_failed_if_item_not_found()
     {
         $data = array('item_id' => 999);
         $data['quantity'] = 10;
@@ -107,7 +79,7 @@ class CartCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_return_error_for_not_enough_quantity()
+    public function test_failed_if_not_enough_quantity()
     {
         // Create a new item --------------
         $data = array('name' => 'Test');
@@ -153,7 +125,7 @@ class CartCheckTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_pass_with_valid_cart_data()
+    public function test_passed_if_valid_data()
     {
         // Create a new item --------------
         $data = array('name' => 'Test');

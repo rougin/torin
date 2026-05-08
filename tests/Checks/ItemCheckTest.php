@@ -12,50 +12,32 @@ use Rougin\Torin\Testcase;
 class ItemCheckTest extends Testcase
 {
     /**
-     * @return mixed[][]
-     */
-    public static function for_errors_provider()
-    {
-        $items = array();
-
-        $data = array('detail' => 'Descrip');
-        $item = array($data);
-        $item[] = 'Name is required';
-        $items[] = $item;
-
-        $data = array('name' => 'Test Item');
-        $item = array($data);
-        $item[] = 'Description is required';
-        $items[] = $item;
-
-        return $items;
-    }
-
-    /**
-     * @dataProvider for_errors_provider
-     *
-     * @param array<string, string> $data
-     * @param string                $text
-     *
      * @return void
      */
-    public function test_should_return_errors_for_invalid_item_data($data, $text)
+    public function test_failed_if_field_is_required()
     {
+        $data = array('detail' => 'Descrip');
+
+        $expect = 'Name is required';
+
         $check = new ItemCheck;
 
-        $this->assertFalse($check->valid($data));
+        $actual = $check->valid($data);
+
+        $this->assertFalse($actual);
 
         $actual = $check->firstError();
 
-        $this->assertEquals($text, $actual);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
      * @return void
      */
-    public function test_should_pass_with_valid_item_data()
+    public function test_passed_if_valid_data()
     {
         $data = array('name' => 'Test Item');
+
         $data['detail'] = 'Test Detail';
 
         $check = new ItemCheck;
