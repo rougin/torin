@@ -2,6 +2,7 @@
 
 namespace Rougin\Torin\Checks;
 
+use Rougin\Dexter\Input;
 use Rougin\Torin\Depots\ItemDepot;
 use Rougin\Torin\Models\Order;
 use Rougin\Valla\Request;
@@ -60,8 +61,9 @@ class CartCheck extends Request
             return count($this->errors) === 0;
         }
 
-        /** @var integer */
-        $item = $data['item_id'];
+        $data = new Input($data);
+
+        $item = $data->asTrueInt('item_id');
 
         if (! $this->item->rowExists($item))
         {
@@ -73,22 +75,22 @@ class CartCheck extends Request
         $item = $this->item->find($item);
 
         // Check if order is for sale -------
-        /** @var integer */
-        $type = $data['type'];
+        $type = $data->asTrueInt('type');
 
         $isSale = $type === Order::TYPE_SALE;
         // ----------------------------------
 
         // Check if quantity is below current stock ---
-        /** @var integer */
-        $quantity = $data['quantity'];
+        $quantity = $data->asTrueInt('quantity');
 
         $lowAmount = $item->quantity < $quantity;
         // --------------------------------------------
 
         if ($isSale && $lowAmount)
         {
-            $this->setError('quantity', 'Not enough quantity');
+            $text = 'Not enough quantity';
+
+            $this->setError('quantity', $text);
         }
 
         return count($this->errors) === 0;
