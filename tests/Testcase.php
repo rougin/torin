@@ -53,6 +53,20 @@ class Testcase extends Legacy
         $this->assertRegExp($pattern, $string);
     }
 
+    /** @phpstan-ignore-next-line */
+    public function doExpectedException($exception)
+    {
+        if (method_exists($this, 'expectException'))
+        {
+            $this->expectException($exception);
+
+            return;
+        }
+
+        /** @phpstan-ignore-next-line */
+        $this->setExpectedException($exception);
+    }
+
     /**
      * @param string $name
      *

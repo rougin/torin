@@ -35,9 +35,7 @@ class System
     public function __construct($root)
     {
         // Load variables from ".env" ---
-        $env = new \Dotenv\Dotenv($root);
-
-        $env->load();
+        Dotenv::load($root);
         // ------------------------------
 
         $app = new Container;

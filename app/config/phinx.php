@@ -4,11 +4,9 @@
 $root = dirname(dirname(__DIR__));
 // -------------------------------
 
-// Load variables from ".env" ---
-$env = new Dotenv\Dotenv($root);
-
-$env->load();
-// ------------------------------
+// Load variables from ".env" ----
+\Rougin\Torin\Dotenv::load($root);
+// -------------------------------
 
 /**
  * Returns a configuration file specifically for Phinx.
