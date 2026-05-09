@@ -22,6 +22,19 @@ class Dotenv
     /**
      * @param string $path
      * @param string $name
+     *
+     * @return void
+     */
+    public static function load($path, $name = '.env')
+    {
+        $dotenv = new self($path, $name);
+
+        $dotenv->run();
+    }
+
+    /**
+     * @param string $path
+     * @param string $name
      */
     public function __construct($path, $name = '.env')
     {
@@ -31,16 +44,25 @@ class Dotenv
     }
 
     /**
-     * @param string $path
      * @param string $name
      *
-     * @return void
+     * @return string|null
      */
-    public static function load($path, $name = '.env')
+    public function get($name)
     {
-        $dotenv = new self($path, $name);
+        if (array_key_exists($name, $_ENV))
+        {
+            return $_ENV[$name];
+        }
 
-        $dotenv->run();
+        if (array_key_exists($name, $_SERVER))
+        {
+            return $_SERVER[$name];
+        }
+
+        $value = getenv($name);
+
+        return $value === false ? null : $value;
     }
 
     /**
@@ -68,7 +90,7 @@ class Dotenv
 
         $lines = file($file, $flags);
 
-        if (! is_array($lines))
+        if ($lines === false || count($lines) === 0)
         {
             $error = 'File "' . $file . '" is empty';
 
@@ -92,18 +114,37 @@ class Dotenv
 
             $lines = explode('=', $line, 2);
 
-            $label = trim($lines[0]);
+            $label = $this->cleanLabel(trim($lines[0]));
 
-            $value = trim($lines[1]);
-
-            $label = $this->cleanLabel($label);
-
-            $value = $this->cleanValue($value);
+            $value = $this->cleanValue(trim($lines[1]));
 
             $value = $this->resolveNested($value);
 
-            $this->setEnv($label, $value);
+            $this->set($label, $value);
         }
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     *
+     * @return void
+     */
+    public function set($name, $value)
+    {
+        if ($this->get($name) !== null)
+        {
+            return;
+        }
+
+        if (function_exists('putenv'))
+        {
+            putenv($name . '=' . $value);
+        }
+
+        $_ENV[$name] = $value;
+
+        $_SERVER[$name] = $value;
     }
 
     /**
@@ -158,7 +199,7 @@ class Dotenv
 
         foreach ($matches[1] as $index => $name)
         {
-            $nested = $this->getEnv($name);
+            $nested = $this->get($name);
 
             if ($nested === null)
             {
@@ -171,50 +212,5 @@ class Dotenv
         }
 
         return $value;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return string|null
-     */
-    protected function getEnv($name)
-    {
-        if (array_key_exists($name, $_ENV))
-        {
-            return $_ENV[$name];
-        }
-
-        if (array_key_exists($name, $_SERVER))
-        {
-            return $_SERVER[$name];
-        }
-
-        $value = getenv($name);
-
-        return $value === false ? null : $value;
-    }
-
-    /**
-     * @param string $name
-     * @param string $value
-     *
-     * @return void
-     */
-    protected function setEnv($name, $value)
-    {
-        if ($this->getEnv($name) !== null)
-        {
-            return;
-        }
-
-        if (function_exists('putenv'))
-        {
-            putenv($name . '=' . $value);
-        }
-
-        $_ENV[$name] = $value;
-
-        $_SERVER[$name] = $value;
     }
 }
