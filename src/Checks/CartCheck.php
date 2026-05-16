@@ -54,7 +54,7 @@ class CartCheck extends Request
      *
      * @return boolean
      */
-    public function valid($data)
+    public function valid(array $data)
     {
         if (! parent::valid($data))
         {
