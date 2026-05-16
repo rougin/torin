@@ -3,6 +3,7 @@
 namespace Rougin\Torin\Depots;
 
 use Rougin\Dexter\Depots\EloquentDepot;
+use Rougin\Dexter\Input;
 use Rougin\Torin\Models\Order;
 
 /**
@@ -56,34 +57,35 @@ class OrderDepot extends EloquentDepot
      */
     public function create($data, $actor = null)
     {
+        $data = new Input($data);
+
         $load = array();
 
-        /** @var integer */
-        $clientId = $data['client_id'];
-        $load['client_id'] = $clientId;
+        $name = 'client_id';
+        $value = $data->asTrueInt($name);
+        $load[$name] = $value;
 
-        /** @var integer */
-        $type = $data['type'];
-        $load['type'] = $type;
+        $name = 'type';
+        $type = $data->asTrueInt($name);
+        $load[$name] = $type;
 
         $load['code'] = $this->getCode($type);
 
         $load['status'] = Order::STATUS_PENDING;
 
-        /** @var string|null */
-        $remarks = $data['remarks'];
-        $load['remarks'] = $remarks;
+        $name = 'remarks';
+        $value = $data->asStr($name);
+        $load[$name] = $value;
 
-        if (array_key_exists('created_by', $data))
-        {
-            /** @var integer */
-            $createdBy = $data['created_by'];
-            $load['created_by'] = $createdBy;
-        }
+        $name = 'created_by';
+        $value = $data->asInt($name);
+        $load[$name] = $value;
 
         $order = $this->model->create($load);
 
         // Add specified items per order ----------
+        $data = $data->getData();
+
         /** @var array<string, mixed>[] */
         $items = $data['cart'];
 

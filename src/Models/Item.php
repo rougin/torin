@@ -96,7 +96,11 @@ class Item extends Model
 
         $row['created_at'] = $this->created_at;
 
-        $row['updated_at'] = $this->updated_at;
+        // Last Updated -----------------
+        $updated = $this->getUpdatedAt();
+
+        $row['updated_at'] = $updated;
+        // ------------------------------
 
         return $row;
     }
@@ -121,7 +125,7 @@ class Item extends Model
      */
     public function getCreatedAtAttribute($value)
     {
-        return $value ? date('d M Y h:i A', (int) strtotime($value)) : $value;
+        return date('d M Y h:i A', (int) strtotime($value));
     }
 
     /**
@@ -164,12 +168,12 @@ class Item extends Model
     }
 
     /**
-     * @param string $value
-     *
-     * @return string
+     * @return string|null
      */
-    public function getUpdatedAtAttribute($value)
+    public function getUpdatedAt()
     {
+        $value = $this->updated_at;
+
         return $value ? date('d M Y h:i A', (int) strtotime($value)) : $value;
     }
 

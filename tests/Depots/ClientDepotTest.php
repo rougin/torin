@@ -59,7 +59,7 @@ class ClientDepotTest extends Testcase
         $stamp = $actual->created_at;
         $this->assertEquals($expect, $stamp);
 
-        $stamp = $actual->updated_at;
+        $stamp = $actual->getUpdatedAt();
         $this->assertEquals($expect, $stamp);
         // -----------------------------------
     }

@@ -3,6 +3,7 @@
 namespace Rougin\Torin\Depots;
 
 use Rougin\Dexter\Depots\EloquentDepot;
+use Rougin\Dexter\Input;
 use Rougin\Torin\Models\Item;
 
 /**
@@ -73,18 +74,29 @@ class ItemDepot extends EloquentDepot
      */
     public function update($id, $data)
     {
-        /** @var \Rougin\Torin\Models\Item */
         $row = $this->findRow($id);
 
-        /** @var string */
-        $name = $data['name'];
-        $row->name = $name;
+        $data = new Input($data);
 
-        /** @var string */
-        $detail = $data['detail'];
-        $row->detail = $detail;
+        $name = 'name';
+        $value = $data->asTrueStr($name);
+        $row->name = $value;
+
+        $name = 'detail';
+        $value = $data->asTrueStr($name);
+        $row->detail = $value;
 
         return $row->save();
+    }
+
+    /**
+     * @param \Rougin\Torin\Models\Item $row
+     *
+     * @return array<string, mixed>
+     */
+    protected function asRow($row)
+    {
+        return $row->asRow();
     }
 
     /**
@@ -94,7 +106,9 @@ class ItemDepot extends EloquentDepot
      */
     protected function findRow($id)
     {
-        return $this->model->with('orders')->findOrFail($id);
+        $model = $this->model->with('orders');
+
+        return $model->findOrFail($id);
     }
 
     /**

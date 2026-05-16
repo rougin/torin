@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property integer|null $parent_id
  * @property string       $code
  * @property string       $name
- * @property string       $remarks
+ * @property string|null  $remarks
  * @property string       $created_at
  * @property string|null  $updated_at
  *
@@ -78,16 +78,16 @@ class Client extends Model
      */
     public function getCreatedAtAttribute($value)
     {
-        return $value ? date('d M Y h:i A', (int) strtotime($value)) : $value;
+        return date('d M Y h:i A', (int) strtotime($value));
     }
 
     /**
-     * @param string $value
-     *
-     * @return string
+     * @return string|null
      */
-    public function getUpdatedAtAttribute($value)
+    public function getUpdatedAt()
     {
+        $value = $this->updated_at;
+
         return $value ? date('d M Y h:i A', (int) strtotime($value)) : $value;
     }
 }

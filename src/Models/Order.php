@@ -86,17 +86,7 @@ class Order extends Model
      */
     public function getCreatedAtAttribute($value)
     {
-        return $value ? date('d M Y h:i A', (int) strtotime($value)) : $value;
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    public function getUpdatedAtAttribute($value)
-    {
-        return $value ? date('d M Y h:i A', (int) strtotime($value)) : $value;
+        return date('d M Y h:i A', (int) strtotime($value));
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Rougin\Torin\Depots;
 
 use Rougin\Dexter\Depots\EloquentDepot;
+use Rougin\Dexter\Input;
 use Rougin\Torin\Models\Client;
 
 /**
@@ -80,20 +81,21 @@ class ClientDepot extends EloquentDepot
      */
     public function update($id, $data)
     {
-        /** @var \Rougin\Torin\Models\Client */
-        $row = $this->findRow($id);
+        $row = $this->find($id);
 
-        /** @var string */
-        $name = $data['name'];
-        $row->name = $name;
+        $data = new Input($data);
 
-        /** @var string */
-        $remarks = $data['remarks'];
-        $row->remarks = $remarks;
+        $name = 'name';
+        $value = $data->asTrueStr($name);
+        $row->name = $value;
 
-        /** @var integer */
-        $type = $data['type'];
-        $row->type = $type;
+        $name = 'remarks';
+        $value = $data->asStr($name);
+        $row->remarks = $value;
+
+        $name = 'type';
+        $value = $data->asTrueInt($name);
+        $row->type = $value;
 
         return $row->save();
     }
