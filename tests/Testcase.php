@@ -43,6 +43,7 @@ class Testcase extends Legacy
     {
         $method = 'assertMatchesRegularExpression';
 
+        /** @phpstan-ignore-next-line */
         if (method_exists($this, $method))
         {
             $this->assertMatchesRegularExpression($pattern, $string);
@@ -50,14 +51,21 @@ class Testcase extends Legacy
             return;
         }
 
+        /** @phpstan-ignore-next-line */
         $this->assertRegExp($pattern, $string);
     }
 
-    /** @phpstan-ignore-next-line */
-    public function doExpectedException($exception)
+    /**
+     * @param class-string $exception
+     *
+     * @return void
+     */
+    public function doExpectException($exception)
     {
+        /** @phpstan-ignore-next-line */
         if (method_exists($this, 'expectException'))
         {
+            /** @phpstan-ignore-next-line */
             $this->expectException($exception);
 
             return;
@@ -121,9 +129,10 @@ class Testcase extends Legacy
     {
         $app = new Container;
 
-        // Prepare the PDO to the configuration file -----------
+        /** @var array{environments: array{test: array<string, mixed>}} */
         $data = require __DIR__ . '/../app/config/phinx.php';
 
+        // Prepare the PDO to the configuration file -----------
         $pdo = $this->capsule->getConnection('torin')->getPdo();
 
         $data['environments']['test']['connection'] = $pdo;

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property integer                     $status
  * @property string                      $created_at
  * @property string|null                 $updated_at
+ * @property \Rougin\Torin\Models\Item   $pivot
  * @property \Rougin\Torin\Models\Item[] $items
  *
  * @method \Rougin\Torin\Models\Order[]    all()
@@ -90,7 +91,7 @@ class Order extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Rougin\Torin\Models\Item, $this>
      */
     public function items()
     {

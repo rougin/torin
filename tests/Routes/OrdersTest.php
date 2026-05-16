@@ -299,12 +299,12 @@ class OrdersTest extends Testcase
         $this->assertEquals(200, $actual->getStatusCode());
         // ------------------------------------------------
 
-        // Verify if items returned from HTTP response ---
         $actual = $actual->getBody()->__toString();
 
-        /** @var array<string, array<string, string>[]> */
+        /** @var array<string, array<integer, array<string, string|null>>> */
         $data = json_decode($actual, true);
 
+        // Verify if items returned from HTTP response ---
         $remarks1 = $data['items'][0]['remarks'];
         $this->assertNull($remarks1);
 

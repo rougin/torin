@@ -14,7 +14,7 @@ class DotenvTest extends Testcase
      */
     public function test_failed_if_file_empty()
     {
-        $this->doExpectedException('Exception');
+        $this->doExpectException('Exception');
 
         // Define the fixture path ------------
         $path = __DIR__ . '/Fixture/Dotenv';
@@ -30,7 +30,7 @@ class DotenvTest extends Testcase
      */
     public function test_failed_if_file_not_found()
     {
-        $this->doExpectedException('Exception');
+        $this->doExpectException('Exception');
 
         // Define a non-existent fixture path ---
         $path = __DIR__ . '/Fixture/Unknown';

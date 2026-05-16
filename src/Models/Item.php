@@ -146,12 +146,11 @@ class Item extends Model
             }
             // -------------------------------------
 
-            // @phpstan-ignore-next-line ----
             $value = $order->pivot->quantity;
-            // ------------------------------
 
             // PHP 5.3 - "$casts" not working ---
             $type = (int) $order->type;
+            // ----------------------------------
 
             if ($type === Order::TYPE_SALE)
             {
@@ -159,7 +158,6 @@ class Item extends Model
 
                 continue;
             }
-            // ----------------------------------
 
             $total = $total + $value;
         }
@@ -178,7 +176,7 @@ class Item extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<\Rougin\Torin\Models\Order, $this>
      */
     public function orders()
     {

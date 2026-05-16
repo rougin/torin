@@ -52,12 +52,18 @@ class Dotenv
     {
         if (array_key_exists($name, $_ENV))
         {
-            return $_ENV[$name];
+            /** @var string|null */
+            $value = $_ENV[$name];
+
+            return $value;
         }
 
         if (array_key_exists($name, $_SERVER))
         {
-            return $_SERVER[$name];
+            /** @var string|null */
+            $value = $_SERVER[$name];
+
+            return $value;
         }
 
         $value = getenv($name);

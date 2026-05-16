@@ -44,6 +44,7 @@ class Page
 
         $this->plate = $plate;
 
+        /** @var array<string, string> */
         $server = $request->getServerParams();
 
         $this->link = new LinkHelper($server);
