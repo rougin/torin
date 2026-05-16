@@ -20,9 +20,9 @@
     "rougin/dexter": "dev-master",
     "rougin/dextra": "dev-master",
     "rougin/fortem": "dev-master",
-    "rougin/gable": "dev-master",
+    "rougin/gable": "~0.1",
     "rougin/onion": "dev-master",
-    "rougin/valla": "dev-master",
+    "rougin/valla": "~0.1",
     "rougin/weasley": "~0.7"
   },
   "require-dev":
