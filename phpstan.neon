@@ -6,5 +6,4 @@ parameters:
     - tests
   excludePaths:
     analyse:
-      - app/cache/compiled
       - app/plates
