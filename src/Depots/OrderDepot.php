@@ -112,6 +112,16 @@ class OrderDepot extends EloquentDepot
     }
 
     /**
+     * @param integer $id
+     *
+     * @return boolean
+     */
+    public function setAsCompleted($id)
+    {
+        return $this->changeStatus($id, Order::STATUS_COMPLETED);
+    }
+
+    /**
      * @param integer $type
      *
      * @return string

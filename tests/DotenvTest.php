@@ -20,9 +20,7 @@ class DotenvTest extends Testcase
         $path = __DIR__ . '/Fixture/Dotenv';
         // ------------------------------------
 
-        // Attempt to load the file --------
         Dotenv::load($path, '.env.empty');
-        // ---------------------------------
     }
 
     /**
@@ -36,9 +34,7 @@ class DotenvTest extends Testcase
         $path = __DIR__ . '/Fixture/Unknown';
         // --------------------------------------
 
-        // Attempt to load the file --------
         Dotenv::load($path, '.env.example');
-        // ---------------------------------
     }
 
     /**

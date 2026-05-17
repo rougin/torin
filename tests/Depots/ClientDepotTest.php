@@ -20,34 +20,85 @@ class ClientDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_find_all_clients()
+    public function test_passed_if_all_clients_found()
     {
         $model = new Client;
 
+        // Create a new client ---------------
         $data = array('name' => 'Client A');
-        $data['type'] = Client::TYPE_SUPPLIER;
-        $model->create($data);
 
-        $data = array('name' => 'Client B');
-        $data['type'] = Client::TYPE_CUSTOMER;
+        $data['type'] = Client::TYPE_SUPPLIER;
+
         $model->create($data);
+        // -----------------------------------
+
+        // Create another new client ---------
+        $data = array('name' => 'Client B');
+
+        $data['type'] = Client::TYPE_CUSTOMER;
+
+        $model->create($data);
+        // -----------------------------------
 
         $items = $this->depot->all();
+
+        // Check if "Client A" already created ---
+        $expect = 'Client A';
+
         $actual = $items[0]->name;
 
-        $this->assertEquals('Client A', $actual);
+        $this->assertEquals($expect, $actual);
+        // ---------------------------------------
+
+        // Check if "Client B" already created ---
+        $expect = 'Client B';
+
+        $actual = $items[1]->name;
+
+        $this->assertEquals($expect, $actual);
+        // ---------------------------------------
     }
 
     /**
      * @return void
      */
-    public function test_should_find_client_by_id()
+    public function test_passed_if_client_created()
+    {
+        // Create a new client as customer ---
+        $data = array('name' => 'New Client');
+
+        $data['type'] = Client::TYPE_CUSTOMER;
+
+        $data['remarks'] = 'Some remarks';
+
+        $actual = $this->depot->create($data);
+        // -----------------------------------
+
+        $expect = 'New Client';
+
+        $this->assertEquals($expect, $actual->name);
+
+        $this->assertEquals(0, $actual->type);
+
+        $expect = 'Some remarks';
+
+        $this->assertEquals($expect, $actual->remarks);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_client_found_by_id()
     {
         $model = new Client;
 
+        // Create a new client as supplier ---
         $data = array('name' => 'Client C');
+
         $data['type'] = Client::TYPE_SUPPLIER;
+
         $result = $model->create($data);
+        // -----------------------------------
 
         $actual = $this->depot->find($result->id);
 
@@ -57,9 +108,11 @@ class ClientDepotTest extends Testcase
         $expect = date('d M Y h:i A', time());
 
         $stamp = $actual->created_at;
+
         $this->assertEquals($expect, $stamp);
 
         $stamp = $actual->getUpdatedAt();
+
         $this->assertEquals($expect, $stamp);
         // -----------------------------------
     }
@@ -67,60 +120,73 @@ class ClientDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_create_client()
+    public function test_passed_if_client_updated()
     {
-        $data = array('name' => 'New Client');
-        $data['type'] = Client::TYPE_CUSTOMER;
-        $data['remarks'] = 'Some remarks';
-        $actual = $this->depot->create($data);
-
-        $this->assertEquals('New Client', $actual->name);
-        $this->assertEquals(0, $actual->type);
-        $this->assertEquals('Some remarks', $actual->remarks);
-    }
-
-    /**
-     * @return void
-     */
-    public function test_should_get_clients_for_select_input()
-    {
-        $data = array('name' => 'Client X');
-        $data['type'] = Client::TYPE_CUSTOMER;
-        $this->depot->create($data);
-
-        $data = array('name' => 'Client Y');
-        $data['type'] = Client::TYPE_SUPPLIER;
-        $this->depot->create($data);
-
-        $actual = $this->depot->getSelect();
-
-        $expected = array('value' => 1, 'label' => 'Client X');
-        $this->assertEquals($expected, $actual[0]);
-
-        $expected = array('value' => 2, 'label' => 'Client Y');
-        $this->assertEquals($expected, $actual[1]);
-    }
-
-    /**
-     * @return void
-     */
-    public function test_should_update_client()
-    {
+        // Create a new client as customer ---
         $data = array('name' => 'Old Client');
-        $data['type'] = Client::TYPE_CUSTOMER;
-        $data['remarks'] = 'Some remarks';
-        $client = $this->depot->create($data);
 
+        $data['type'] = Client::TYPE_CUSTOMER;
+
+        $data['remarks'] = 'Some remarks';
+
+        $client = $this->depot->create($data);
+        // -----------------------------------
+
+        // Update the recent client as supplier ---
         $data = array('name' => 'New Client');
+
         $data['type'] = Client::TYPE_SUPPLIER;
+
         $data['remarks'] = 'New remarks';
+
         $this->depot->update($client->id, $data);
+        // ----------------------------------------
 
         $actual = $this->depot->find($client->id);
 
-        $this->assertEquals('New Client', $actual->name);
-        $this->assertEquals(Client::TYPE_SUPPLIER, $actual->type);
-        $this->assertEquals('New remarks', $actual->remarks);
+        $expect = 'New remarks';
+
+        $this->assertEquals($expect, $actual->remarks);
+
+        $expect = 'New Client';
+
+        $this->assertEquals($expect, $actual->name);
+
+        $expect = Client::TYPE_SUPPLIER;
+
+        $this->assertEquals($expect, $actual->type);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_clients_for_select()
+    {
+        // Create a new client as customer ---
+        $data = array('name' => 'Client X');
+
+        $data['type'] = Client::TYPE_CUSTOMER;
+
+        $this->depot->create($data);
+        // -----------------------------------
+
+        // Create a new client as supplier ---
+        $data = array('name' => 'Client Y');
+
+        $data['type'] = Client::TYPE_SUPPLIER;
+
+        $this->depot->create($data);
+        // -----------------------------------
+
+        $actual = $this->depot->getSelect();
+
+        $expect = array('value' => 1, 'label' => 'Client X');
+
+        $this->assertEquals($expect, $actual[0]);
+
+        $expect = array('value' => 2, 'label' => 'Client Y');
+
+        $this->assertEquals($expect, $actual[1]);
     }
 
     /**

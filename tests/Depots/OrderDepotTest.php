@@ -22,55 +22,15 @@ class OrderDepotTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_change_order_status()
-    {
-        // Create a new client ---------------
-        $model = new Client;
-
-        $data = array('name' => 'Jane Doe');
-        $data['type'] = Client::TYPE_SUPPLIER;
-        $client = $model->create($data);
-        // -----------------------------------
-
-        // Create a new item -------------
-        $model = new Item;
-
-        $data = array('name' => 'Item 2');
-        $data['price'] = 200;
-        $item = $model->create($data);
-        // -------------------------------
-
-        // Add a new item to cart -----------
-        $data = array('remarks' => null);
-        $data['client_id'] = $client->id;
-        $data['type'] = Order::TYPE_PURCHASE;
-
-        $cart = array('id' => $item->id);
-        $cart['quantity'] = 20;
-        $data['cart'] = array($cart);
-
-        $order = $this->depot->create($data);
-        // ----------------------------------
-
-        $status = Order::STATUS_COMPLETED;
-        $this->depot->changeStatus($order->id, $status);
-
-        $result = $this->depot->find($order->id);
-
-        $expect = Order::STATUS_COMPLETED;
-        $this->assertEquals($expect, $result->status);
-    }
-
-    /**
-     * @return void
-     */
-    public function test_should_create_order()
+    public function test_passed_if_order_created()
     {
         // Create a new client ---------------
         $model = new Client;
 
         $data = array('name' => 'John Doe');
+
         $data['type'] = Client::TYPE_SUPPLIER;
+
         $client = $model->create($data);
         // -----------------------------------
 
@@ -78,31 +38,101 @@ class OrderDepotTest extends Testcase
         $model = new Item;
 
         $data = array('name' => 'Item 1');
+
         $data['price'] = 100;
+
         $item = $model->create($data);
         // -------------------------------
 
-        // Add a new item to cart -----------------
+        // Add the new item to the cart ---
+        $cart = array('id' => $item->id);
+
+        $cart['quantity'] = 10;
+        // --------------------------------
+
+        // Create a new purchase order ------------
         $data = array('remarks' => 'Test remarks');
+
         $data['created_by'] = 1; // Sample user
+
         $data['client_id'] = $client->id;
+
         $data['type'] = Order::TYPE_PURCHASE;
 
-        $cart = array('id' => $item->id);
-        $cart['quantity'] = 10;
         $data['cart'] = array($cart);
 
         $order = $this->depot->create($data, 1);
         // ----------------------------------------
 
-        $status = Order::STATUS_COMPLETED;
-        $this->depot->changeStatus($order->id, $status);
+        $this->depot->setAsCompleted($order->id);
 
         $actual = $this->depot->find($order->id);
 
-        $this->assertEquals($client->id, $actual->client_id);
-        $this->assertEquals('Test remarks', $actual->remarks);
-        $this->assertEquals(10, $actual->items[0]->quantity);
+        $first = $actual->items[0];
+
+        $this->assertEquals(10, $first->quantity);
+
+        $value = $actual->client_id;
+
+        $this->assertEquals($client->id, $value);
+
+        $expect = 'Test remarks';
+
+        $this->assertEquals($expect, $actual->remarks);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_order_status_changed()
+    {
+        // Create a new client ---------------
+        $model = new Client;
+
+        $data = array('name' => 'Jane Doe');
+
+        $data['type'] = Client::TYPE_SUPPLIER;
+
+        $client = $model->create($data);
+        // -----------------------------------
+
+        // Create a new item -------------
+        $model = new Item;
+
+        $data = array('name' => 'Item 2');
+
+        $data['price'] = 200;
+
+        $item = $model->create($data);
+        // -------------------------------
+
+        // Add the new item to the cart ---
+        $cart = array('id' => $item->id);
+
+        $cart['quantity'] = 20;
+        // --------------------------------
+
+        // Create a new purchase order ------
+        $data = array('remarks' => null);
+
+        $data['client_id'] = $client->id;
+
+        $data['type'] = Order::TYPE_PURCHASE;
+
+        $data['cart'] = array($cart);
+
+        $order = $this->depot->create($data);
+        // ----------------------------------
+
+        $this->depot->setAsCompleted($order->id);
+
+        $result = $this->depot->find($order->id);
+
+        $expect = Order::STATUS_COMPLETED;
+
+        $actual = $result->status;
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**

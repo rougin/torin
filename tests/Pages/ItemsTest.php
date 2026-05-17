@@ -29,7 +29,7 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_render_items_page_output()
+    public function test_passed_if_items_page_rendered()
     {
         $expect = $this->findPlate('Items');
 

@@ -27,87 +27,111 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_create_item_via_store_method()
+    public function test_failed_if_create_item_invalid_data()
     {
-        // Simulate an HTTP request ---------
-        $data = array('name' => 'Test Item');
-        $data['detail'] = 'Test Details';
+        // Simulate an HTTP request ----------
+        $data = array('detail' => 'Details');
 
         $http = $this->withParsed($data);
-        // ----------------------------------
-
-        // Call the route method ------------
-        $actual = $this->route->store($http);
-        // ----------------------------------
+        // -----------------------------------
 
         // Verify if it returns an HTTP response ----------
-        $this->assertEquals(201, $actual->getStatusCode());
+        $actual = $this->route->store($http);
+
+        $this->assertEquals(422, $actual->getStatusCode());
         // ------------------------------------------------
 
-        // Verify if item was created in the database --------
-        $actuals = $this->depot->all();
+        // Verify if errors returned properly ---------
+        $actual = $actual->getBody()->__toString();
 
-        $this->assertEquals($data['name'], $actuals[0]->name);
-        // ---------------------------------------------------
+        /** @var array<string, string[]> */
+        $data = json_decode($actual, true);
+
+        $expect = 'Name is required';
+
+        $this->assertEquals($expect, $data['name'][0]);
+        // --------------------------------------------
     }
 
     /**
      * @return void
      */
-    public function test_should_delete_item_via_delete_method()
+    public function test_failed_if_item_not_found()
+    {
+        $http = $this->withHttp('DELETE');
+
+        $http = $this->route->delete(99, $http);
+
+        $actual = $http->getStatusCode();
+
+        $this->assertEquals(404, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_failed_if_update_item_invalid_data()
     {
         // Create a new item ----------------
         $data = array('name' => 'Test Item');
+
         $data['detail'] = 'Test Details';
 
         $item = $this->depot->create($data);
         // ----------------------------------
 
-        // Simulate an HTTP request ------
-        $http = $this->withHttp('DELETE');
-        // -------------------------------
+        // Simulate an HTTP request ------------
+        $data = array('name' => 'Updated Item');
 
-        // Call the route method ------------------------
-        $actual = $this->route->delete($item->id, $http);
-        // ----------------------------------------------
+        $http = $this->withParsed($data, 'PUT');
+        // -------------------------------------
 
         // Verify if it returns an HTTP response ----------
-        $this->assertEquals(204, $actual->getStatusCode());
+        $actual = $this->route->update($item->id, $http);
+
+        $this->assertEquals(422, $actual->getStatusCode());
         // ------------------------------------------------
 
-        // Verify item was deleted from the database ---
-        $exists = $this->depot->rowExists($item->id);
+        // Verify if errors returned properly -----------
+        $actual = $actual->getBody()->__toString();
 
-        $this->assertFalse($exists);
-        // -----------------------------------------------
+        /** @var array<string, string[]> */
+        $data = json_decode($actual, true);
+
+        $expect = 'Description is required';
+
+        $this->assertEquals($expect, $data['detail'][0]);
+        // ----------------------------------------------
     }
 
     /**
      * @return void
      */
-    public function test_should_get_all_items_via_index_method()
+    public function test_passed_if_all_items_via_index()
     {
         // Create new multiple items ----------
         $data = array('name' => 'Test Item 1');
+
         $data['detail'] = 'Test Details 1';
 
         $this->depot->create($data);
 
         $data = array('name' => 'Test Item 2');
+
         $data['detail'] = 'Test Details 2';
 
         $this->depot->create($data);
         // ------------------------------------
 
-        // Simulate an HTTP request -------------------------
-        $http = $this->withParams(array('p' => 1, 'l' => 5));
-        // --------------------------------------------------
+        // Simulate an HTTP request ------
+        $data = array('p' => 1, 'l' => 5);
 
-        // Call the route method ------------
-        $actual = $this->route->index($http);
-        // ----------------------------------
+        $http = $this->withParams($data);
+        // -------------------------------
 
         // Verify if it returns an HTTP response ----------
+        $actual = $this->route->index($http);
+
         $this->assertEquals(200, $actual->getStatusCode());
         // ------------------------------------------------
 
@@ -118,9 +142,11 @@ class ItemsTest extends Testcase
         $data = json_decode($actual, true);
 
         $name1 = $data['items'][0]['name'];
+
         $this->assertEquals('Test Item 1', $name1);
 
         $name2 = $data['items'][1]['name'];
+
         $this->assertEquals('Test Item 2', $name2);
         // -----------------------------------------------
     }
@@ -131,25 +157,27 @@ class ItemsTest extends Testcase
      *
      * @return void
      */
-    public function test_should_get_filtered_items_via_index_method()
+    public function test_passed_if_filtered_items_via_index()
     {
         // Create new multiple items ----------
         $data = array('name' => 'Test Item 2');
+
         $data['detail'] = 'Test Details 2';
 
         $this->depot->create($data);
 
         $data = array('name' => 'Test Item 1');
+
         $data['detail'] = 'Test Details 1';
 
         $this->depot->create($data);
         // ------------------------------------
 
-        // Simulate an HTTP request ----------------------
-        $http = $this->withParams(array('k' => 'item 2'));
-        // -----------------------------------------------
+        // Simulate an HTTP request ---------
+        $data = array('k' => 'item 2');
 
-        // Call the route method ------------
+        $http = $this->withParams($data);
+
         $actual = $this->route->index($http);
         // ----------------------------------
 
@@ -167,47 +195,67 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_get_items_for_select_via_select_method()
+    public function test_passed_if_item_created_via_store()
     {
-        // Create new multiple items ----------
-        $data = array('name' => 'Test Item 1');
-        $data['detail'] = 'Test Details 1';
+        // Simulate an HTTP request ---------
+        $data = array('name' => 'Test Item');
 
-        $this->depot->create($data);
+        $data['detail'] = 'Test Details';
 
-        $data = array('name' => 'Test Item 2');
-        $data['detail'] = 'Test Details 2';
-
-        $this->depot->create($data);
-        // ------------------------------------
-
-        // Call the route method --------
-        $actual = $this->route->select();
-        // ------------------------------
+        $http = $this->withParsed($data);
+        // ----------------------------------
 
         // Verify if it returns an HTTP response ----------
-        $this->assertEquals(200, $actual->getStatusCode());
+        $actual = $this->route->store($http);
+
+        $this->assertEquals(201, $actual->getStatusCode());
         // ------------------------------------------------
 
-        // Verify if selects returned properly ----
-        $actual = $actual->getBody()->__toString();
+        // Verify if item was created in the database ---
+        $actuals = $this->depot->all();
 
-        /** @var array<string, string>[] */
-        $data = json_decode($actual, true);
+        $actual = $actuals[0]->name;
 
-        $this->assertEquals(1, $data[0]['value']);
-
-        $this->assertEquals(2, $data[1]['value']);
-        // ----------------------------------------
+        $this->assertEquals($data['name'], $actual);
+        // ----------------------------------------------
     }
 
     /**
      * @return void
      */
-    public function test_should_update_item_via_update_method()
+    public function test_passed_if_item_deleted_via_delete()
     {
         // Create a new item ----------------
         $data = array('name' => 'Test Item');
+
+        $data['detail'] = 'Test Details';
+
+        $item = $this->depot->create($data);
+        // ----------------------------------
+
+        // Verify if it returns an HTTP response ----------
+        $http = $this->withHttp('DELETE');
+
+        $actual = $this->route->delete($item->id, $http);
+
+        $this->assertEquals(204, $actual->getStatusCode());
+        // ------------------------------------------------
+
+        // Verify item was deleted from the database ---
+        $exists = $this->depot->rowExists($item->id);
+
+        $this->assertFalse($exists);
+        // ---------------------------------------------
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_item_updated_via_update()
+    {
+        // Create a new item ----------------
+        $data = array('name' => 'Test Item');
+
         $data['detail'] = 'Test Details';
 
         $item = $this->depot->create($data);
@@ -215,16 +263,15 @@ class ItemsTest extends Testcase
 
         // Simulate an HTTP request ------------
         $data = array('name' => 'Updated Item');
+
         $data['detail'] = 'Updated Details';
 
         $http = $this->withParsed($data, 'PUT');
         // -------------------------------------
 
-        // Call the route method ------------------------
-        $actual = $this->route->update($item->id, $http);
-        // ----------------------------------------------
-
         // Verify if it returns an HTTP response ----------
+        $actual = $this->route->update($item->id, $http);
+
         $this->assertEquals(204, $actual->getStatusCode());
         // ------------------------------------------------
 
@@ -238,82 +285,40 @@ class ItemsTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_not_create_item_with_invalid_data()
+    public function test_passed_if_items_select_via_select()
     {
-        // Simulate an HTTP request ----------
-        $data = array('detail' => 'Details');
+        // Create new multiple items ----------
+        $data = array('name' => 'Test Item 1');
 
-        $http = $this->withParsed($data);
-        // -----------------------------------
+        $data['detail'] = 'Test Details 1';
 
-        // Call the method ------------------
-        $actual = $this->route->store($http);
-        // ----------------------------------
+        $this->depot->create($data);
 
-        // Verify if it returns an HTTP response ----------
-        $this->assertEquals(422, $actual->getStatusCode());
-        // ------------------------------------------------
+        $data = array('name' => 'Test Item 2');
 
-        // Verify if errors returned properly ---------
+        $data['detail'] = 'Test Details 2';
+
+        $this->depot->create($data);
+        // ------------------------------------
+
+        // Verify if it returns an HTTP response ---
+        $actual = $this->route->select();
+
+        $status = $actual->getStatusCode();
+
+        $this->assertEquals(200, $status);
+        // -----------------------------------------
+
+        // Verify if selects returned properly ----
         $actual = $actual->getBody()->__toString();
 
-        /** @var array<string, string[]> */
+        /** @var array<string, string>[] */
         $data = json_decode($actual, true);
 
-        $expect = 'Name is required';
-        $this->assertEquals($expect, $data['name'][0]);
-        // --------------------------------------------
-    }
+        $this->assertEquals(1, $data[0]['value']);
 
-    /**
-     * @return void
-     */
-    public function test_cannot_delete_non_existent_item()
-    {
-        $http = $this->withHttp('DELETE');
-
-        $http = $this->route->delete(99, $http);
-
-        $actual = $http->getStatusCode();
-
-        $this->assertEquals(404, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function test_cannot_update_item_with_invalid_data()
-    {
-        // Create a new item ----------------
-        $data = array('name' => 'Test Item');
-        $data['detail'] = 'Test Details';
-
-        $item = $this->depot->create($data);
-        // ----------------------------------
-
-        // Simulate an HTTP request ------------
-        $data = array('name' => 'Updated Item');
-
-        $http = $this->withParsed($data, 'PUT');
-        // -------------------------------------
-
-        // Call the route method ------------------------
-        $actual = $this->route->update($item->id, $http);
-        // ----------------------------------------------
-
-        // Verify if it returns an HTTP response ----------
-        $this->assertEquals(422, $actual->getStatusCode());
-        // ------------------------------------------------
-
-        // Verify if errors returned properly -----------
-        $actual = $actual->getBody()->__toString();
-
-        /** @var array<string, string[]> */
-        $data = json_decode($actual, true);
-
-        $expect = 'Description is required';
-        $this->assertEquals($expect, $data['detail'][0]);
-        // ----------------------------------------------
+        $this->assertEquals(2, $data[1]['value']);
+        // ----------------------------------------
     }
 
     /**

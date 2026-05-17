@@ -26,7 +26,7 @@ class HelloTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_render_hello_page_output()
+    public function test_passed_if_hello_page_rendered()
     {
         $expect = $this->findPlate('Hello');
 

@@ -26,8 +26,6 @@ class OrderCheckTest extends Testcase
 
         $data['type'] = Order::TYPE_SALE;
 
-        $expect = 'Cart is required';
-
         $check = new OrderCheck;
 
         $actual = $check->valid($data);
@@ -35,6 +33,8 @@ class OrderCheckTest extends Testcase
         $this->assertFalse($actual);
 
         $actual = $check->firstError();
+
+        $expect = 'Cart is required';
 
         $this->assertEquals($expect, $actual);
     }

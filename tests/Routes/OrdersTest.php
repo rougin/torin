@@ -41,296 +41,21 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_change_order_status()
-    {
-        // Create a new client and item -------
-        $data = array();
-        $data['type'] = Client::TYPE_CUSTOMER;
-        $data['name'] = 'Test Client';
-        $data['remarks'] = 'Test Remarks';
-
-        $client = $this->client->create($data);
-
-        $data = array('name' => 'Test Item');
-        $data['detail'] = 'Test Details';
-
-        $item = $this->item->create($data);
-        // ------------------------------------
-
-        // Create a new purchase order ------
-        $data = array('remarks' => null);
-        $data['client_id'] = $client->id;
-        $data['type'] = Order::TYPE_PURCHASE;
-
-        $cart = array('id' => $item->id);
-        $cart['quantity'] = 1;
-        $data['cart'] = array($cart);
-
-        $order = $this->depot->create($data);
-        // ----------------------------------
-
-        // Simulate an HTTP request ------------
-        $expect = Order::STATUS_COMPLETED;
-
-        $data = array('status' => $expect);
-
-        $http = $this->withParsed($data, 'PUT');
-        // -------------------------------------
-
-        // Call the route method -------------------------
-        $actual = $this->route->status($order->id, $http);
-        // -----------------------------------------------
-
-        // Verify if it returns an HTTP response ----------
-        $this->assertEquals(204, $actual->getStatusCode());
-        // ------------------------------------------------
-
-        // Verify status was updated in the database ---
-        $actual = $this->depot->find($order->id);
-
-        $this->assertEquals($expect, $actual->status);
-        // ---------------------------------------------
-    }
-
-    /**
-     * @return void
-     */
-    public function test_should_check_cart_with_valid_data()
-    {
-        // Create a new client and item -------
-        $data = array();
-        $data['type'] = Client::TYPE_CUSTOMER;
-        $data['name'] = 'Test Client';
-        $data['remarks'] = 'Test Remarks';
-
-        $client = $this->client->create($data);
-
-        $data = array('name' => 'Test Item');
-        $data['detail'] = 'Test Details';
-
-        $item = $this->item->create($data);
-        // ------------------------------------
-
-        // Create a new purchase order ------
-        $data = array('remarks' => null);
-        $data['client_id'] = $client->id;
-        $data['type'] = Order::TYPE_PURCHASE;
-
-        $cart = array('id' => $item->id);
-        $cart['quantity'] = 10;
-        $data['cart'] = array($cart);
-
-        $order = $this->depot->create($data);
-        // ----------------------------------
-
-        // Mark the purchase order as completed --------
-        $status = Order::STATUS_COMPLETED;
-
-        $this->depot->changeStatus($order->id, $status);
-        // ---------------------------------------------
-
-        // Simulate an HTTP request ----------
-        $data = array('item_id' => $item->id);
-        $data['quantity'] = 10;
-        $data['type'] = Order::TYPE_SALE;
-
-        $http = $this->withParsed($data);
-        // -----------------------------------
-
-        // Call the route method -------------------------
-        $actual = $this->route->check($this->item, $http);
-        // -----------------------------------------------
-
-        // Verify if it returns an HTTP response ----------
-        $this->assertEquals(200, $actual->getStatusCode());
-        // ------------------------------------------------
-    }
-
-    /**
-     * @return void
-     */
-    public function test_should_create_order_via_store_method()
-    {
-        // Create a new client and item -------
-        $data = array();
-        $data['type'] = Client::TYPE_CUSTOMER;
-        $data['name'] = 'Test Client';
-        $data['remarks'] = 'Test Remarks';
-
-        $client = $this->client->create($data);
-
-        $data = array('name' => 'Test Item');
-        $data['detail'] = 'Test Details';
-
-        $item = $this->item->create($data);
-        // ------------------------------------
-
-        // Simulate an HTTP request ----------------------
-        $data = array('client_id' => $client->id);
-        $data['type'] = Order::TYPE_PURCHASE;
-        $data['remarks'] = 'Order Remarks';
-        $cart = array('id' => $item->id, 'quantity' => 5);
-        $data['cart'] = array($cart);
-
-        $http = $this->withParsed($data);
-        // -----------------------------------------------
-
-        // Call the route method ------------
-        $actual = $this->route->store($http);
-        // ----------------------------------
-
-        // Verify if it returns an HTTP response ----------
-        $this->assertEquals(201, $actual->getStatusCode());
-        // ------------------------------------------------
-
-        // Verify order was created in the database ------
-        $actual = $this->depot->all();
-
-        $expect = 'Order Remarks';
-        $this->assertEquals($expect, $actual[0]->remarks);
-
-        $expect = Order::TYPE_PURCHASE;
-        $this->assertEquals($expect, $actual[0]->type);
-        // -----------------------------------------------
-    }
-
-    /**
-     * @return void
-     */
-    public function test_should_delete_order_via_delete_method()
-    {
-        // Create a new client and item -------
-        $data = array();
-        $data['type'] = Client::TYPE_CUSTOMER;
-        $data['name'] = 'Test Client';
-        $data['remarks'] = 'Test Remarks';
-
-        $client = $this->client->create($data);
-
-        $data = array('name' => 'Test Item');
-        $data['detail'] = 'Test Details';
-
-        $item = $this->item->create($data);
-        // ------------------------------------
-
-        // Create a new purchase order ------
-        $data = array('remarks' => null);
-        $data['client_id'] = $client->id;
-        $data['type'] = Order::TYPE_PURCHASE;
-
-        $cart = array('id' => $item->id);
-        $cart['quantity'] = 1;
-        $data['cart'] = array($cart);
-
-        $order = $this->depot->create($data);
-        // ----------------------------------
-
-        // Simulate an HTTP request ------
-        $http = $this->withHttp('DELETE');
-        // -------------------------------
-
-        // Call the route method -------------------------
-        $actual = $this->route->delete($order->id, $http);
-        // -----------------------------------------------
-
-        // Verify if it returns an HTTP response ----------
-        $this->assertEquals(204, $actual->getStatusCode());
-        // ------------------------------------------------
-
-        // Verify order was deleted from the database ---
-        $exists = $this->depot->rowExists($order->id);
-
-        $this->assertFalse($exists);
-        // ----------------------------------------------
-    }
-
-    /**
-     * @return void
-     */
-    public function test_should_get_all_orders_via_index_method()
-    {
-        // Create a new client and item -------
-        $data = array();
-        $data['type'] = Client::TYPE_CUSTOMER;
-        $data['name'] = 'Test Client';
-        $data['remarks'] = 'Test Remarks';
-
-        $client = $this->client->create($data);
-
-        $data = array('name' => 'Test Item');
-        $data['detail'] = 'Test Details';
-
-        $item = $this->item->create($data);
-        // ------------------------------------
-
-        // Create a new purchase order ------
-        $data = array('remarks' => null);
-        $data['client_id'] = $client->id;
-        $data['type'] = Order::TYPE_PURCHASE;
-
-        $cart = array('id' => $item->id);
-        $cart['quantity'] = 1;
-        $data['cart'] = array($cart);
-
-        $this->depot->create($data);
-        // ----------------------------------
-
-        // Create a new sales order -----
-        $data = array('remarks' => null);
-        $data['client_id'] = $client->id;
-        $data['type'] = Order::TYPE_SALE;
-
-        $cart = array('id' => $item->id);
-        $cart['quantity'] = 2;
-        $data['cart'] = array($cart);
-
-        $this->depot->create($data);
-        // ------------------------------
-
-        // Simulate an HTTP request -------------------------
-        $http = $this->withParams(array('p' => 1, 'l' => 5));
-        // --------------------------------------------------
-
-        // Call the route method ------------
-        $actual = $this->route->index($http);
-        // ----------------------------------
-
-        // Verify if it returns an HTTP response ----------
-        $this->assertEquals(200, $actual->getStatusCode());
-        // ------------------------------------------------
-
-        $actual = $actual->getBody()->__toString();
-
-        /** @var array<string, array<integer, array<string, string|null>>> */
-        $data = json_decode($actual, true);
-
-        // Verify if items returned from HTTP response ---
-        $remarks1 = $data['items'][0]['remarks'];
-        $this->assertNull($remarks1);
-
-        $remarks2 = $data['items'][1]['remarks'];
-        $this->assertNull($remarks2);
-        // -----------------------------------------------
-    }
-
-    /**
-     * @return void
-     */
-    public function test_should_not_check_cart_with_invalid_data()
+    public function test_failed_if_cart_check_invalid_data()
     {
         // Simulate an HTTP request -----
         $data = array('item_id' => 9999);
+
         $data['quantity'] = 10;
+
         $data['type'] = Order::TYPE_SALE;
 
         $http = $this->withParsed($data);
         // ------------------------------
 
-        // Call the route method -------------------------
-        $actual = $this->route->check($this->item, $http);
-        // -----------------------------------------------
-
         // Verify if it returns an HTTP response ----------
+        $actual = $this->route->check($this->item, $http);
+
         $this->assertEquals(422, $actual->getStatusCode());
         // ------------------------------------------------
 
@@ -344,17 +69,19 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_not_check_cart_with_invalid_quantity()
+    public function test_failed_if_cart_invalid_quantity()
     {
         // Create a new client and item -------
-        $data = array();
+        $data = array('name' => 'Test Client');
+
         $data['type'] = Client::TYPE_CUSTOMER;
-        $data['name'] = 'Test Client';
+
         $data['remarks'] = 'Test Remarks';
 
         $client = $this->client->create($data);
 
         $data = array('name' => 'Test Item');
+
         $data['detail'] = 'Test Details';
 
         $item = $this->item->create($data);
@@ -362,33 +89,33 @@ class OrdersTest extends Testcase
 
         // Create a new purchase order -------------------
         $data = array('client_id' => $client->id);
+
         $data['type'] = Order::TYPE_PURCHASE;
+
         $data['remarks'] = 'Purchase Remarks';
+
         $cart = array('id' => $item->id, 'quantity' => 1);
+
         $data['cart'] = array($cart);
 
         $order = $this->depot->create($data);
         // -----------------------------------------------
 
-        // Mark the purchase order as completed --------
-        $status = Order::STATUS_COMPLETED;
-
-        $this->depot->changeStatus($order->id, $status);
-        // ---------------------------------------------
+        $this->depot->setAsCompleted($order->id);
 
         // Simulate an HTTP request ----------
         $data = array('item_id' => $item->id);
+
         $data['quantity'] = 100;
+
         $data['type'] = Order::TYPE_SALE;
 
         $http = $this->withParsed($data);
         // -----------------------------------
 
-        // Call the route method -------------------------
-        $actual = $this->route->check($this->item, $http);
-        // -----------------------------------------------
-
         // Verify if it returns an HTTP response ----------
+        $actual = $this->route->check($this->item, $http);
+
         $this->assertEquals(422, $actual->getStatusCode());
         // ------------------------------------------------
 
@@ -402,7 +129,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_not_create_order_with_invalid_data()
+    public function test_failed_if_create_order_invalid_data()
     {
         // Simulate an HTTP request ----------
         $data = array('remarks' => 'Remarks');
@@ -410,13 +137,13 @@ class OrdersTest extends Testcase
         $http = $this->withParsed($data);
         // -----------------------------------
 
-        // Call the route method ------------
+        // Verify if it returns an HTTP response ---
         $actual = $this->route->store($http);
-        // ----------------------------------
 
-        // Verify if it returns an HTTP response ----------
-        $this->assertEquals(422, $actual->getStatusCode());
-        // ------------------------------------------------
+        $status = $actual->getStatusCode();
+
+        $this->assertEquals(422, $status);
+        // -----------------------------------------
 
         // Verify if errors returned properly --------------
         $actual = $actual->getBody()->__toString();
@@ -425,12 +152,15 @@ class OrdersTest extends Testcase
         $data = json_decode($actual, true);
 
         $expect = 'Cart is required';
+
         $this->assertEquals($expect, $data['cart'][0]);
 
         $expect = 'Client Name is required';
+
         $this->assertEquals($expect, $data['client_id'][0]);
 
         $expect = 'Order Type is required';
+
         $this->assertEquals($expect, $data['type'][0]);
         // -------------------------------------------------
     }
@@ -438,7 +168,7 @@ class OrdersTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_not_delete_non_existent_order()
+    public function test_failed_if_order_not_found()
     {
         $http = $this->withHttp('DELETE');
 
@@ -447,6 +177,311 @@ class OrdersTest extends Testcase
         $actual = $http->getStatusCode();
 
         $this->assertEquals(404, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_all_orders_via_index()
+    {
+        // Create a new client and item -------
+        $data = array('name' => 'Test Client');
+
+        $data['type'] = Client::TYPE_CUSTOMER;
+
+        $data['remarks'] = 'Test Remarks';
+
+        $client = $this->client->create($data);
+
+        $data = array('name' => 'Test Item');
+
+        $data['detail'] = 'Test Details';
+
+        $item = $this->item->create($data);
+        // ------------------------------------
+
+        // Create a new purchase order ------
+        $data = array('remarks' => null);
+
+        $data['client_id'] = $client->id;
+
+        $data['type'] = Order::TYPE_PURCHASE;
+
+        $cart = array('id' => $item->id);
+
+        $cart['quantity'] = 1;
+
+        $data['cart'] = array($cart);
+
+        $this->depot->create($data);
+        // ----------------------------------
+
+        // Create a new sales order -----
+        $data = array('remarks' => null);
+
+        $data['client_id'] = $client->id;
+
+        $data['type'] = Order::TYPE_SALE;
+
+        $cart = array('id' => $item->id);
+
+        $cart['quantity'] = 2;
+
+        $data['cart'] = array($cart);
+
+        $this->depot->create($data);
+        // ------------------------------
+
+        // Simulate an HTTP request ------
+        $data = array('p' => 1, 'l' => 5);
+
+        $http = $this->withParams($data);
+        // -------------------------------
+
+        // Call the route method ------------
+        $actual = $this->route->index($http);
+
+        $status = $actual->getStatusCode();
+
+        $this->assertEquals(200, $status);
+        // ----------------------------------
+
+        $actual = $actual->getBody()->__toString();
+
+        /** @var array<string, array<integer, array<string, string|null>>> */
+        $data = json_decode($actual, true);
+
+        // Verify if items returned from HTTP response ---
+        $remarks1 = $data['items'][0]['remarks'];
+
+        $this->assertNull($remarks1);
+
+        $remarks2 = $data['items'][1]['remarks'];
+
+        $this->assertNull($remarks2);
+        // -----------------------------------------------
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_cart_check_valid_data()
+    {
+        // Create a new client and item -------
+        $data = array('name' => 'Test Client');
+
+        $data['type'] = Client::TYPE_CUSTOMER;
+
+        $data['remarks'] = 'Test Remarks';
+
+        $client = $this->client->create($data);
+
+        $data = array('name' => 'Test Item');
+
+        $data['detail'] = 'Test Details';
+
+        $item = $this->item->create($data);
+        // ------------------------------------
+
+        // Create a new purchase order ------
+        $data = array('remarks' => null);
+
+        $data['client_id'] = $client->id;
+
+        $data['type'] = Order::TYPE_PURCHASE;
+
+        $cart = array('id' => $item->id);
+
+        $cart['quantity'] = 10;
+
+        $data['cart'] = array($cart);
+
+        $order = $this->depot->create($data);
+        // ----------------------------------
+
+        $this->depot->setAsCompleted($order->id);
+
+        // Simulate an HTTP request ----------
+        $data = array('item_id' => $item->id);
+
+        $data['quantity'] = 10;
+
+        $data['type'] = Order::TYPE_SALE;
+
+        $http = $this->withParsed($data);
+        // -----------------------------------
+
+        // Verify if it returns an HTTP response ----------
+        $actual = $this->route->check($this->item, $http);
+
+        $this->assertEquals(200, $actual->getStatusCode());
+        // ------------------------------------------------
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_order_created_via_store()
+    {
+        // Create a new client and item -------
+        $data = array('name' => 'Test Client');
+
+        $data['type'] = Client::TYPE_CUSTOMER;
+
+        $data['remarks'] = 'Test Remarks';
+
+        $client = $this->client->create($data);
+
+        $data = array('name' => 'Test Item');
+
+        $data['detail'] = 'Test Details';
+
+        $item = $this->item->create($data);
+        // ------------------------------------
+
+        // Simulate an HTTP request ----------------------
+        $data = array('client_id' => $client->id);
+
+        $data['type'] = Order::TYPE_PURCHASE;
+
+        $data['remarks'] = 'Order Remarks';
+
+        $cart = array('id' => $item->id, 'quantity' => 5);
+
+        $data['cart'] = array($cart);
+
+        $http = $this->withParsed($data);
+        // -----------------------------------------------
+
+        // Verify if it returns an HTTP response ----------
+        $actual = $this->route->store($http);
+
+        $this->assertEquals(201, $actual->getStatusCode());
+        // ------------------------------------------------
+
+        // Verify order was created in the database ------
+        $actual = $this->depot->all();
+
+        $expect = 'Order Remarks';
+
+        $this->assertEquals($expect, $actual[0]->remarks);
+
+        $expect = Order::TYPE_PURCHASE;
+
+        $this->assertEquals($expect, $actual[0]->type);
+        // -----------------------------------------------
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_order_deleted_via_delete()
+    {
+        // Create a new client and item -------
+        $data = array('name' => 'Test Client');
+
+        $data['type'] = Client::TYPE_CUSTOMER;
+
+        $data['name'] = 'Test Client';
+
+        $data['remarks'] = 'Test Remarks';
+
+        $client = $this->client->create($data);
+
+        $data = array('name' => 'Test Item');
+
+        $data['detail'] = 'Test Details';
+
+        $item = $this->item->create($data);
+        // ------------------------------------
+
+        // Create a new purchase order ------
+        $data = array('remarks' => null);
+
+        $data['client_id'] = $client->id;
+
+        $data['type'] = Order::TYPE_PURCHASE;
+
+        $cart = array('id' => $item->id);
+
+        $cart['quantity'] = 1;
+
+        $data['cart'] = array($cart);
+
+        $order = $this->depot->create($data);
+        // ----------------------------------
+
+        // Verify if it returns an HTTP response ----------
+        $http = $this->withHttp('DELETE');
+
+        $actual = $this->route->delete($order->id, $http);
+
+        $this->assertEquals(204, $actual->getStatusCode());
+        // ------------------------------------------------
+
+        // Verify order was deleted from the database ---
+        $exists = $this->depot->rowExists($order->id);
+
+        $this->assertFalse($exists);
+        // ----------------------------------------------
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_order_status_changed()
+    {
+        // Create a new client and item -------
+        $data = array('name' => 'Test Client');
+
+        $data['type'] = Client::TYPE_CUSTOMER;
+
+        $data['remarks'] = 'Test Remarks';
+
+        $client = $this->client->create($data);
+
+        $data = array('name' => 'Test Item');
+
+        $data['detail'] = 'Test Details';
+
+        $item = $this->item->create($data);
+        // ------------------------------------
+
+        // Create a new purchase order ------
+        $data = array('remarks' => null);
+
+        $data['client_id'] = $client->id;
+
+        $data['type'] = Order::TYPE_PURCHASE;
+
+        $cart = array('id' => $item->id);
+
+        $cart['quantity'] = 1;
+
+        $data['cart'] = array($cart);
+
+        $order = $this->depot->create($data);
+        // ----------------------------------
+
+        // Simulate an HTTP request ------------
+        $expect = Order::STATUS_COMPLETED;
+
+        $data = array('status' => $expect);
+
+        $http = $this->withParsed($data, 'PUT');
+        // -------------------------------------
+
+        // Verify if it returns an HTTP response ----------
+        $actual = $this->route->status($order->id, $http);
+
+        $this->assertEquals(204, $actual->getStatusCode());
+        // ------------------------------------------------
+
+        // Verify status was updated in the database ---
+        $actual = $this->depot->find($order->id);
+
+        $this->assertEquals($expect, $actual->status);
+        // ---------------------------------------------
     }
 
     /**

@@ -16,9 +16,7 @@ class ItemCheckTest extends Testcase
      */
     public function test_failed_if_field_is_required()
     {
-        $data = array('detail' => 'Descrip');
-
-        $expect = 'Name is required';
+        $data = array('detail' => 'Descript');
 
         $check = new ItemCheck;
 
@@ -28,6 +26,8 @@ class ItemCheckTest extends Testcase
 
         $actual = $check->firstError();
 
+        $expect = 'Name is required';
+
         $this->assertEquals($expect, $actual);
     }
 
@@ -36,14 +36,12 @@ class ItemCheckTest extends Testcase
      */
     public function test_passed_if_valid_data()
     {
-        $data = array('name' => 'Test Item');
+        $data = array('name' => 'Another Item');
 
         $data['detail'] = 'Test Detail';
 
         $check = new ItemCheck;
 
-        $actual = $check->valid($data);
-
-        $this->assertTrue($actual);
+        $this->assertTrue($check->valid($data));
     }
 }

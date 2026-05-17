@@ -14,33 +14,44 @@ class ClientTest extends Testcase
     /**
      * @return void
      */
-    public function test_should_create_a_client()
+    public function test_passed_if_client_created()
     {
         $model = new Client;
 
+        // Create a new client as supplier ---
         $data = array('name' => 'John Doe');
+
         $data['type'] = Client::TYPE_SUPPLIER;
+
         $actual = $model->create($data)->name;
+        // -----------------------------------
 
         $expect = 'John Doe';
+
         $this->assertEquals($expect, $actual);
     }
 
     /**
      * @return void
      */
-    public function test_should_find_a_client()
+    public function test_passed_if_client_found()
     {
         $model = new Client;
 
+        // Create a new client as supplier ---
         $data = array('name' => 'Jane Doe');
+
         $data['type'] = Client::TYPE_SUPPLIER;
+
         $model->create($data);
+        // -----------------------------------
 
         $model = $model->where('name', 'Jane Doe');
+
         $actual = $model->firstOrFail()->name;
 
         $expect = 'Jane Doe';
+
         $this->assertEquals($expect, $actual);
     }
 

@@ -42,16 +42,19 @@ class CartCheckTest extends Testcase
      */
     public function test_failed_if_field_is_required()
     {
-        $expect = 'An item is required';
-
+        // Payload for the failed check ---
         $data = array('quantity' => 10);
+
         $data['type'] = Order::TYPE_SALE;
+        // --------------------------------
 
         $actual = $this->check->valid($data);
 
         $this->assertFalse($actual);
 
         $actual = $this->check->firstError();
+
+        $expect = 'An item is required';
 
         $this->assertEquals($expect, $actual);
     }
@@ -61,9 +64,13 @@ class CartCheckTest extends Testcase
      */
     public function test_failed_if_item_not_found()
     {
+        // Payload for the failed check ---
         $data = array('item_id' => 999);
+
         $data['quantity'] = 10;
+
         $data['type'] = Order::TYPE_SALE;
+        // --------------------------------
 
         $actual = $this->check->valid($data);
 
@@ -83,33 +90,47 @@ class CartCheckTest extends Testcase
     {
         // Create a new item --------------
         $data = array('name' => 'Test');
+
         $data['detail'] = 'Test';
+
         $item = $this->item->create($data);
         // --------------------------------
 
         // Create a new client ----------------
         $data = array('name' => 'Test');
+
         $data['address'] = 'Test';
+
         $client = $this->client->create($data);
         // ------------------------------------
 
+        // Add the new item to the cart ---
+        $cart = array('id' => $item->id);
+
+        $cart['quantity'] = 5;
+        // --------------------------------
+
         // Create a new purchase order ------
         $data = array('remarks' => '');
+
         $data['client_id'] = $client->id;
+
         $data['type'] = Order::TYPE_PURCHASE;
 
-        $cart = array('id' => $item->id);
-        $cart['quantity'] = 5;
         $data['cart'] = array($cart);
 
         $order = $this->order->create($data);
         // ----------------------------------
 
-        $this->order->changeStatus($order->id, Order::STATUS_COMPLETED);
+        $this->order->setAsCompleted($order->id);
 
+        // Payload for the failed check ---
         $data = array('quantity' => 10);
+
         $data['item_id'] = $item->id;
+
         $data['type'] = Order::TYPE_SALE;
+        // --------------------------------
 
         $actual = $this->check->valid($data);
 
@@ -129,33 +150,47 @@ class CartCheckTest extends Testcase
     {
         // Create a new item --------------
         $data = array('name' => 'Test');
+
         $data['detail'] = 'Test';
+
         $item = $this->item->create($data);
         // --------------------------------
 
         // Create a new client ----------------
         $data = array('name' => 'Test');
+
         $data['address'] = 'Test';
+
         $client = $this->client->create($data);
         // ------------------------------------
 
+        // Add the new item to the cart ---
+        $cart = array('id' => $item->id);
+
+        $cart['quantity'] = 20;
+        // --------------------------------
+
         // Create a new purchase order ------
         $data = array('remarks' => '');
+
         $data['client_id'] = $client->id;
+
         $data['type'] = Order::TYPE_PURCHASE;
 
-        $cart = array('id' => $item->id);
-        $cart['quantity'] = 20;
         $data['cart'] = array($cart);
 
         $order = $this->order->create($data);
         // ----------------------------------
 
-        $this->order->changeStatus($order->id, Order::STATUS_COMPLETED);
+        $this->order->setAsCompleted($order->id);
 
+        // Payload for the passed check ---
         $data = array('quantity' => 10);
+
         $data['item_id'] = $item->id;
+
         $data['type'] = Order::TYPE_SALE;
+        // --------------------------------
 
         $actual = $this->check->valid($data);
 
