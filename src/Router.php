@@ -72,14 +72,14 @@ class Router extends Slytherin
      */
     protected function pages()
     {
-        $this->prefix('/', 'Rougin\Torin\Pages');
+        $this->prefix('/', 'Rougin\Torin\Routes');
 
-        $this->get('/', 'Hello@index');
+        $this->get('/', 'Hello@page');
 
-        $this->get('clients', 'Clients@index');
+        $this->get('clients', 'Clients@page');
 
-        $this->get('items', 'Items@index');
+        $this->get('items', 'Items@page');
 
-        $this->get('orders', 'Orders@index');
+        $this->get('orders', 'Orders@page');
     }
 }

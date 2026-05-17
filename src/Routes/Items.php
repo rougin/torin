@@ -2,11 +2,14 @@
 
 namespace Rougin\Torin\Routes;
 
+use Rougin\Dextra\Depot;
 use Rougin\Dexter\Filter;
 use Rougin\Dexter\Message\JsonResponse;
 use Rougin\Dexter\Route;
+use Rougin\Gable\Table;
 use Rougin\Torin\Checks\ItemCheck;
 use Rougin\Torin\Depots\ItemDepot;
+use Rougin\Torin\Plate;
 
 /**
  * @package Torin
@@ -34,6 +37,47 @@ class Items extends Route
         $this->check = $check;
 
         $this->item = $item;
+    }
+
+    /**
+     * @param \Rougin\Torin\Plate $plate
+     *
+     * @return string
+     */
+    public function page(Plate $plate)
+    {
+        $data = array('depot' => new Depot('items'));
+
+        // Prepare the pagination -----------------
+        $total = $this->item->getTotal();
+
+        $pagee = $plate->setPagee('items', $total);
+
+        $data['pagee'] = $pagee;
+        // ----------------------------------------
+
+        // Generate the HTML table -----------------------------------------------
+        $table = new Table;
+        $table->withAlpine();
+        $table->setClass('table mb-0');
+        $table->newColumn();
+
+        $table->setCell('Item Code', 'left')->withWidth(10)->withName('code');
+        $table->setCell('Name', 'left')->withWidth(15);
+        $table->setCell('Description', 'left')->withWidth(15)->withName('detail');
+        $table->setCell('Quantity', 'right')->withWidth(5);
+        $table->setCell('Created At', 'left')->withWidth(12);
+        $table->setCell('Updated At', 'left')->withWidth(12);
+        $table->withActions(null, 'left')->withWidth(5);
+        $table->withUpdateAction('edit(item)');
+        $table->withDeleteAction('trash(item)');
+        $table->withLoading($pagee->getLimit());
+        $table->withOpacity(50);
+
+        $data['table'] = $table;
+        // -----------------------------------------------------------------------
+
+        return $plate->render('items/index', $data);
     }
 
     /**

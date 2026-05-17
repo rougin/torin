@@ -2,8 +2,11 @@
 
 namespace Rougin\Torin\Pages;
 
+use Rougin\Torin\Checks\ItemCheck;
 use Rougin\Torin\Depots\ItemDepot;
 use Rougin\Torin\Models\Item;
+use Rougin\Torin\Plate;
+use Rougin\Torin\Routes\Items;
 use Rougin\Torin\Testcase;
 
 /**
@@ -14,20 +17,23 @@ use Rougin\Torin\Testcase;
 class ItemsTest extends Testcase
 {
     /**
-     * @var \Rougin\Torin\Pages\Items
+     * @var \Rougin\Torin\Plate
      */
-    protected $page;
+    protected $plate;
+
+    /**
+     * @var \Rougin\Torin\Routes\Items
+     */
+    protected $route;
 
     /**
      * @return void
      */
     public function test_should_render_items_page_output()
     {
-        $expect = $this->getPlate('Items');
+        $expect = $this->findPlate('Items');
 
-        $depot = new ItemDepot(new Item);
-
-        $actual = $this->page->index($depot);
+        $actual = $this->route->page($this->plate);
 
         $actual = $this->parseHtml($actual);
 
@@ -45,17 +51,21 @@ class ItemsTest extends Testcase
 
         $http = $this->withHttp('/items');
 
-        $plate = $this->withPlate();
-
         // Add query parameters to the request ---
         $param = array('p' => 1, 'l' => 10);
 
         $http = $http->withQueryParams($param);
         // ---------------------------------------
 
-        $page = new Items($plate, $http);
+        $plate = $this->getPlate();
 
-        $this->page = $page;
+        $this->plate = new Plate($plate, $http);
+
+        $check = new ItemCheck;
+
+        $depot = new ItemDepot(new Item);
+
+        $this->route = new Items($check, $depot);
     }
 
     /**

@@ -2,10 +2,13 @@
 
 namespace Rougin\Torin\Routes;
 
+use Rougin\Dextra\Depot;
 use Rougin\Dexter\Message\JsonResponse;
 use Rougin\Dexter\Route;
+use Rougin\Gable\Table;
 use Rougin\Torin\Checks\ClientCheck;
 use Rougin\Torin\Depots\ClientDepot;
+use Rougin\Torin\Plate;
 
 /**
  * @package Torin
@@ -33,6 +36,56 @@ class Clients extends Route
         $this->check = $check;
 
         $this->client = $client;
+    }
+
+    /**
+     * @param \Rougin\Torin\Plate $plate
+     *
+     * @return string
+     */
+    public function page(Plate $plate)
+    {
+        $data = array('depot' => new Depot('clients'));
+
+        // Prepare the pagination -------------------
+        $total = $this->client->getTotal();
+
+        $pagee = $plate->setPagee('clients', $total);
+
+        $data['pagee'] = $pagee;
+        // ------------------------------------------
+
+        // Generate the HTML table ----------------------------------------------
+        $table = new Table;
+        $table->withAlpine();
+        $table->setClass('table mb-0');
+        $table->newColumn();
+
+        $table->setCell('Type', 'left')
+            ->addBadge('Customer', 'text-bg-success', 'item.type === 0')
+            ->addBadge('Supplier', 'text-bg-primary', 'item.type === 1')
+            ->withWidth(5);
+        $table->setCell('Client Name', 'left')
+            ->addHtml('<p class="mb-0" x-text="item.name"></p>')
+            ->addHtml('<p class="mb-0 small text-muted" x-text="item.code"></p>')
+            ->withWidth(22);
+        $table->setCell('Remarks', 'left')
+            ->addHtml('<p class="mb-0 fst-italic" x-text="item.remarks"></p>')
+            ->withWidth(15);
+        $table->setCell('Created At', 'left')->withWidth(13);
+        $table->setCell('Updated At', 'left')->withWidth(13);
+        $table->withActions(null, 'left')->withWidth(5);
+        $table->withUpdateAction('edit(item)');
+        $table->withDeleteAction('trash(item)');
+        $table->withLoading($pagee->getLimit());
+        $table->withEmptyText('No clients found.');
+        $table->withErrorText('An error occured in getting the clients.');
+        $table->withOpacity(50);
+
+        $data['table'] = $table;
+        // ----------------------------------------------------------------------
+
+        return $plate->render('clients/index', $data);
     }
 
     /**

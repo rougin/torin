@@ -17,7 +17,7 @@ class HelloTest extends Testcase
     public function test_should_run_front_controller()
     {
         // Expect the template from "Hello" page ---
-        $expect = $this->getPlate('Hello');
+        $expect = $this->findPlate('Hello');
         // -----------------------------------------
 
         ob_start();

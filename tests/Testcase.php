@@ -24,11 +24,6 @@ class Testcase extends Legacy
     protected $capsule;
 
     /**
-     * @var \Staticka\Render
-     */
-    protected $plate;
-
-    /**
      * @var \Rougin\Slytherin\Http\ServerRequest
      */
     protected $request;
@@ -80,7 +75,7 @@ class Testcase extends Legacy
      *
      * @return string
      */
-    protected function getPlate($name)
+    protected function findPlate($name)
     {
         $path = __DIR__ . '/Fixture/Plates';
 
@@ -90,6 +85,19 @@ class Testcase extends Legacy
         $html = file_get_contents($file);
 
         return $this->parseHtml($html);
+    }
+
+    /**
+     * @return \Staticka\Render
+     */
+    protected function getPlate()
+    {
+        $paths = array();
+
+        $paths[] = __DIR__ . '/../app/assets';
+        $paths[] = __DIR__ . '/../app/plates';
+
+        return new Render($paths);
     }
 
     /**
@@ -235,18 +243,5 @@ class Testcase extends Legacy
         $http = $this->withHttp('/', $method);
 
         return $http->withParsedBody($items);
-    }
-
-    /**
-     * @return \Staticka\Render
-     */
-    protected function withPlate()
-    {
-        $paths = array();
-
-        $paths[] = __DIR__ . '/../app/assets';
-        $paths[] = __DIR__ . '/../app/plates';
-
-        return new Render($paths);
     }
 }

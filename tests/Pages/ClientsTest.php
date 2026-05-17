@@ -2,8 +2,11 @@
 
 namespace Rougin\Torin\Pages;
 
+use Rougin\Torin\Checks\ClientCheck;
 use Rougin\Torin\Depots\ClientDepot;
 use Rougin\Torin\Models\Client;
+use Rougin\Torin\Plate;
+use Rougin\Torin\Routes\Clients;
 use Rougin\Torin\Testcase;
 
 /**
@@ -14,20 +17,23 @@ use Rougin\Torin\Testcase;
 class ClientsTest extends Testcase
 {
     /**
-     * @var \Rougin\Torin\Pages\Clients
+     * @var \Rougin\Torin\Plate
      */
-    protected $page;
+    protected $plate;
+
+    /**
+     * @var \Rougin\Torin\Routes\Clients
+     */
+    protected $route;
 
     /**
      * @return void
      */
     public function test_should_render_clients_page_output()
     {
-        $depot = new ClientDepot(new Client);
+        $expect = $this->findPlate('Clients');
 
-        $expect = $this->getPlate('Clients');
-
-        $actual = $this->page->index($depot);
+        $actual = $this->route->page($this->plate);
 
         $actual = $this->parseHtml($actual);
 
@@ -45,17 +51,21 @@ class ClientsTest extends Testcase
 
         $http = $this->withHttp('/clients');
 
-        $plate = $this->withPlate();
-
         // Add query parameters to the request ---
         $param = array('p' => 1, 'l' => 10);
 
         $http = $http->withQueryParams($param);
         // ---------------------------------------
 
-        $page = new Clients($plate, $http);
+        $plate = $this->getPlate();
 
-        $this->page = $page;
+        $this->plate = new Plate($plate, $http);
+
+        $check = new ClientCheck;
+
+        $depot = new ClientDepot(new Client);
+
+        $this->route = new Clients($check, $depot);
     }
 
     /**

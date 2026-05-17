@@ -2,6 +2,8 @@
 
 namespace Rougin\Torin\Pages;
 
+use Rougin\Torin\Plate;
+use Rougin\Torin\Routes\Hello;
 use Rougin\Torin\Testcase;
 
 /**
@@ -12,18 +14,23 @@ use Rougin\Torin\Testcase;
 class HelloTest extends Testcase
 {
     /**
-     * @var \Rougin\Torin\Pages\Hello
+     * @var \Rougin\Torin\Plate
      */
-    protected $page;
+    protected $plate;
+
+    /**
+     * @var \Rougin\Torin\Routes\Hello
+     */
+    protected $route;
 
     /**
      * @return void
      */
     public function test_should_render_hello_page_output()
     {
-        $expect = $this->getPlate('Hello');
+        $expect = $this->findPlate('Hello');
 
-        $actual = $this->page->index();
+        $actual = $this->route->page($this->plate);
 
         $actual = $this->parseHtml($actual);
 
@@ -35,10 +42,12 @@ class HelloTest extends Testcase
      */
     protected function doSetUp()
     {
-        $plate = $this->withPlate();
+        $plate = $this->getPlate();
 
         $http = $this->withHttp();
 
-        $this->page = new Hello($plate, $http);
+        $this->plate = new Plate($plate, $http);
+
+        $this->route = new Hello;
     }
 }

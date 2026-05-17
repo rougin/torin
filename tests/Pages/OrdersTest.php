@@ -2,8 +2,11 @@
 
 namespace Rougin\Torin\Pages;
 
+use Rougin\Torin\Checks\OrderCheck;
 use Rougin\Torin\Depots\OrderDepot;
 use Rougin\Torin\Models\Order;
+use Rougin\Torin\Plate;
+use Rougin\Torin\Routes\Orders;
 use Rougin\Torin\Testcase;
 
 /**
@@ -14,20 +17,23 @@ use Rougin\Torin\Testcase;
 class OrdersTest extends Testcase
 {
     /**
-     * @var \Rougin\Torin\Pages\Orders
+     * @var \Rougin\Torin\Routes\Orders
      */
-    protected $page;
+    protected $route;
+
+    /**
+     * @var \Rougin\Torin\Plate
+     */
+    protected $plate;
 
     /**
      * @return void
      */
     public function test_should_render_orders_page_output()
     {
-        $expect = $this->getPlate('Orders');
+        $expect = $this->findPlate('Orders');
 
-        $depot = new OrderDepot(new Order);
-
-        $actual = $this->page->index($depot);
+        $actual = $this->route->page($this->plate);
 
         $actual = $this->parseHtml($actual);
 
@@ -45,17 +51,21 @@ class OrdersTest extends Testcase
 
         $http = $this->withHttp('/orders');
 
-        $plate = $this->withPlate();
-
         // Add query parameters to the request ---
         $param = array('p' => 1, 'l' => 10);
 
         $http = $http->withQueryParams($param);
         // ---------------------------------------
 
-        $page = new Orders($plate, $http);
+        $plate = $this->getPlate();
 
-        $this->page = $page;
+        $this->plate = new Plate($plate, $http);
+
+        $check = new OrderCheck;
+
+        $depot = new OrderDepot(new Order);
+
+        $this->route = new Orders($check, $depot);
     }
 
     /**
