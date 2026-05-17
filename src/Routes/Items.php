@@ -89,66 +89,49 @@ class Items extends Route
     }
 
     /**
+     * Returns a response if the validation failed.
+     *
+     * @param integer $code
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function invalidDelete()
+    protected function invalid($code = 400)
     {
-        $errors = $this->check->errors();
+        $data = $this->check->errors();
 
-        return Response::toJson($errors, 422);
+        // HTTP 404 means the row does not exists ---
+        if ($code === 404)
+        {
+            $data = 'Item not found';
+        }
+        // ------------------------------------------
+
+        return Response::toJson($data, $code);
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
+     * Checks if the payload data is valid.
+     *
+     * @param array<string, mixed> $data
+     * @param integer              $id
+     *
+     * @return boolean
      */
-    protected function invalidStore()
+    protected function isDataValid($data, $id = 0)
     {
-        $errors = $this->check->errors();
-
-        return Response::toJson($errors, 422);
+        return $this->check->valid($data);
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function invalidUpdate()
-    {
-        $errors = $this->check->errors();
-
-        return Response::toJson($errors, 422);
-    }
-
-    /**
+     * Checks if the specified item can be shown or deleted.
+     *
      * @param integer $id
      *
      * @return boolean
      */
-    protected function isDeleteValid($id)
+    protected function isRowValid($id)
     {
         return $this->item->rowExists($id);
-    }
-
-    /**
-     * @param array<string, mixed> $parsed
-     *
-     * @return boolean
-     */
-    protected function isStoreValid($parsed)
-    {
-        return $this->check->valid($parsed);
-    }
-
-    /**
-     * Checks if the specified item can be updated.
-     *
-     * @param integer              $id
-     * @param array<string, mixed> $parsed
-     *
-     * @return boolean
-     */
-    protected function isUpdateValid($id, $parsed)
-    {
-        return $this->check->valid($parsed);
     }
 
     /**

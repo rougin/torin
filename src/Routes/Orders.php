@@ -136,44 +136,49 @@ class Orders extends Route
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function invalidDelete()
-    {
-        $errors = $this->check->errors();
-
-        return Response::toJson($errors, 422);
-    }
-
-    /**
+     * Returns a response if the validation failed.
+     *
+     * @param integer $code
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function invalidStore()
+    protected function invalid($code = 400)
     {
-        $errors = $this->check->errors();
+        $data = $this->check->errors();
 
-        return Response::toJson($errors, 422);
+        // HTTP 404 means the row does not exists ---
+        if ($code === 404)
+        {
+            $data = 'Order not found';
+        }
+        // ------------------------------------------
+
+        return Response::toJson($data, $code);
     }
 
     /**
+     * Checks if the payload data is valid.
+     *
+     * @param array<string, mixed> $data
+     * @param integer              $id
+     *
+     * @return boolean
+     */
+    protected function isDataValid($data, $id = 0)
+    {
+        return $this->check->valid($data);
+    }
+
+    /**
+     * Checks if the specified item can be shown or deleted.
+     *
      * @param integer $id
      *
      * @return boolean
      */
-    protected function isDeleteValid($id)
+    protected function isRowValid($id)
     {
         return $this->order->rowExists($id);
-    }
-
-    /**
-     * @param array<string, mixed> $parsed
-     *
-     * @return boolean
-     */
-    protected function isStoreValid($parsed)
-    {
-        return $this->check->valid($parsed);
     }
 
     /**

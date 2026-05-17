@@ -440,17 +440,13 @@ class OrdersTest extends Testcase
      */
     public function test_should_not_delete_non_existent_order()
     {
-        // Simulate an HTTP request ------
         $http = $this->withHttp('DELETE');
-        // -------------------------------
 
-        // Call the route method -----------------
-        $actual = $this->route->delete(99, $http);
-        // ---------------------------------------
+        $http = $this->route->delete(99, $http);
 
-        // Verify if it returns an HTTP response ----------
-        $this->assertEquals(422, $actual->getStatusCode());
-        // ------------------------------------------------
+        $actual = $http->getStatusCode();
+
+        $this->assertEquals(404, $actual);
     }
 
     /**
