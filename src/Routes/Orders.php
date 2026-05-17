@@ -3,9 +3,9 @@
 namespace Rougin\Torin\Routes;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Rougin\Dextra\Depot;
-use Rougin\Dexter\Message\JsonResponse;
+use Rougin\Dexter\Http\Response;
 use Rougin\Dexter\Route;
+use Rougin\Dextra\Depot;
 use Rougin\Gable\Action;
 use Rougin\Gable\Table;
 use Rougin\Torin\Checks\CartCheck;
@@ -54,10 +54,10 @@ class Orders extends Route
 
         if (! $check->isParsedValid($request))
         {
-            return new JsonResponse($check->firstError(), 422);
+            return Response::toJson($check->firstError(), 422);
         }
 
-        return new JsonResponse(true);
+        return Response::toJson(true);
     }
 
     /**
@@ -132,7 +132,7 @@ class Orders extends Route
 
         $this->order->changeStatus($id, $status);
 
-        return new JsonResponse(true, 204);
+        return Response::toJson(true, 204);
     }
 
     /**
@@ -142,7 +142,7 @@ class Orders extends Route
     {
         $errors = $this->check->errors();
 
-        return new JsonResponse($errors, 422);
+        return Response::toJson($errors, 422);
     }
 
     /**
@@ -153,7 +153,7 @@ class Orders extends Route
     {
         $errors = $this->check->errors();
 
-        return new JsonResponse($errors, 422);
+        return Response::toJson($errors, 422);
     }
 
     /**
@@ -185,7 +185,7 @@ class Orders extends Route
     {
         $this->order->delete($id);
 
-        return new JsonResponse('Deleted!', 204);
+        return Response::toJson('Deleted!', 204);
     }
 
     /**
@@ -215,7 +215,7 @@ class Orders extends Route
 
         $items = $result->toArray();
 
-        return new JsonResponse($items);
+        return Response::toJson($items);
     }
 
     /**
@@ -227,6 +227,6 @@ class Orders extends Route
     {
         $this->order->create($parsed);
 
-        return new JsonResponse('Created!', 201);
+        return Response::toJson('Created!', 201);
     }
 }

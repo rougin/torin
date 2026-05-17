@@ -2,9 +2,9 @@
 
 namespace Rougin\Torin\Routes;
 
-use Rougin\Dextra\Depot;
-use Rougin\Dexter\Message\JsonResponse;
+use Rougin\Dexter\Http\Response;
 use Rougin\Dexter\Route;
+use Rougin\Dextra\Depot;
 use Rougin\Gable\Table;
 use Rougin\Torin\Checks\ClientCheck;
 use Rougin\Torin\Depots\ClientDepot;
@@ -93,7 +93,7 @@ class Clients extends Route
      */
     public function select()
     {
-        return new JsonResponse($this->client->getSelect());
+        return Response::toJson($this->client->getSelect());
     }
 
     /**
@@ -103,7 +103,7 @@ class Clients extends Route
     {
         $errors = $this->check->errors();
 
-        return new JsonResponse($errors, 422);
+        return Response::toJson($errors, 422);
     }
 
     /**
@@ -113,7 +113,7 @@ class Clients extends Route
     {
         $errors = $this->check->errors();
 
-        return new JsonResponse($errors, 422);
+        return Response::toJson($errors, 422);
     }
 
     /**
@@ -123,7 +123,7 @@ class Clients extends Route
     {
         $errors = $this->check->errors();
 
-        return new JsonResponse($errors, 422);
+        return Response::toJson($errors, 422);
     }
 
     /**
@@ -168,7 +168,7 @@ class Clients extends Route
     {
         $this->client->delete($id);
 
-        return new JsonResponse('Deleted!', 204);
+        return Response::toJson('Deleted!', 204);
     }
 
     /**
@@ -198,7 +198,7 @@ class Clients extends Route
 
         $clients = $result->toArray();
 
-        return new JsonResponse($clients);
+        return Response::toJson($clients);
     }
 
     /**
@@ -210,7 +210,7 @@ class Clients extends Route
     {
         $this->client->create($parsed);
 
-        return new JsonResponse('Created!', 201);
+        return Response::toJson('Created!', 201);
     }
 
     /**
@@ -223,6 +223,6 @@ class Clients extends Route
     {
         $this->client->update($id, $parsed);
 
-        return new JsonResponse('Updated!', 204);
+        return Response::toJson('Updated!', 204);
     }
 }

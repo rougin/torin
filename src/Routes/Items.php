@@ -2,10 +2,10 @@
 
 namespace Rougin\Torin\Routes;
 
-use Rougin\Dextra\Depot;
 use Rougin\Dexter\Filter;
-use Rougin\Dexter\Message\JsonResponse;
+use Rougin\Dexter\Http\Response;
 use Rougin\Dexter\Route;
+use Rougin\Dextra\Depot;
 use Rougin\Gable\Table;
 use Rougin\Torin\Checks\ItemCheck;
 use Rougin\Torin\Depots\ItemDepot;
@@ -85,7 +85,7 @@ class Items extends Route
      */
     public function select()
     {
-        return new JsonResponse($this->item->getSelect());
+        return Response::toJson($this->item->getSelect());
     }
 
     /**
@@ -95,7 +95,7 @@ class Items extends Route
     {
         $errors = $this->check->errors();
 
-        return new JsonResponse($errors, 422);
+        return Response::toJson($errors, 422);
     }
 
     /**
@@ -105,7 +105,7 @@ class Items extends Route
     {
         $errors = $this->check->errors();
 
-        return new JsonResponse($errors, 422);
+        return Response::toJson($errors, 422);
     }
 
     /**
@@ -115,7 +115,7 @@ class Items extends Route
     {
         $errors = $this->check->errors();
 
-        return new JsonResponse($errors, 422);
+        return Response::toJson($errors, 422);
     }
 
     /**
@@ -160,7 +160,7 @@ class Items extends Route
     {
         $this->item->delete($id);
 
-        return new JsonResponse('Deleted!', 204);
+        return Response::toJson('Deleted!', 204);
     }
 
     /**
@@ -210,7 +210,7 @@ class Items extends Route
 
         $result = $this->item->get($page, $limit);
 
-        return new JsonResponse($result->toArray());
+        return Response::toJson($result->toArray());
     }
 
     /**
@@ -222,7 +222,7 @@ class Items extends Route
     {
         $this->item->create($parsed);
 
-        return new JsonResponse('Created!', 201);
+        return Response::toJson('Created!', 201);
     }
 
     /**
@@ -235,6 +235,6 @@ class Items extends Route
     {
         $this->item->update($id, $parsed);
 
-        return new JsonResponse('Updated!', 204);
+        return Response::toJson('Updated!', 204);
     }
 }
